@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+          $('#home').click(function(){
+             $('#main').load('dashboard.html');
+          });
+        });
+      </script>
+</head>
+<body>
+    <div class="header border">
+        <div class="row p-3 ps-5">
+             <h1 class="h4 text-secondary">Enrolment Form</h1>
+             <div class="d-inline"><a href="/">Dashboard</a><span> / </span><a id="viewStudent" href="#">View Students</a><span> / Add Students</span></div> 
+        </div>
+    </div>
+    <div class="content border mt-3">
+        <form class="ps-2">
+            <h1 class="mb-4 h5 text-secondary">PERSONAL DETAILS</h1>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="text-secondary" for="inputEmail4">Student Id</label>
+                    <input type="email" class="form-control" id="inputEmail4" placeholder="Student Id">
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="text-secondary" for="inputPassword4">Name</label>
+                    <input type="password" class="form-control" id="inputPassword4" placeholder="Name">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="text-secondary" for="inputEmail4">Phone</label>
+                    <input type="email" class="form-control" id="inputEmail4" placeholder="Phone">
+                </div>
+                <div class="col-md-6" style="padding: 40px;">
+                    
+                </div>
+            </div>
+            <h1 class="mb-4 h5 text-secondary">COURSE DETAILS</h1>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="text-secondary" for="inputEmail4">Program</label>
+                    <input type="email" class="form-control" id="inputEmail4" placeholder="Program">
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="text-secondary" for="inputPassword4">Batch Name</label>
+                    <input type="password" class="form-control" id="inputPassword4" placeholder="Batch Name">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label class="text-secondary" for="inputEmail4">Strats ON</label>
+                    <input type="date" class="form-control" id="inputEmail4" placeholder="Starts On">
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="text-secondary" for="inputPassword4">Days</label>
+                    <input type="number" class="form-control" id="inputPassword4" placeholder="Days">
+                </div>
+            </div>
+            <div class="text-center py-4">
+                <button type="submit" class="btn btn-primary" style="left: 50%;">CREATE</button>
+            </div>
+            
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src='https://code.jquery.com/jquery-3.7.0.js'></script>
+    
+    <script>
+      $(document).ready(function () {
+      $('#addEmployee').click(function(){
+           $('#main').load('addEmployee.html');
+      });
+      $('#batch').click(function(){
+           $('#main').load('addBatch.html');
+      });
+      $('#wallet').click(function(){
+           $('#main').load('wallet.html');
+      });
+      
+      });
+    </script>
+    <script>
+        $(document).ready(function () {
+          $('.dropdown').click(function () {
+            $(this).find('.submenu').slideToggle();
+          });
+        });
+    </script>
+</head>
+<body>
+  <nav id="main-navbar" class="navbar fixed-top" style="position: fixed;">
+    <a href="javascript:void(0);" onclick="openNav()" class="link-dark">
+      <img class="logo_icon" src="images/LMS_icon.png" />
+      <div href="" class="logo_name text-decoration-none"><span>PTE LMS</span></div>
+  </nav>
+  <div class="sidebar">
+    <ul class="menu">
+      <li class="menu-item">
+        <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/dashboard.png" />Dashboard</a>
+      </li>
+      <li class="menu-item dropdown">
+        <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/Admin.png" />Admin</a>
+        <ul class="submenu">
+          <li><a href="#" id="addEmployee" class="text-decoration-none">Add Empolyee</a></li>
+          <li><a href="#" id="batch" class="text-decoration-none">Batch</a></li>
+          <li><a href="#" id="wallet" class="text-decoration-none">Wallet</a></li>
+        </ul>
+      </li>
+      <li class="menu-item dropdown">
+        <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/student.png" />Student</a>
+        <ul class="submenu">
+          <li><a href="#" class="text-decoration-none">Enrolment</a></li>
+          <li><a href="#" class="text-decoration-none" class="text-decoration-none">Attendance</a></li>
+        </ul>
+      </li>
+      <li class="menu-item dropdown">
+        <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/programs.png" />Program PTE</a>
+        <ul class="submenu">
+          <li><a href="#" class="text-decoration-none">Assign Test</a></li>
+          <li><a href="#" class="text-decoration-none">Pending Evaluation</a></li>
+          <li><a href="#" class="text-decoration-none">Evaluation History</a></li>
+        </ul>
+      </li>
+      <li class="menu-item dropdown">
+        <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/employee.png" />Employee</a>
+        <ul class="submenu">
+          <li><a href="#" class="text-decoration-none">View</a></li>
+          <li><a href="#" class="text-decoration-none">Attendance</a></li>
+        </ul>
+      </li>
+      <li class="menu-item dropdown">
+        <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/support.png" />Support</a>
+        <ul class="submenu">
+          <li><a href="#" class="text-decoration-none">Ticket</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <div id="main">
+    <h1>scdsc</h1>
+  </div>
+  
+</body>
+</html>

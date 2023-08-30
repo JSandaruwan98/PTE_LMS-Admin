@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagination Example</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <!-- Other table headers -->
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Table rows will be populated dynamically -->
+    </tbody>
+  </table>
+  <div id="pagination">
+    <button id="prev-btn">Previous</button>
+    <span id="page-info">Page 1</span>
+    <button id="next-btn">Next</button>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    $(document).ready(function() {
+  // Sample data for demonstration
+  const data = [
+    { id: 1, name: "Item 1" },
+    { id: 2, name: "Item 2" },
+    { id: 1, name: "Item 1" },
+    { id: 2, name: "Item 2" },
+    { id: 1, name: "Item 1" },
+    { id: 2, name: "Item 2" },
+    { id: 1, name: "Item 1" },
+    { id: 2, name: "Item 2" },
+    { id: 1, name: "Item 1" },
+    { id: 2, name: "Item 2" },
+    { id: 1, name: "Item 1" },
+    { id: 2, name: "Item 2" },
+    { id: 1, name: "Item 1" },
+    { id: 2, name: "Item 2" },
+    { id: 1, name: "Item 1" },
+    { id: 2, name: "Item 2" },
+    { id: 1, name: "Item 1" },
+    { id: 2, name: "Item 2" },
+    
+    // Add more data items
+  ];
+
+  const itemsPerPage = 5; // Number of items to show per page
+  let currentPage = 1; // Current page number
+
+  function displayTableData() {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const pageData = data.slice(startIndex, endIndex);
+
+    const tableBody = $("#data-table tbody");
+    tableBody.empty(); // Clear existing rows
+
+    pageData.forEach(item => {
+      const row = `<tr><td>${item.id}</td><td>${item.name}</td></tr>`;
+      tableBody.append(row);
+    });
+
+    $("#page-info").text(`Page ${currentPage}`);
+  }
+
+  $("#prev-btn").on("click", function() {
+    if (currentPage > 1) {
+      currentPage--;
+      displayTableData();
+    }
+  });
+
+  $("#next-btn").on("click", function() {
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    if (currentPage < totalPages) {
+      currentPage++;
+      displayTableData();
+    }
+  });
+
+  // Initial display
+  displayTableData();
+});
+
+  </script>
+</body>
+</html>
