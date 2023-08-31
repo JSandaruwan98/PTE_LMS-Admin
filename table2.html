@@ -4,50 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pagination Example</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-  <table id="data-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <!-- Other table headers -->
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Table rows will be populated dynamically -->
-    </tbody>
-  </table>
-  <div id="pagination">
-    <button id="prev-btn">Previous</button>
-    <span id="page-info">Page 1</span>
-    <button id="next-btn">Next</button>
+  <div class="header border">
+    <div class="row p-3 ps-5">
+         <h1 class="h4 text-secondary">Batch Details</h1>
+         <div class="d-inline"><a href="/">Dashboard</a><span> / Batch Details</span></div> 
+    </div>
   </div>
+  <div class="content border mt-3 p-3">
+    <table class="table" id="data-table">
+      <thead>
+        <tr>
+          <th scope="col"><span style="color: #666464;">#</span></th>
+          <th scope="col"><span style="color: #666464;">First</span></th>
+          <th scope="col"><span style="color: #666464;">First</span></th>
+          <th scope="col"><span style="color: #666464;">First</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        
+      </tbody>
+    </table>
+    <nav aria-label="Page navigation example" id="pagination" style="margin-top: -30px; margin-bottom: -20px;">
+      <ul class="pagination">
+        <li class="page-item" id="prev-btn"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#"><span style="color: black;" id="page-info">Page 1</span></a></li>
+        <li class="page-item" id="next-btn"><a class="page-link" href="#">Next</a></li>
+      </ul>
+    </nav>
+  </div>
+  
+  
+  
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="script.js"></script>
   <script>
     $(document).ready(function() {
   // Sample data for demonstration
   const data = [
-    { id: 1, name: "Item 1" },
-    { id: 2, name: "Item 2" },
-    { id: 1, name: "Item 1" },
-    { id: 2, name: "Item 2" },
-    { id: 1, name: "Item 1" },
-    { id: 2, name: "Item 2" },
-    { id: 1, name: "Item 1" },
-    { id: 2, name: "Item 2" },
-    { id: 1, name: "Item 1" },
-    { id: 2, name: "Item 2" },
-    { id: 1, name: "Item 1" },
-    { id: 2, name: "Item 2" },
-    { id: 1, name: "Item 1" },
-    { id: 2, name: "Item 2" },
-    { id: 1, name: "Item 1" },
-    { id: 2, name: "Item 2" },
-    { id: 1, name: "Item 1" },
-    { id: 2, name: "Item 2" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 2, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 1, name: "Item 1", lname: "Item 1", handle: "Item 1" },
+    { id: 2, name: "Item 1", lname: "Item 1", handle: "Item 1" },
     
     // Add more data items
   ];
@@ -64,11 +84,11 @@
     tableBody.empty(); // Clear existing rows
 
     pageData.forEach(item => {
-      const row = `<tr><td>${item.id}</td><td>${item.name}</td></tr>`;
+      const row = `<tr><td>${item.id}</td><td>${item.name}</td><td>${item.lname}</td><td>${item.handle}</td></tr>`;
       tableBody.append(row);
     });
 
-    $("#page-info").text(`Page ${currentPage}`);
+    $("#page-info").text(`Page ${currentPage}/${data.length/5}`);
   }
 
   $("#prev-btn").on("click", function() {

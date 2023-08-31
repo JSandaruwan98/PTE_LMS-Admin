@@ -1,3 +1,16 @@
+<?php
+
+$sname= "localhost";
+$unmae= "root";
+$password = "";
+$db_name = "lms";
+
+$conn = mysqli_connect($sname, $unmae, $password, $db_name);
+
+if (!$conn) {
+	echo "Connection failed!";
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,8 +30,8 @@
          <div class="d-inline"><a href="/">Dashboard</a><span> / Wallet</span></div> 
     </div>
   </div>
-  <div class="content border mt-3 p-4">
-    <div style="height: 359px; background-color: white;">
+  <div class="content border mt-3 p-3">
+    <div style="height: 360px;">
     <table class="table" id="data-table">
       <thead>
         <tr>
@@ -35,8 +48,9 @@
         
       </tbody>
     </table>
+    <h1 id="test"></h1>
   </div>
-    <nav aria-label="Page navigation example" id="pagination">
+    <nav aria-label="Page navigation example" id="pagination" style="margin-top: -30px; margin-bottom: -20px;">
       <ul class="pagination">
         <li class="page-item" id="prev-btn"><a class="page-link" href="#">Previous</a></li>
         <li class="page-item"><a class="page-link" href="#"><span style="color: black;" id="page-info">Page 1</span></a></li>
@@ -44,65 +58,62 @@
       </ul>
     </nav>
   </div>
+  <?php $result = $conn->query("SELECT * FROM courses") or die($conn->$query);
+        $data = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $data[] = $row;
+        }
+        $data_json = json_encode($data)
+  ?>
   
   
   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="script.js"></script>
   <script>
-    const itemsPerPage = 10; // Number of items to show per page
-    let currentPage = 1; // Current page number
+    $(document).ready(function() {
+  // Sample data for demonstration
+  var jsonData = <?php echo $data_json; ?>;
 
-    function displayTableData() {
-        
+  const itemsPerPage = 10; // Number of items to show per page
+  let currentPage = 1; // Current page number
 
-        const tableBody = $("#data-table tbody");
-        tableBody.empty(); // Clear existing rows
-        
-        $(document).ready(function() {
-            $.ajax({
-                url: 'get_data.php',
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    // Process the retrieved data
-                    const startIndex = (currentPage - 1) * itemsPerPage;
-                    const endIndex = startIndex + itemsPerPage;
-                    const pageData = data.slice(startIndex, endIndex);
-                    var dataContainer = $('#data-container');
-                    pageData.forEach(function(item) {
-                        var row = `<tr><td>${item.course_id}</td><td>${item.name}</td><td>${item.name}</td><td>${item.name}</td><td>${item.name}</td><td>${item.name}</td></tr>`;
-                        tableBody.append(row);
-                    });
-                },
-                error: function(xhr, status, error) {
-                    console.error(error);
-                }
-            });
-        });
-        
+  function displayTableData() {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const pageData = data.slice(startIndex, endIndex);
 
-        $("#page-info").text(`Page ${currentPage}`);
+    const tableBody = $("#data-table tbody");
+    tableBody.empty(); // Clear existing rows
+    $("#test").append(`kamal`)
+    
+    pageData.forEach(item => {
+      const row = `<tr><td>${item.id}</td><td>${item.course_id}</td><td>${item.lname}</td><td>${item.handle}</td></tr>`;
+      tableBody.append(row);
+    });
+
+    $("#page-info").text(`Page ${currentPage}`);
+  }
+
+  $("#prev-btn").on("click", function() {
+    if (currentPage > 1) {
+      currentPage--;
+      displayTableData();
     }
+  });
 
-    $("#prev-btn").on("click", function() {
-        if (currentPage > 1) {
-            currentPage--;
-            displayTableData();
-        }
-    });
+  $("#next-btn").on("click", function() {
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    if (currentPage < totalPages) {
+      currentPage++;
+      displayTableData();
+    }
+  });
 
-    $("#next-btn").on("click", function() {
-        const totalPages = Math.ceil(data.length / itemsPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            displayTableData();
-        }
-    });
+  // Initial display
+  displayTableData();
+});
 
-    // Initial display
-    displayTableData();
-
-</script>
+  </script>
 </body>
 </html>

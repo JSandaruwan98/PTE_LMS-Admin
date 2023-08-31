@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Table Pagination Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+<body>
+    <div id="data-container">
+        <table id="data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Age</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be displayed here -->
+            </tbody>
+        </table>
+    </div>
+    <div id="pagination">
+        <!-- Pagination controls will be displayed here -->
+    </div>
+
+    <script>
+        $(document).ready(function () {
+    function loadData(page) {
+        $.ajax({
+            type: "GET",
+            url: "get_data.php",
+            data: { page: page },
+            dataType: "json",
+            success: function (response) {
+                // Populate the table with data
+                var data = response.data;
+                var tableBody = $("#data-table tbody");
+                tableBody.empty();
+                $.each(data, function (index, item) {
+                    var row = `<tr>
+                        <td>${item.id}</td>
+                        <td>${item.name}</td>
+                        <td>${item.age}</td>
+                    </tr>`;
+                    tableBody.append(row);
+                });
+
+                // Update pagination controls
+                // Calculate and update pagination links based on data length
+                var pagination = $("#pagination");
+                pagination.empty();
+                console.log(data.totalCount)
+                var totalPages = Math.ceil(response.totalItems /10);
+                for (var i = 1; i <= totalPages; i++) {
+                    console.log("kamal")
+                    var pageLink = `<a href="#" data-page="${i}">${i}</a>`;
+                    pagination.append(pageLink);
+                }
+            }
+            
+        });
+    }
+
+    // Initial data load
+    loadData(1);
+
+    // Pagination click event
+    $(document).on("click", "#pagination a", function (e) {
+        e.preventDefault();
+        var page = $(this).data("page");
+        loadData(page);
+    });
+});
+
+    </script>
+</body>
+</html>

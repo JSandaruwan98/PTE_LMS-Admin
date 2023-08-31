@@ -129,3 +129,11 @@
     .th{
       color: #666464;
     }
+    thead{
+      background-color: rgba(244, 227, 227, 1);
+      color: rgba(244, 227, 227, 0.5);
+    }
+    tbody{
+      background-color: white;
+    }
+

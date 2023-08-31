@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fetching MySQL Data with jQuery</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div id="data-container"></div>
+
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: 'get_data.php',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Process the retrieved data
+                    var dataContainer = $('#data-container');
+                    data.forEach(function(item) {
+                        var row = `<p>ID: ${item.id}, Name: ${item.name}</p>`;
+                        dataContainer.append(row);
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
