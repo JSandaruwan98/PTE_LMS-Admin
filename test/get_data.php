@@ -14,7 +14,7 @@ if ($conn->connect_error) {
 
 
 $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-$itemsPerPage = 10; // Number of items to display per page
+$itemsPerPage = 2; // Number of items to display per page
 $offset = ($page - 1) * $itemsPerPage;
 
 $query = "SELECT * FROM courses LIMIT $offset, $itemsPerPage";

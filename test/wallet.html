@@ -28,6 +28,9 @@
 
     <script>
         $(document).ready(function () {
+    var itemsPerPage = 2; // Number of items to display per page
+    var currentPage = 1;  // Track the current page
+
     function loadData(page) {
         $.ajax({
             type: "GET",
@@ -35,8 +38,9 @@
             data: { page: page },
             dataType: "json",
             success: function (response) {
-                // Populate the table with data
                 var data = response.data;
+
+                // Populate the table with data
                 var tableBody = $("#data-table tbody");
                 tableBody.empty();
                 $.each(data, function (index, item) {
@@ -49,32 +53,42 @@
                 });
 
                 // Update pagination controls
-                // Calculate and update pagination links based on data length
                 var pagination = $("#pagination");
                 pagination.empty();
-                console.log(data.totalCount)
-                var totalPages = Math.ceil(response.totalItems /10);
+                var totalPages = Math.ceil(response.totalItems / itemsPerPage);
+
+                // Add Previous button
+                if (currentPage > 1) {
+                    var prevButton = `<a href="#" data-page="${currentPage - 1}">Previous</a>`;
+                    pagination.append(prevButton);
+                }
+
+                // Add numbered page buttons
                 for (var i = 1; i <= totalPages; i++) {
-                    console.log("kamal")
                     var pageLink = `<a href="#" data-page="${i}">${i}</a>`;
                     pagination.append(pageLink);
                 }
+
+                // Add Next button
+                if (currentPage < totalPages) {
+                    var nextButton = `<a href="#" data-page="${currentPage + 1}">Next</a>`;
+                    pagination.append(nextButton);
+                }
             }
-            
         });
     }
 
     // Initial data load
-    loadData(1);
+    loadData(currentPage);
 
     // Pagination click event
     $(document).on("click", "#pagination a", function (e) {
         e.preventDefault();
         var page = $(this).data("page");
+        currentPage = page;  // Update the current page
         loadData(page);
     });
 });
-
     </script>
 </body>
 </html>

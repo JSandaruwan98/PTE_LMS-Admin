@@ -22,7 +22,12 @@
       $('#wallet').click(function(){
            $('#main').load('wallet.html');
       });
-      
+      $('#studentEnrolment').click(function(){
+           $('#main').load('studentEnrolment.html');
+      });
+      $('#studentAttendance').click(function(){
+           $('#main').load('studentAttendance.html');
+      });
       });
     </script>
     <script>
@@ -37,7 +42,7 @@
   <nav id="main-navbar" class="navbar fixed-top" style="position: fixed;">
     <a href="javascript:void(0);" onclick="openNav()" class="link-dark">
       <img class="logo_icon" src="images/LMS_icon.png" />
-      <div href="" class="logo_name text-decoration-none"><span>PTE LMS</span></div>
+      <div href="" class="logo_name text-decoration-none"><span>PTE EXAM LMS</span></div>
   </nav>
   <div class="sidebar">
     <ul class="menu">
@@ -55,8 +60,8 @@
       <li class="menu-item dropdown">
         <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/student.png" />Student</a>
         <ul class="submenu">
-          <li><a href="#" class="text-decoration-none">Enrolment</a></li>
-          <li><a href="#" class="text-decoration-none" class="text-decoration-none">Attendance</a></li>
+          <li><a id="studentEnrolment" class="text-decoration-none">Enrolment</a></li>
+          <li><a id="studentAttendance" href="#" class="text-decoration-none">Attendance</a></li>
         </ul>
       </li>
       <li class="menu-item dropdown">

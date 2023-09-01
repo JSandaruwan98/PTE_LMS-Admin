@@ -14,26 +14,29 @@
 <body>
     <div class="header border">
         <div class="row mb-4 ms-4">
-             <h1 class="h3 text-secondary">Wallet</h1>
-             <div class="d-inline"><a href="/">Dashboard</a><span> / Wallet</span></div> 
+             <h1 class="h3 text-secondary">Student Attendance</h1>
+             <div class="d-inline"><a href="/">Dashboard</a><span> / Attendance</span></div> 
         </div>
     </div>
   <div id="data-container" class="content border mt-3 p-4">
     <div class="col">
-        <h5 class="pb-3" style="float: left;">PASSBOOK</h5>
-        <button type="button" class="btn btn-secondary btn-sm" style="float: right;">Found Transfer</button>
-        <div class="btn border border-secondary btn-sm  me-2" style="float: right;">Balance: $50000</div>
+        <h5 class="pb-3" style="float: left;">View Attendance</h5>
+        <button type="button" class="btn btn-secondary btn-sm" style="float: right;">Mark Attendance</button>
       </div>
     <div style="height: 380px;">
     <table class="table" id="data-table">
       <thead>
         <tr>
           <th scope="col"><span style="color: #666464;">S.No</span></th>
-          <th scope="col"><span style="color: #666464;">Date</span></th>
-          <th scope="col"><span style="color: #666464;">Type</span></th>
-          <th scope="col"><span style="color: #666464;">Amount</span></th>
-          <th scope="col"><span style="color: #666464;">Transaction</span></th>
-          <th scope="col"><span style="color: #666464;">Description</span></th>
+          <th scope="col"><span style="color: #666464;">Employee ID</span></th>
+          <th scope="col"><span style="color: #666464;">Name</span></th>
+          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
         </tr>
       </thead>
       <tbody>
@@ -72,6 +75,10 @@
                     var row = `<tr>
                         <td>${item.id}</td>
                         <td>${item.name}</td>
+                        <td>${item.age}</td>
+                        <td>${item.id}</td>
+                        <td>${item.name}</td>
+                        <td>${item.age}</td>
                         <td>${item.age}</td>
                         <td>${item.id}</td>
                         <td>${item.name}</td>

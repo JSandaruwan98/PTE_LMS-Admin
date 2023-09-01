@@ -11,19 +11,29 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch data from the database
-$query = "SELECT * FROM courses";
-$result = $conn->query($query);
 
-$data = array();
-while ($row = $result->fetch_assoc()) {
+
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$itemsPerPage = 10; // Number of items to display per page
+$offset = ($page - 1) * $itemsPerPage;
+
+$query = "SELECT * FROM courses LIMIT $offset, $itemsPerPage";
+$result = mysqli_query($conn, $query);
+
+$data = [];
+while ($row = mysqli_fetch_assoc($result)) {
     $data[] = $row;
 }
 
-// Close the connection
-$conn->close();
+$totalItemsQuery = "SELECT COUNT(*) as total FROM courses";
+$totalItemsResult = mysqli_query($conn, $totalItemsQuery);
+$totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
 
-// Return data as JSON
-header("Content-Type: application/json");
-echo json_encode($data);
+
+$response = [
+    'data' => $data,
+    'totalItems' => $totalItems
+];
+echo json_encode($response);
+
 ?>
