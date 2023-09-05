@@ -22,13 +22,13 @@
     <table class="table" id="data-table">
       <thead>
         <tr>
-          <th scope="col"><span style="color: #666464;">S.No</span></th>
-          <th scope="col"><span style="color: #666464;">Student ID</span></th>
-          <th scope="col"><span style="color: #666464;">Name</span></th>
-          <th scope="col"><span style="color: #666464;">Contact No</span></th>
-          <th scope="col"><span style="color: #666464;">Course Name</span></th>
-          <th scope="col"><span style="color: #666464;">Batch Name</span></th>
-          <th scope="col"><span style="color: #666464;">Action</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">S.No</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Student ID</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Name</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Contact No</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Course Name</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Batch Name</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Action</span></th>
         </tr>
       </thead>
       <tbody>
@@ -65,13 +65,13 @@
                 tableBody.empty();
                 $.each(data, function (index, item) {
                     var row = `<tr>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.age}</td>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.age}</td>
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
                     </tr>`;
                     tableBody.append(row);
                 });

@@ -10,31 +10,42 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-          $('#home').click(function(){
-             $('#main').load('dashboard.html');
+          $('#batchView').click(function(){
+             $('#main').load('batchView.html');
           });
         });
       </script>
 </head>
 <body>
     <div class="header border">
-        <div class="row p-3 ps-5">
-             <h1 class="h4 text-secondary">Batch Details</h1>
-             <div class="d-inline"><a href="/">Dashboard</a><span> / Batch Details</span></div> 
+        <div class="card-body ms-3" style="margin-top: -7px;">
+            <h5 class="h4 card-title text-secondary">Add Batch Details</h5>
+            <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / </span><a id="batchView" href="#">Batch Details</a><span> / Add Batch</span></p>
         </div>
     </div>
+    
     <div class="content border mt-3 p-4 px-5">
         <form>
             <h1 class="mb-4 h5 text-secondary">BATCH INFOTMATION</h1>
             <div class="form1">
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label class="text-secondary" for="inputName">Program</label>
-                        <input type="text" class="form-control" id="inputEmail4" placeholder="Program">
+                        <label class="text-secondary" for="inputEmail4">Program</label>
+                        <select class="form-select form-select-lg text-secondary" aria-label="Default select example" style="height: 34px;">
+                            <option selected>Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label class="text-secondary" for="inputEmail">Class</label>
-                        <input type="email" class="form-control" id="inputPassword4" placeholder="Class">
+                        <label class="text-secondary" for="inputPassword4">Class</label>
+                        <select class="form-select form-select-lg text-secondary" aria-label="Default select example" style="height: 34px;">
+                            <option selected>Open this select menu</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-row">

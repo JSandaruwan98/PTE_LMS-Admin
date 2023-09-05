@@ -12,12 +12,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="header border">
-        <div class="row mb-4 ms-4">
-             <h1 class="h3 text-secondary">Wallet</h1>
-             <div class="d-inline"><a href="/">Dashboard</a><span> / Wallet</span></div> 
-        </div>
+  <div class="header border">
+    <div class="card-body ms-3" style="margin-top: -7px;">
+        <h5 class="h4 card-title text-secondary">Wallet</h5>
+        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / Wallet</span></p>
     </div>
+  </div>
+    
   <div id="data-container" class="content border mt-3 p-4">
     <div class="col">
         <h5 class="pb-3" style="float: left;">PASSBOOK</h5>
@@ -28,12 +29,12 @@
     <table class="table" id="data-table">
       <thead>
         <tr>
-          <th scope="col"><span style="color: #666464;">S.No</span></th>
-          <th scope="col"><span style="color: #666464;">Date</span></th>
-          <th scope="col"><span style="color: #666464;">Type</span></th>
-          <th scope="col"><span style="color: #666464;">Amount</span></th>
-          <th scope="col"><span style="color: #666464;">Transaction</span></th>
-          <th scope="col"><span style="color: #666464;">Description</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">S.No</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Date</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Type</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Amount</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Transaction</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Description</span></th>
         </tr>
       </thead>
       <tbody>
@@ -70,12 +71,12 @@
                 tableBody.empty();
                 $.each(data, function (index, item) {
                     var row = `<tr>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.age}</td>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.age}</td>
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.age}</td>
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.age}</td>
                     </tr>`;
                     tableBody.append(row);
                 });

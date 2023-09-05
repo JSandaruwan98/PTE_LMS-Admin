@@ -6,28 +6,42 @@
   <title>Pagination Example</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">  
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+          $('#addEmp').click(function(){
+             $('#main').load('employeeAdd.html');
+          });
+        });
+      </script>
 </head>
 <body>
   <div class="header border">
-    <div class="row p-3 ps-5">
-         <h1 class="h4 text-secondary">PTE Evaluation</h1>
-         <div class="d-inline"><a href="/">Dashboard</a><span> / PTE Evaluation</span></div> 
+    <div class="card-body ms-3" style="margin-top: -7px;">
+        <h5 class="h4 card-title text-secondary">Employee Management</h5>
+        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / Employee List</span></p>
     </div>
-  </div>
+</div>
+    
   <div id="data-container" class="content border mt-3 p-4">
-    <div style="height: 359px; background-color: white;">
+    <div class="col">
+        <h5 class="pb-3" style="float: left;">Employee Details</h5>
+        <button id="addEmp" href="#" type="button" class="btn btn-secondary btn-sm" style="float: right;">Add Employee</button>
+      </div>
+    <div style="height: 380px;">
     <table class="table" id="data-table">
       <thead>
         <tr>
-          <th scope="col"><span style="color: #666464;">S.No</span></th>
-          <th scope="col"><span style="color: #666464;">Name</span></th>
-          <th scope="col"><span style="color: #666464;">Assigned On</span></th>
-          <th scope="col"><span style="color: #666464;">Attempted On</span></th>
-          <th scope="col"><span style="color: #666464;">Test/span></th>
-          <th scope="col"><span style="color: #666464;">Action</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Emp No</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Employee Name</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Role</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">User Name</span></th>
+          <th class="text-center"  scope="col"><span style="color: #666464;">User Name</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Password</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Action</span></th>
         </tr>
       </thead>
       <tbody>
@@ -35,7 +49,7 @@
       </tbody>
     </table>
   </div>
-    <nav aria-label="Page navigation example">
+    <nav aria-label="Page navigation example" class="mt-4">
       <ul id="pagination" class="pagination">
       </ul>
     </nav>
@@ -64,13 +78,13 @@
                 tableBody.empty();
                 $.each(data, function (index, item) {
                     var row = `<tr>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.age}</td>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.age}</td>
-                        
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.age}</td>
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.age}</td>
+                        <td class="text-center" style="font-size:15px;"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"></div></td>
                     </tr>`;
                     tableBody.append(row);
                 });

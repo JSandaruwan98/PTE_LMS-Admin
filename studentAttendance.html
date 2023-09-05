@@ -10,33 +10,42 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $('#attendance').click(function(){
+           $('#main').load('studentMarkAttendance.html');
+        });
+      });
+    </script> 
 </head>
 <body>
-    <div class="header border">
-        <div class="row mb-4 ms-4">
-             <h1 class="h3 text-secondary">Student Attendance</h1>
-             <div class="d-inline"><a href="/">Dashboard</a><span> / Attendance</span></div> 
-        </div>
+  <div class="header border">
+    <div class="card-body ms-3" style="margin-top: -7px;">
+        <h5 class="h4 card-title text-secondary">Student Attendance</h5>
+        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / Attendance</span></p>
     </div>
+  </div>
+    
+    
   <div id="data-container" class="content border mt-3 p-4">
     <div class="col">
         <h5 class="pb-3" style="float: left;">View Attendance</h5>
-        <button type="button" class="btn btn-secondary btn-sm" style="float: right;">Mark Attendance</button>
+        <button id="attendance" type="button" class="btn btn-secondary btn-sm" style="float: right;">Mark Attendance</button>
       </div>
     <div style="height: 380px;">
     <table class="table" id="data-table">
       <thead>
         <tr>
-          <th scope="col"><span style="color: #666464;">S.No</span></th>
-          <th scope="col"><span style="color: #666464;">Employee ID</span></th>
-          <th scope="col"><span style="color: #666464;">Name</span></th>
-          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
-          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
-          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
-          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
-          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
-          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
-          <th scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">S.No</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Student ID</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Name</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
         </tr>
       </thead>
       <tbody>
@@ -73,16 +82,16 @@
                 tableBody.empty();
                 $.each(data, function (index, item) {
                     var row = `<tr>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.age}</td>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.age}</td>
-                        <td>${item.age}</td>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.age}</td>
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.age}</td>
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.age}</td>
+                        <td class="text-center">${item.age}</td>
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.age}</td>
                     </tr>`;
                     tableBody.append(row);
                 });

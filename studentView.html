@@ -10,29 +10,37 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+          $('#enrollStudent').click(function(){
+             $('#main').load('studentEnrolment.html');
+          });
+        });
+      </script>
 </head>
 <body>
   <div class="header border">
     <div class="card-body ms-3" style="margin-top: -7px;">
-        <h5 class="h4 card-title text-secondary">PTE Evaluation Details</h5>
-        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / PTE Evaluation</span></p>
+        <h5 class="h4 card-title text-secondary">View Student</h5>
+        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / View Students</span></p>
     </div>
-  </div>
-   
+</div>
+    
   <div id="data-container" class="content border mt-3 p-4">
     <div class="col">
-        <h5 class="pb-3" style="float: left;">VIEW EVALUATION</h5>
+        <h5 class="pb-3" style="float: left;">View Attendance</h5>
+        <button id="enrollStudent" href="#" type="button" class="btn btn-secondary btn-sm" style="float: right;">Enroll Student</button>
       </div>
     <div style="height: 380px;">
     <table class="table" id="data-table">
       <thead>
         <tr>
           <th class="text-center" scope="col"><span style="color: #666464;">S.No</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Student ID</span></th>
           <th class="text-center" scope="col"><span style="color: #666464;">Name</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Assigned On</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Attempted On</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Evaluation On</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Test</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Contact No</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Course Name</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Batch Name</span></th>
           <th class="text-center" scope="col"><span style="color: #666464;">Action</span></th>
         </tr>
       </thead>
@@ -41,7 +49,7 @@
       </tbody>
     </table>
   </div>
-    <nav aria-label="Page navigation example">
+    <nav class="mt-4" aria-label="Page navigation example">
       <ul id="pagination" class="pagination">
       </ul>
     </nav>
@@ -76,7 +84,7 @@
                         <td class="text-center">${item.id}</td>
                         <td class="text-center">${item.name}</td>
                         <td class="text-center">${item.age}</td>
-                        <td class="text-center"><a href="">${item.age}</a></td>
+                        <td class="text-center" style="font-size:15px;"><div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault"></div></td>
                     </tr>`;
                     tableBody.append(row);
                 });

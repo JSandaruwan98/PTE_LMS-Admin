@@ -10,22 +10,25 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-          $('#home').click(function(){
-             $('#main').load('dashboard.html');
+          $('#view').click(function(){
+             $('#main').load('studentView.html');
           });
         });
       </script>
 </head>
 <body>
     <div class="header border">
-        <div class="row p-3 ps-5">
-             <h1 class="h4 text-secondary">Enrolment Form</h1>
-             <div class="d-inline"><a href="/">Dashboard</a><span> / </span><a id="viewStudent" href="#">View Students</a><span> / Add Students</span></div> 
+        <div class="card-body ms-3" style="margin-top: -7px;">
+            <h5 class="h4 card-title text-secondary">Enrollment Form</h5>
+            <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / </span><a id="view" href="#">View Student</a><span> / Add Student</span></p>
         </div>
     </div>
-    <div class="content border mt-3">
+        
+    
+    <div class="content border mt-3 p-4 px-5">
         <form class="ps-2">
             <h1 class="mb-4 h5 text-secondary">PERSONAL DETAILS</h1>
+            <div class="form1">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label class="text-secondary" for="inputEmail4">Student Id</label>
@@ -49,27 +52,37 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label class="text-secondary" for="inputEmail4">Program</label>
-                    <input type="email" class="form-control" id="inputEmail4" placeholder="Program">
+                    <select class="form-select form-select-lg text-secondary" aria-label="Default select example" style="height: 34px;">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
                 </div>
                 <div class="form-group col-md-6">
                     <label class="text-secondary" for="inputPassword4">Batch Name</label>
-                    <input type="password" class="form-control" id="inputPassword4" placeholder="Batch Name">
+                    <select class="form-select form-select-lg text-secondary" aria-label="Default select example" style="height: 34px;">
+                        <option selected>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label class="text-secondary" for="inputEmail4">Strats ON</label>
-                    <input type="date" class="form-control" id="inputEmail4" placeholder="Starts On">
+                    <input type="date" class="form-control text-secondary" id="inputEmail4" placeholder="Starts On">
                 </div>
                 <div class="form-group col-md-6">
                     <label class="text-secondary" for="inputPassword4">Days</label>
-                    <input type="number" class="form-control" id="inputPassword4" placeholder="Days">
+                    <input type="number" class="form-control text-secondary" id="inputPassword4" placeholder="Days">
                 </div>
             </div>
             <div class="text-center py-4">
                 <button type="submit" class="btn btn-secondary" style="left: 50%;">CREATE</button>
             </div>
-            
+        </div>
         </form>
     </div>
 </body>
