@@ -25,33 +25,46 @@
     </div>
     
     <div class="content border mt-3 p-4 px-5">
-        <form>
+        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            </symbol>
+            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </symbol>
+        </svg>
+        
+        <div id="alertSuccess" class="alert alert-success align-items-center" style="display: none;">
+            
+        </div>
+        <div id="alertDanger" class="alert alert-danger align-items-center" style="display: none;">
+            
+        </div>
+        <form action="dataHandler/api/post.php" method="POST" id="batch-form">
             <h1 class="mb-4 h5 text-secondary">BATCH INFOTMATION</h1>
             <div class="form1">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label class="text-secondary" for="inputEmail4">Program</label>
-                        <select class="form-select form-select-lg text-secondary" aria-label="Default select example" style="height: 34px;">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                        <select name="program" class="form-select form-select-lg text-secondary" aria-label="Default select example" style="height: 34px;">
+                            <option selected value="">Open this select menu</option>
+                            <option value="Program I">Program I</option>
+                            <option value="Program II">Program II</option>
+                            <option value="Program III">Program III</option>
+                            <option value="Program IV">Program IV</option>
                         </select>
                     </div>
                     <div class="form-group col-md-6">
                         <label class="text-secondary" for="inputPassword4">Class</label>
-                        <select class="form-select form-select-lg text-secondary" aria-label="Default select example" style="height: 34px;">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                        <select id="data-container" name="class" class="form-select form-select-lg text-secondary" aria-label="Default select example" style="height: 34px;">
+                            <option selected value="">Open this select menu</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label class="text-secondary" for="inputRole">Batch Name</label>
-                        <input type="text" class="form-control" id="inputEmail4" placeholder="Batch Name">
+                        <input name="batchname" type="text" class="form-control" id="inputEmail4" placeholder="Batch Name">
                     </div>
                     <div class="form-group col-md-6" style="padding: 30px;">
                         
@@ -60,20 +73,84 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label class="text-secondary" for="inputDOB">Time from</label>
-                        <input type="time" class="form-control" id="inputEmail4" placeholder="">
+                        <input name="timefrom" type="time" class="form-control text-secondary" id="inputEmail4" placeholder="">
                     </div>
                     <div class="form-group col-md-6">
                         <label class="text-secondary" for="inputQualification">Time to</label>
-                        <input type="time" class="form-control" id="inputPassword4" placeholder="">
+                        <input name="timeto" type="time" class="form-control text-secondary" id="inputEmail4" placeholder="">
                     </div>
                 </div>
             </div>
             
             <div class="text-center py-4">
+                <input type="hidden" name="task" value="create_batch">
                 <button type="submit" class="btn btn-secondary" style="left: 50%;">CREATE</button>
             </div>
             
         </form>
     </div>
+    <script>
+        $(document).ready(function () {
+            $("#batch-form").submit(function (event) {
+                event.preventDefault(); // Prevent the form from submitting normally
+                
+                $.ajax({
+                    type: "POST",
+                    url: "dataHandler/api/post.php",
+                    data: $(this).serialize() + "&task=create_batch", // Serialize the form data
+                    dataType: "json",
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            // Show success alert
+                            $("#alertSuccess").css("display","flex")
+                            $("#alertSuccess").html(`
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                            <div>` + response.message + `</div>`
+                            );
+                            $("#alertSuccess").fadeIn();
+                            $("#batch-form")[0].reset();
+                            setTimeout(function () {
+                                $("#alertSuccess").fadeOut();
+                            }, 1000)
+                        } else {
+                            // Show error alert
+                            $("#alertDanger").css("display","flex")
+                            $("#alertDanger").html(`
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                            <div>` + response.message + `</div>`
+                            );
+                            $("#alertDanger").fadeIn();
+                            setTimeout(function () {
+                                $("#alertDanger").fadeOut();
+                            }, 5000)
+                        }
+                        $("#alert").show();
+                    },
+                    error: function () {
+                        // Handle errors here
+                    }
+                });
+            });
+        });
+    </script>
+     <script>
+        // Use jQuery to fetch data from the server-side script
+        $(document).ready(function () {
+            $.ajax({
+                url: 'dataHandler/api/get.php?data_type=class', // Replace with the correct URL
+                method: 'GET',
+                success: function (data) {
+                    // Loop through the data and append it to the container
+                    for (var i = 0; i < data.length; i++) {
+                        $('#data-container').append('<option value="'+ data[i].class_id +'">' + data[i].name + '</option>');
+                    }
+                },
+                error: function () {
+                    alert('Error fetching data.');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
