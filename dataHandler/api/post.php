@@ -29,6 +29,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $pass = $_POST['pass'];
 
             $response = $dataHandler->createEmployee($name, $email, $role, $phone, $address, $qualification, $uname, $pass);
+        } elseif ($task === 'enroll_student') {
+            $studentid = $_POST['studentid'];
+            $name = $_POST['name'];
+            $phone = $_POST['phone'];
+            $program = $_POST['program'];
+            $batchid = $_POST['batchid'];
+            $starton = $_POST['starton'];
+             
+
+            $response = $dataHandler->enrollStudent($studentid, $name, $phone, $program, $batchid, $starton);
         }
     }
 }

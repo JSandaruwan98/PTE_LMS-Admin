@@ -11,6 +11,10 @@ if (isset($_GET['data_type'])) {
         $data = $dataHandler->getBatchData();
     } elseif ($data_type === 'class') {
         $data = $dataHandler->getClassData();
+    }elseif ($data_type === 'stuid') {
+        $data = $dataHandler->generateStudentID();
+    }elseif ($data_type === 'batchView') {
+        $data = $dataHandler->batchView();
     } else {
         $data = array("error" => "Invalid data type");
     }

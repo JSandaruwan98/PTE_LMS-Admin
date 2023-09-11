@@ -41,23 +41,23 @@
         <div id="alertDanger" class="alert alert-danger align-items-center" style="display: none;">
             
         </div>
-        <form action="studentEnrolment.php" method="POST" id="studentenrollment-form" class="ps-2">
+        <form action="dataHandler/api/post.php" method="POST" id="studentenrollment-form" class="ps-2">
             <h1 class="mb-4 h5 text-secondary">PERSONAL DETAILS</h1>
             <div class="form1">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label class="text-secondary" for="inputEmail4">Student Id</label>
-                    <input name="studentid" type="email" class="form-control" id="inputEmail4" placeholder="Student Id">
+                    <input name="studentid" type="text" class="form-control" id="inputstuid" placeholder="Student Id">
                 </div>
                 <div class="form-group col-md-6">
                     <label class="text-secondary" for="inputPassword4">Name</label>
-                    <input name="name" type="password" class="form-control" id="inputPassword4" placeholder="Name">
+                    <input name="name" type="text" class="form-control" id="inputPassword4" placeholder="Name">
                 </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label class="text-secondary" for="inputEmail4">Phone</label>
-                    <input name="phone" type="email" class="form-control" id="inputEmail4" placeholder="Phone">
+                    <input name="phone" type="number" class="form-control" id="inputEmail4" placeholder="Phone">
                 </div>
                 <div class="col-md-6" style="padding: 40px;">
                     
@@ -74,7 +74,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label class="text-secondary" for="inputPassword4">Batch Name</label>
-                    <select id="data-container" name="batchname" class="form-select form-select-lg text-secondary" aria-label="Default select example" style="height: 34px;">
+                    <select id="data-container" name="batchid" class="form-select form-select-lg text-secondary" aria-label="Default select example" style="height: 34px;">
                         <option selected value="">Open this select menu</option>
                     </select>
                 </div>
@@ -102,8 +102,8 @@
     
                     $.ajax({
                         type: "POST",
-                        url: "studentEnrolment.php",
-                        data: $(this).serialize(), // Serialize the form data
+                        url: "dataHandler/api/post.php",
+                        data: $(this).serialize() + "&task=enroll_student", // Serialize the form data
                         dataType: "json",
                         success: function (response) {
                             if (response.success) {
@@ -141,14 +141,27 @@
          <script>
             // Use jQuery to fetch data from the server-side script
             $(document).ready(function () {
+                //batch name added the Batch name selection box
                 $.ajax({
-                    url: 'api.php?data_type=batch', // Replace with the correct URL
+                    url: 'dataHandler/api/get.php?data_type=batch', // Replace with the correct URL
                     method: 'GET',
                     success: function (data) {
                         // Loop through the data and append it to the container
                         for (var i = 0; i < data.length; i++) {
                             $('#data-container').append('<option value="'+ data[i].batch_id +'">' + data[i].name + '</option>');
                         }
+                    },
+                    error: function () {
+                        alert('Error fetching data.');
+                    }
+                });
+                //generate the Student id
+                $.ajax({
+                    url: 'dataHandler/api/get.php?data_type=stuid', // Replace with the correct URL
+                    method: 'GET',
+                    success: function (data) {
+                        // Loop through the data and append it to the container
+                        $("#inputstuid").val(data)
                     },
                     error: function () {
                         alert('Error fetching data.');
