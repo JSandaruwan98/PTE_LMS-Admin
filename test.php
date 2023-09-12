@@ -2,10 +2,10 @@
 // Check if the request is a POST request
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check if 'featureEnabled' is set in the POST data
-    if (isset($_POST['featureEnabled'])) {
+    if (isset($_POST['featureEnabled']) && isset($_POST['id'])) {
         // Retrieve the checkbox value
         $featureEnabled = ($_POST['featureEnabled'] === 'true') ? 1 : 0; // Convert to 1 or 0
-
+        $id = $_POST['id'];
         // Perform a database update using the $featureEnabled value
         // Replace this section with your actual database update logic
         $servername = "localhost";
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Update the database with the new checkbox value
-        $sql = "UPDATE mine SET enable = $featureEnabled WHERE id = 1"; // Replace with your table and conditions
+        $sql = "UPDATE mine SET enable = $featureEnabled WHERE id = $id"; // Replace with your table and conditions
         if ($conn->query($sql) === TRUE) {
             // Database update successful
             echo "Database updated successfully.";

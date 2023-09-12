@@ -9,20 +9,32 @@
 <body>
 
 
-  <label for="myCheckbox">Enable Feature:</label>
+  <label for="myCheckbox" id="check"></label>
   <input type="checkbox" id="myCheckbox" name="featureEnabled">
+  <table id="checktable">
+        <thead>
+            <tr>
+                <td>Active</td>
+                <td>id</td>
+            </tr>
+        </thead>
+        <tbody>
+        
+        </tbody>
+  </table>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
       $(document).ready(function() {
           // Change event handler for the checkbox
-          $('#myCheckbox').change(function() {
+          $('#checktable').on('change', '#myCheckbox', function() {
               // Get the checkbox value (true or false)
               var featureEnabled = $(this).is(':checked');
-
+              const id = $(this).data('id');
               // Create an object to send to the server
               var dataToSend = {
-                  featureEnabled: featureEnabled
+                  featureEnabled: featureEnabled,
+                  id: id
               };
 
               // Send the data to the server using AJAX
@@ -42,7 +54,34 @@
           });
       });
   </script>
-
+    <script>
+        $(document).ready(function () {
+            
+            $.ajax({
+                
+                url: 'testget.php', // Replace with the correct URL
+                method: 'GET',
+                success: function (data) {
+                    
+                    var tableBody = $("#checktable tbody");
+                    tableBody.empty();
+                    $.each(data, function (index, item) {
+                        
+                        var row = `<tr>
+                            <td>${item.id}</td>
+                            <td><input type="checkbox" id="myCheckbox" name="featureEnabled" data-id=${item.id} ${(parseInt(item.enable) ? "checked" : "")}></td>
+                        </tr>`;
+                        tableBody.append(row);
+                    });
+                    
+                },
+                error: function () {
+                    alert('Error fetching data.');
+                }
+            });
+            
+        });
+    </script>
 
 
 

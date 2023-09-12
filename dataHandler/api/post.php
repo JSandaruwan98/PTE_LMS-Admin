@@ -39,7 +39,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              
 
             $response = $dataHandler->enrollStudent($studentid, $name, $phone, $program, $batchid, $starton);
+        }elseif ($task === 'checkbox') {
+            $featureEnabled = ($_POST['featureEnabled'] === 'true') ? 1 : 0; // Convert to 1 or 0
+            $id = $_POST['id'];
+             
+
+            $response = $dataHandler->checkbox($featureEnabled, $id);
         }
+        
     }
 }
 

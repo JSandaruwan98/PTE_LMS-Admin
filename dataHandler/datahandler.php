@@ -22,6 +22,10 @@ class DataHandler {
         return $data;
     }
 
+    
+    
+    
+
     //View all batch details
     public function batchView() {
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -149,6 +153,11 @@ class DataHandler {
         }
 
         return $response;
+    }
+
+    public function checkbox($featureEnabled, $id) {
+        $sql = "UPDATE batch SET activation = $featureEnabled WHERE batch_id = $id";
+        $this->conn->query($sql);
     }
 
     //created the student enrollement
