@@ -61,9 +61,10 @@
 </head>
 <body style="cursor: context-menu;">
   <nav id="main-navbar" class="navbar fixed-top" style="position: fixed;">
-    <a href="javascript:void(0);" onclick="openNav()" class="link-dark">
+    <a id="toggle-btn" href="javascript:void(0);" onclick="openNav()" class="link-dark">
       <img class="logo_icon" src="images/LMS_icon.png" />
       <div href="" class="logo_name text-decoration-none"><span>PTE EXAM LMS</span></div>
+    </a>  
   </nav>
   <div class="sidebar">
     <ul class="menu">
@@ -112,6 +113,15 @@
   <div id="main">
     <h1>scdsc</h1>
   </div>
-  
+  <script>
+    $(document).ready(function() {
+        const toggleBtn = $("#toggle-btn");
+        const sidebar = $(".sidebar");
+
+        toggleBtn.click(function() {
+            sidebar.toggleClass("open");
+        });
+    });
+  </script>
 </body>
 </html>

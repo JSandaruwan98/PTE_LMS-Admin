@@ -54,6 +54,38 @@ class DataHandler {
         return $response;
     }
 
+    //View all batch details
+    public function studentView() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT S.activation AS activation,S.student_id AS student_id, S.name AS student_name, S.phone AS phone, B.program AS program, B.name AS batch_name
+                FROM student AS S, assignstudent AS SB, batch AS B 
+                WHERE S.student_id = SB.student_id AND B.batch_id = SB.batch_id";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total 
+                            FROM student AS S, assignstudent AS SB, batch AS B 
+                            WHERE S.student_id = SB.student_id AND B.batch_id = SB.batch_id";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+    }
+
     // get the class id and name for the drop down input field of classes
     public function getClassData() {
         $sql = "SELECT * FROM class";
@@ -155,8 +187,12 @@ class DataHandler {
         return $response;
     }
 
-    public function checkbox($featureEnabled, $id) {
+    public function bactcheckbox($featureEnabled, $id) {
         $sql = "UPDATE batch SET activation = $featureEnabled WHERE batch_id = $id";
+        $this->conn->query($sql);
+    }
+    public function studentcheckbox($featureEnabled, $id) {
+        $sql = "UPDATE student SET activation = $featureEnabled WHERE student_id = $id";
         $this->conn->query($sql);
     }
 

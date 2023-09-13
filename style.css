@@ -54,13 +54,20 @@
 
   .sidebar {
     width: 200px;
-    background-color: rgba(244, 227, 227, 0.5);
+    background-color: rgba(244, 227, 227, 1);
     color: #666464;
     font: 500 12px 'Inter', sans-serif;
     top: 72px;
+    left: -215px;
     overflow-y: hidden;
     position: absolute;
+    transition: left 0.3s ease-in-out;
   }
+
+  .sidebar.open {
+    left: 0;
+}
+
 
   .menu {
     list-style-type: none;
@@ -102,20 +109,30 @@
     }
 
     #main {
-      width: 85%;
-      height: auto;
-      position: absolute;
-      top: 72px;
+      margin-top: 70px;
+      margin-left: 0;
+      padding: 20px;
       overflow: hidden;
-      padding: 0px;
-      display: block;
+      transition: margin-left 0.3s ease-in-out;
     }
 
-    @media (min-width: 991.98px) {
+    
+    @media (max-width: 991.98px) {
       #main{
-        margin-left: 215px;
+        width: 100%;
       }
     }
+    @media screen and (min-width: 768px) {
+      /* Apply styles when the screen width is 768px or wider */
+      .sidebar {
+          left: 0;
+          background-color: rgba(244, 227, 227, 0.5);
+      }
+  
+      #main {
+          margin-left: 215px;
+      }
+  }
 
     .header, .content{
       background-color: #F9F1F1;
@@ -140,4 +157,10 @@
       cursor: pointer;
     }
 
-    
+    #form{
+      position:static;
+    }
+
+    .form-group{
+      position: static;
+    }
