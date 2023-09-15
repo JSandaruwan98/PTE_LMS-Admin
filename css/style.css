@@ -53,15 +53,16 @@
 
 
   .sidebar {
-    width: 210px;
+    width: 200px;
     background-color: rgba(244, 227, 227, 1);
     color: #666464;
     font: 500 12px 'Inter', sans-serif;
     top: 75px;
-    left: -215px;
+    left: -230px;
     overflow-y: hidden;
     position: absolute;
     transition: left 0.3s ease-in-out;
+    margin-left: 15px;
   }
 
   .sidebar.open {

@@ -39,6 +39,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              
 
             $response = $dataHandler->enrollStudent($studentid, $name, $phone, $program, $batchid, $starton);
+        }elseif ($task === 'mark_attendance_stu') {
+            if (isset($_POST['attendance']) && is_array($_POST['attendance']) && isset($_POST['attendanceDate'])) {
+                $attendanceDate = $_POST['attendanceDate'];
+                
+                try {
+                    $conn->autocommit(false); // Start a transaction
+                    
+                    foreach ($_POST['attendance'] as $studentId => $isPresent) {
+                        // Sanitize inputs and perform error checking as needed
+                        $studentId = intval($studentId);
+                        $isPresent = intval($isPresent);
+        
+                        $response = $dataHandler->mark_attendance_stu($attendanceDate, $studentId, $isPresent);
+                    }
+        
+                     // Commit the transaction
+                } catch (Exception $e) {
+                    $conn->rollback();// Rollback the transaction in case of an error
+                } finally {
+                    $conn->autocommit(true);// Restore autocommit mode
+                }
+            }else{
+                $response['success'] = false;
+                $response['message'] = "All students Absent";
+            }
+            
+        }elseif ($task === 'mark_attendance_emp') {
+            if (isset($_POST['attendance']) && is_array($_POST['attendance']) && isset($_POST['attendanceDate'])) {
+                $attendanceDate = $_POST['attendanceDate'];
+                
+                try {
+                    $conn->autocommit(false); // Start a transaction
+                    
+                    foreach ($_POST['attendance'] as $employeeId => $isPresent) {
+                        // Sanitize inputs and perform error checking as needed
+                        $employeeId = intval($employeeId);
+                        $isPresent = intval($isPresent);
+        
+                        $response = $dataHandler->mark_attendance_emp($attendanceDate, $employeeId, $isPresent);
+                    }
+        
+                     // Commit the transaction
+                } catch (Exception $e) {
+                    $conn->rollback();// Rollback the transaction in case of an error
+                } finally {
+                    $conn->autocommit(true);// Restore autocommit mode
+                }
+            }else{
+                $response['success'] = false;
+                $response['message'] = "All employee Absent";
+            }
+            
         }elseif ($task === 'bactcheckbox') {
             $featureEnabled = ($_POST['featureEnabled'] === 'true') ? 1 : 0; // Convert to 1 or 0
             $id = $_POST['id'];

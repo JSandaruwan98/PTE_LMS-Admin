@@ -142,6 +142,34 @@ class DataHandler {
         return $response;
     }
 
+    //View all student details for Mark the attendance
+    public function employee_markTheAttendance() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT * FROM employee LIMIT $offset, $itemsPerPage";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM employee";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+    }
+
     // get the class id and name for the drop down input field of classes
     public function getClassData() {
         $sql = "SELECT * FROM class";
@@ -295,31 +323,44 @@ class DataHandler {
 
         return $response;
     }
+
     //created the Mark the attendace
-    public function mark_attendance($student_id, $employee_id, $date, $isPresent) {
-        $response = array();
+    public function mark_attendance_stu($attendanceDate, $studentId, $isPresent) {
+        
+        // Update the attendance for the student
+        $sql = "INSERT INTO attendance (student_id, attendance_date, ispresent) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ispresent = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('issi', $studentId, $attendanceDate, $isPresent, $isPresent);
+        $stmt->execute();
 
-        // Perform data validation
-        if (empty($date) || empty($isPresent)) {
-            $response['success'] = false;
-            $response['message'] = "All fields are required.";
-        } else {
-            // Data is valid, proceed with database insertion
-
-            // Insert the batch data into the database (assuming you have a "batch" table)
-            $sql = "INSERT INTO attendance (employee_id, student_id, date, isPresent) 
-                    VALUES ('$employee_id', '$student_id', '$date', '$isPresent')";
-
-            if ($this->conn->query($sql) === TRUE) {
-                $response['success'] = true;
-                $response['message'] = "Batch '$student_id' created successfully!";
-            } else {
-                $response['success'] = false;
-                $response['message'] = "Batch creation failed. Please try again.";
-            }
+        if ($stmt->error) {
+            throw new Exception("Error adding attendance for student ID: $studentId");
+        }else{
+            $response['success'] = true;
+            $response['message'] = "Attendance in '$attendanceDate' created successfully!";
         }
-
         return $response;
     }
+
+    //created the Mark the attendace
+    public function mark_attendance_emp($attendanceDate, $employeeId, $isPresent) {
+        
+        // Update the attendance for the student
+        $sql = "INSERT INTO attendance (employee_id, attendance_date, ispresent) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ispresent = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('issi', $employeeId, $attendanceDate, $isPresent, $isPresent);
+        $stmt->execute();
+
+        if ($stmt->error) {
+            throw new Exception("Error adding attendance for student ID: $employeeId");
+        }else{
+            $response['success'] = true;
+            $response['message'] = "Attendance in '$attendanceDate' created successfully!";
+        }
+        return $response;
+    }
+
+        //return $response;
+    
 }
 ?>

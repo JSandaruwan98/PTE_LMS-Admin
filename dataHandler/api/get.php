@@ -21,6 +21,8 @@ if (isset($_GET['data_type'])) {
         $data = $dataHandler->employeeView();
     }elseif ($data_type === 'studentView_markTheAttendance') {
         $data = $dataHandler->studentView_markTheAttendance();
+    }elseif ($data_type === 'employee_markTheAttendance') {
+        $data = $dataHandler->employee_markTheAttendance();
     } else {
         $data = array("error" => "Invalid data type");
     }
