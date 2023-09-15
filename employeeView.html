@@ -12,8 +12,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function () {
-          $('#enrollStudent').click(function(){
-             $('#main').load('studentEnrolment.html');
+          $('#addEmp').click(function(){
+             $('#main').load('employeeAdd.html');
           });
         });
       </script>
@@ -21,26 +21,25 @@
 <body>
   <div class="header border">
     <div class="card-body ms-3" style="margin-top: -7px;">
-        <h5 class="h4 card-title text-secondary">View Student</h5>
-        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / View Students</span></p>
+        <h5 class="h4 card-title text-secondary">Employee Management</h5>
+        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / Employee List</span></p>
     </div>
 </div>
     
   <div id="data-container" class="content border mt-3 p-4">
     <div class="col">
-        <h5 class="pb-3" style="float: left;">View Attendance</h5>
-        <button id="enrollStudent" href="#" type="button" class="btn btn-secondary btn-sm" style="float: right;">Enroll Student</button>
+        <h5 class="pb-3" style="float: left;">Employee Details</h5>
+        <button id="addEmp" href="#" type="button" class="btn btn-secondary btn-sm" style="float: right;">Add Employee</button>
       </div>
     <div style="height: 380px;">
     <table class="table" id="data-table">
       <thead>
         <tr>
-          <th class="text-center" scope="col"><span style="color: #666464;">S.No</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Student ID</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Name</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Contact No</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Course Name</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Batch Name</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Emp No</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Employee Name</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Role</span></th>
+          <th class="text-center"  scope="col"><span style="color: #666464;">User Name</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Password</span></th>
           <th class="text-center" scope="col"><span style="color: #666464;">Action</span></th>
         </tr>
       </thead>
@@ -49,7 +48,7 @@
       </tbody>
     </table>
   </div>
-    <nav class="mt-4" aria-label="Page navigation example">
+    <nav aria-label="Page navigation example" class="mt-4">
       <ul id="pagination" class="pagination">
       </ul>
     </nav>
@@ -67,7 +66,7 @@
     function loadData(page) {
         $.ajax({
             type: "GET",
-            url: "dataHandler/api/get.php?data_type=studentView",
+            url: "dataHandler/api/get.php?data_type=employeeView",
             data: { page: page },
             dataType: "json",
             success: function (response) {
@@ -76,18 +75,16 @@
                 // Populate the table with data
                 var tableBody = $("#data-table tbody");
                 tableBody.empty();
-                var i=1
                 $.each(data, function (index, item) {
-                  var formattedStudentID = 'STU ' + ('0000' + item.student_id).slice(-4);
-                    var row = `<tr>
-                        <td class="text-center">${i}</td>
-                        <td class="text-center">${formattedStudentID}</td>
-                        <td class="text-center">${item.student_name}</td>
-                        <td class="text-center">${item.phone}</td>
-                        <td class="text-center">${item.program}</td>
-                        <td class="text-center">${item.batch_name}</td>
-                        <td class="" style="font-size:15px;"><div class="form-check form-switch text-center"><input type="checkbox" name="task" class="form-check-input" id="myCheckbox" name="featureEnabled" data-id=${item.student_id} ${(parseInt(item.activation) ? "checked" : "")}></div></td>                    </tr>`;
-                    i++;
+                      var formattedEmployeeID = 'EMP ' + ('0000' + item.employee_id).slice(-4);
+                      var row = `<tr>
+                        <td class="text-center">${formattedEmployeeID}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.role}</td>
+                        <td class="text-center">${item.username}</td>
+                        <td class="text-center">${item.password}</td>
+                        <td class="" style="font-size:15px;"><div class="form-check form-switch text-center"><input type="checkbox" name="task" class="form-check-input" id="myCheckbox" name="featureEnabled" data-id=${item.employee_id} ${(parseInt(item.activation) ? "checked" : "")}></div></td>
+                    </tr>`;
                     tableBody.append(row);
                 });
 
@@ -143,7 +140,7 @@
           var dataToSend = {
               featureEnabled: featureEnabled,
               id: id,
-              task: 'studentcheckbox'
+              task: 'employeecheckbox'
           };
 
           // Send the data to the server using AJAX

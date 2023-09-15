@@ -54,6 +54,34 @@ class DataHandler {
         return $response;
     }
 
+    //View all employee details
+    public function employeeView() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT * FROM employee LIMIT $offset, $itemsPerPage";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM employee";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+    }
+
     //View all batch details
     public function studentView() {
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
@@ -74,6 +102,34 @@ class DataHandler {
         $totalItemsQuery = "SELECT COUNT(*) as total 
                             FROM student AS S, assignstudent AS SB, batch AS B 
                             WHERE S.student_id = SB.student_id AND B.batch_id = SB.batch_id";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+    }
+
+    //View all student details for Mark the attendance
+    public function studentView_markTheAttendance() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT * FROM student LIMIT $offset, $itemsPerPage";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM student";
         $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
         $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
 
@@ -187,12 +243,17 @@ class DataHandler {
         return $response;
     }
 
+    //check boxsess
     public function bactcheckbox($featureEnabled, $id) {
         $sql = "UPDATE batch SET activation = $featureEnabled WHERE batch_id = $id";
         $this->conn->query($sql);
     }
     public function studentcheckbox($featureEnabled, $id) {
         $sql = "UPDATE student SET activation = $featureEnabled WHERE student_id = $id";
+        $this->conn->query($sql);
+    }
+    public function employeecheckbox($featureEnabled, $id) {
+        $sql = "UPDATE employee SET activation = $featureEnabled WHERE employee_id = $id";
         $this->conn->query($sql);
     }
 
@@ -230,6 +291,32 @@ class DataHandler {
                     $response['success'] = false;
                     $response['message'] = "Employee creation failed. Please try again.";
                 }
+        }
+
+        return $response;
+    }
+    //created the Mark the attendace
+    public function mark_attendance($student_id, $employee_id, $date, $isPresent) {
+        $response = array();
+
+        // Perform data validation
+        if (empty($date) || empty($isPresent)) {
+            $response['success'] = false;
+            $response['message'] = "All fields are required.";
+        } else {
+            // Data is valid, proceed with database insertion
+
+            // Insert the batch data into the database (assuming you have a "batch" table)
+            $sql = "INSERT INTO attendance (employee_id, student_id, date, isPresent) 
+                    VALUES ('$employee_id', '$student_id', '$date', '$isPresent')";
+
+            if ($this->conn->query($sql) === TRUE) {
+                $response['success'] = true;
+                $response['message'] = "Batch '$student_id' created successfully!";
+            } else {
+                $response['success'] = false;
+                $response['message'] = "Batch creation failed. Please try again.";
+            }
         }
 
         return $response;

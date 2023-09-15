@@ -47,6 +47,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $featureEnabled = ($_POST['featureEnabled'] === 'true') ? 1 : 0; // Convert to 1 or 0
             $id = $_POST['id'];
             $response = $dataHandler->studentcheckbox($featureEnabled, $id);
+        }elseif ($task === 'employeecheckbox') {
+            $featureEnabled = ($_POST['featureEnabled'] === 'true') ? 1 : 0; // Convert to 1 or 0
+            $id = $_POST['id'];
+            $response = $dataHandler->employeecheckbox($featureEnabled, $id);
         }
         
     }

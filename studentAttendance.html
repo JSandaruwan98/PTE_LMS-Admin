@@ -11,25 +11,26 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function () {
-          $('#enrollStudent').click(function(){
-             $('#main').load('studentEnrolment.html');
-          });
+      $(document).ready(function () {
+        $('#attendance').click(function(){
+           $('#main').load('studentMarkAttendance.html');
         });
-      </script>
+      });
+    </script> 
 </head>
 <body>
   <div class="header border">
     <div class="card-body ms-3" style="margin-top: -7px;">
-        <h5 class="h4 card-title text-secondary">View Student</h5>
-        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / View Students</span></p>
+        <h5 class="h4 card-title text-secondary">Student Attendance</h5>
+        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / Attendance</span></p>
     </div>
-</div>
+  </div>
+    
     
   <div id="data-container" class="content border mt-3 p-4">
     <div class="col">
         <h5 class="pb-3" style="float: left;">View Attendance</h5>
-        <button id="enrollStudent" href="#" type="button" class="btn btn-secondary btn-sm" style="float: right;">Enroll Student</button>
+        <button id="attendance" type="button" class="btn btn-secondary btn-sm" style="float: right;">Mark Attendance</button>
       </div>
     <div style="height: 380px;">
     <table class="table" id="data-table">
@@ -38,10 +39,13 @@
           <th class="text-center" scope="col"><span style="color: #666464;">S.No</span></th>
           <th class="text-center" scope="col"><span style="color: #666464;">Student ID</span></th>
           <th class="text-center" scope="col"><span style="color: #666464;">Name</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Contact No</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Course Name</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Batch Name</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Action</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">2023/07/15</span></th>
         </tr>
       </thead>
       <tbody>
@@ -49,7 +53,7 @@
       </tbody>
     </table>
   </div>
-    <nav class="mt-4" aria-label="Page navigation example">
+    <nav aria-label="Page navigation example">
       <ul id="pagination" class="pagination">
       </ul>
     </nav>
@@ -67,7 +71,7 @@
     function loadData(page) {
         $.ajax({
             type: "GET",
-            url: "dataHandler/api/get.php?data_type=studentView",
+            url: "get_data.php",
             data: { page: page },
             dataType: "json",
             success: function (response) {
@@ -76,18 +80,19 @@
                 // Populate the table with data
                 var tableBody = $("#data-table tbody");
                 tableBody.empty();
-                var i=1
                 $.each(data, function (index, item) {
-                  var formattedStudentID = 'STU ' + ('0000' + item.student_id).slice(-4);
                     var row = `<tr>
-                        <td class="text-center">${i}</td>
-                        <td class="text-center">${formattedStudentID}</td>
-                        <td class="text-center">${item.student_name}</td>
-                        <td class="text-center">${item.phone}</td>
-                        <td class="text-center">${item.program}</td>
-                        <td class="text-center">${item.batch_name}</td>
-                        <td class="" style="font-size:15px;"><div class="form-check form-switch text-center"><input type="checkbox" name="task" class="form-check-input" id="myCheckbox" name="featureEnabled" data-id=${item.student_id} ${(parseInt(item.activation) ? "checked" : "")}></div></td>                    </tr>`;
-                    i++;
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.age}</td>
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.age}</td>
+                        <td class="text-center">${item.age}</td>
+                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${item.name}</td>
+                        <td class="text-center">${item.age}</td>
+                    </tr>`;
                     tableBody.append(row);
                 });
 
@@ -130,38 +135,6 @@
     });
 });
 
-</script>
-<script>
-  $(document).ready(function() {
-      // Change event handler for the checkbox
-      $('#data-table').on('change', '#myCheckbox', function() {
-          // Get the checkbox value (true or false)
-          var featureEnabled = $(this).is(':checked');
-          const id = $(this).data('id');
-          // Create an object to send to the server
-          console.log(featureEnabled)
-          var dataToSend = {
-              featureEnabled: featureEnabled,
-              id: id,
-              task: 'studentcheckbox'
-          };
-
-          // Send the data to the server using AJAX
-          $.ajax({
-              url: 'dataHandler/api/post.php', // Replace with the URL to your server-side script
-              type: 'POST',
-              data: dataToSend,
-              success: function(response) {
-                  // Handle the server's response here if needed
-                  console.log(response);
-              },
-              error: function(xhr, status, error) {
-                  // Handle errors here if needed
-                  console.error(error);
-              }
-          });
-      });
-  });
 </script>
 </body>
 </html>

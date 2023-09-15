@@ -17,6 +17,10 @@ if (isset($_GET['data_type'])) {
         $data = $dataHandler->batchView();
     }elseif ($data_type === 'studentView') {
         $data = $dataHandler->studentView();
+    }elseif ($data_type === 'employeeView') {
+        $data = $dataHandler->employeeView();
+    }elseif ($data_type === 'studentView_markTheAttendance') {
+        $data = $dataHandler->studentView_markTheAttendance();
     } else {
         $data = array("error" => "Invalid data type");
     }
