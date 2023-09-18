@@ -9,7 +9,7 @@ class DataHandler {
 
     // get the batch id and name for the drop down input field of batches  
     public function getBatchData() {
-        $sql = "SELECT * FROM batch";
+        $sql = "SELECT *,CONCAT(DATE_FORMAT(time_from, '%h:%i %p'), ' - ' , DATE_FORMAT(time_to, '%h:%i %p')) AS duration FROM batch";
         $result = $this->conn->query($sql);
         $data = array();
 
@@ -53,6 +53,8 @@ class DataHandler {
 
         return $response;
     }
+
+    
 
     //View all employee details
     public function employeeView() {

@@ -1,0 +1,44 @@
+<!-- assignTest_batch.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>assignTest_batch</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>assignTest_batch.html</h1>
+    
+    <script>
+        // Function to extract query parameters from the URL
+        function getQueryParams() {
+            var queryString = window.location.search.substring(1); // Remove the leading "?" character
+            var queryParams = {};
+
+            var pairs = queryString.split('&');
+            for (var i = 0; i < pairs.length; i++) {
+                var pair = pairs[i].split('=');
+                var key = decodeURIComponent(pair[0]);
+                var value = decodeURIComponent(pair[1] || '');
+                queryParams[key] = value;
+            }
+
+            return queryParams;
+        }
+
+        // Get the query parameters from the URL
+        var queryParams = getQueryParams();
+
+        console.log(queryParams)
+
+        // Access and use the data
+        var id = queryParams.id;
+        var name = queryParams.name;
+
+        // Example: Display the data
+        $('#main').append('<p>ID: ' + id + '</p>');
+    </script>
+
+</body>
+</html>

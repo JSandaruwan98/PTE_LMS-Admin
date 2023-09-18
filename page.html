@@ -1,0 +1,28 @@
+<!-- page1.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 1</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <a href="#" class="addTestLink">Load assignTest_batch.html with Data</a>
+    
+    <script>
+        $('.addTestLink').click(function () {
+            var dataToSend = {
+                id: 23,  // Your data here
+                name: 'Kamala'  // Additional data if needed
+            };
+
+            // Encode the data object as a query string
+            var queryString = $.param(dataToSend);
+
+            // Use the load method to load assignTest_batch.html with the query string
+            $('#main').load('test2.html?' + queryString);
+        });
+    </script>
+</body>
+</html>

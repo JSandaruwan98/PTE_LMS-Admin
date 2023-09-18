@@ -40,9 +40,9 @@
     border-radius: 5px;
     box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
   }
-  #main .header .content{ 
+  #main .header, .content, .sidebar{ 
     border-radius: 5px;
-    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 10%), 0 2px 10px 0 rgb(0 0 0 / 8%);
   }
   #main-navbar{
     border-radius: 5px;
@@ -63,15 +63,21 @@
     position: absolute;
     transition: left 0.3s ease-in-out;
     margin-left: 15px;
+    border-radius: 5px;
   }
 
   .sidebar.open {
     left: 0;
 }
 
+  .sidebar li a:hover{
+    background-color: rgba(244, 227, 227, 1.5);
+    border-radius: 5px;
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 4%);
+
+  }
 
   .menu {
-    margin-left: 8px;
     list-style-type: none;
     padding: 0;
   }
@@ -89,8 +95,7 @@
   
   .submenu {
     display: none;
-    list-style-type: none;
-    margin-left: 10px;
+    list-style-type: none; 
   }
   
   .submenu li {
@@ -99,6 +104,8 @@
   
   .submenu a {
     color: #666464;
+    margin-left: -20px;
+    padding-left: 70px;
     font: 500 11px 'Inter', sans-serif;
     text-decoration: none;
   }
@@ -166,3 +173,13 @@
     .form-group{
       position: static;
     }
+
+
+    input[type="checkbox"]:checked {
+      background-color: #6c757d; /* Change the background color when checked */
+      border-color: #6c757d; /* Change the border color when checked */
+    } 
+    
+    input[type="checkbox"]:checked::before {
+      color: white; 
+    } 
