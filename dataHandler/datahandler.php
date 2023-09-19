@@ -22,7 +22,64 @@ class DataHandler {
         return $data;
     }
 
+    //View all test details
+    public function test() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT * FROM test LIMIT $offset, $itemsPerPage";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM test";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+    }
+
     
+
+
+    //View all videos details
+    public function video() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT * FROM video LIMIT $offset, $itemsPerPage";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM video";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+    }
     
     
 
@@ -187,6 +244,10 @@ class DataHandler {
         return $data;
     }
 
+    
+
+    
+
     // generate the student id for the student enrollment form that add the student id field
     function generateStudentID() {
         $query = "SELECT MAX(student_id) as max_id FROM student";
@@ -323,6 +384,24 @@ class DataHandler {
                 }
         }
 
+        return $response;
+    }
+
+    //created test assigning table
+    public function assignTest($batchId, $testId, $isPresent) {
+        
+        
+        $sql = "INSERT INTO testass (batch_id, test_id, assigned_on, isPresent) VALUES (?, ?, CURDATE(), ?) ON DUPLICATE KEY UPDATE isPresent = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param($batchId, $testId, $isPresent, $isPresent);
+        $stmt->execute();
+
+        if ($stmt->error) {
+            throw new Exception("Error adding attendance for student ID: $testId");
+        }else{
+            $response['success'] = true;
+            $response['message'] = "Attendance in  created successfully!";
+        }
         return $response;
     }
 
