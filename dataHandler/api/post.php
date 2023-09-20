@@ -40,14 +40,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $response = $dataHandler->enrollStudent($studentid, $name, $phone, $program, $batchid, $starton);
         }elseif ($task === 'assignTest') {
-            if (isset($_POST['test']) && is_array($_POST['test']) && isset($_POST['batchid'])) {
+            if (isset($_POST['attendance']) && is_array($_POST['attendance']) && isset($_POST['batchid'])) {
                 $batchId = $_POST['batchid'];
                 
                 try {
                     $conn->autocommit(false); // Start a transaction
                     
-                    foreach ($_POST['test'] as $testId => $isPresent) {
+                    foreach ($_POST['attendace'] as $testId => $isPresent) {
                         // Sanitize inputs and perform error checking as needed
+                        
                         $testId = intval($testId);
                         $isPresent = intval($isPresent);
         
@@ -63,6 +64,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }else{
                 $response['success'] = false;
                 $response['message'] = "All students Absent";
+            }
+            
+        }elseif ($task === 'testassign') {
+            if (isset($_POST['test']) && is_array($_POST['test'])) {
+                $batchId = $_POST['batchId'];
+                
+                try {
+                    $conn->autocommit(false); // Start a transaction
+                    
+                    foreach ($_POST['test'] as $testId => $isPresent) {
+                        // Sanitize inputs and perform error checking as needed
+                        $testId = intval($testId);
+                        $isPresent = intval($isPresent);
+        
+                        $response = $dataHandler->testassign($batchId, $testId, $isPresent);
+                    }
+        
+                     // Commit the transaction
+                } catch (Exception $e) {
+                    $conn->rollback();// Rollback the transaction in case of an error
+                } finally {
+                    $conn->autocommit(true);// Restore autocommit mode
+                }
+            }else{
+                $response['success'] = false;
+                $response['message'] = "All employee Absent";
             }
             
         }elseif ($task === 'mark_attendance_stu') {

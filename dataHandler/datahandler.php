@@ -389,14 +389,17 @@ class DataHandler {
 
     //created test assigning table
     public function assignTest($batchId, $testId, $isPresent) {
-        
+        $response['success'] = false;
+        $response['message'] = "All wrong";
         
         $sql = "INSERT INTO testass (batch_id, test_id, assigned_on, isPresent) VALUES (?, ?, CURDATE(), ?) ON DUPLICATE KEY UPDATE isPresent = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param($batchId, $testId, $isPresent, $isPresent);
+        $stmt->bind_param('issi', $batchId, $testId, $isPresent, $isPresent);
         $stmt->execute();
 
         if ($stmt->error) {
+            $response['success'] = false;
+            $response['message'] = "Attendance in  created not!";
             throw new Exception("Error adding attendance for student ID: $testId");
         }else{
             $response['success'] = true;
@@ -404,6 +407,8 @@ class DataHandler {
         }
         return $response;
     }
+
+    
 
     //created the Mark the attendace
     public function mark_attendance_stu($attendanceDate, $studentId, $isPresent) {
@@ -437,6 +442,24 @@ class DataHandler {
         }else{
             $response['success'] = true;
             $response['message'] = "Attendance in '$attendanceDate' created successfully!";
+        }
+        return $response;
+    }
+
+    //created the Mark the attendace
+    public function testassign($batchId, $testId, $isPresent) {
+        
+        // Update the attendance for the student
+        $sql = "INSERT INTO testass (batch_id, test_id, assigned_on, ispresent) VALUES (?, ?, CURDATE(), ?) ON DUPLICATE KEY UPDATE ispresent = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('issi', $batchId, $testId, $isPresent, $isPresent);
+        $stmt->execute();
+
+        if ($stmt->error) {
+            throw new Exception("Error adding attendance for student ID:");
+        }else{
+            $response['success'] = true;
+            $response['message'] = "Attendance in '$batchId' created successfully!";
         }
         return $response;
     }
