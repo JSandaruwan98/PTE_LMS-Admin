@@ -1,44 +1,42 @@
-<!-- assignTest_batch.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>assignTest_batch</title>
+    <title>Document</title>
+    <!-- Include jQuery library -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <h1>assignTest_batch.html</h1>
-    
+    <!-- Create a table with checkboxes -->
+    <table>
+        <tr>
+            <td><input type="checkbox" id="flexSwitchCheckDefault" class="test-checkbox" data-test-id="1"></td>
+            <td><input type="checkbox" id="flexSwitchCheckDefault" class="test-checkbox" data-test-id="2"></td>
+            <td><input type="checkbox" id="flexSwitchCheckDefault" class="test-checkbox" data-test-id="3"></td>
+        </tr>
+    </table>
+
+    <!-- Display the test array -->
+    <div id="test-array"></div>
+
     <script>
-        // Function to extract query parameters from the URL
-        function getQueryParams() {
-            var queryString = window.location.search.substring(1); // Remove the leading "?" character
-            var queryParams = {};
+        $(document).ready(function() {
+            // Initialize an empty test array
+            var testArray = {};
 
-            var pairs = queryString.split('&');
-            for (var i = 0; i < pairs.length; i++) {
-                var pair = pairs[i].split('=');
-                var key = decodeURIComponent(pair[0]);
-                var value = decodeURIComponent(pair[1] || '');
-                queryParams[key] = value;
-            }
+            // Function to update the test array when a checkbox changes state
+            $('.test-checkbox').change(function() {
+                var testId = $(this).data('test-id');
+                var isChecked = this.checked ? 1 : 0;
 
-            return queryParams;
-        }
+                // Update the test array with test_id and "1" or "0"
+                testArray[testId] = isChecked;
 
-        // Get the query parameters from the URL
-        var queryParams = getQueryParams();
-
-        console.log(queryParams)
-
-        // Access and use the data
-        var id = queryParams.id;
-        var name = queryParams.name;
-
-        // Example: Display the data
-        $('#main').append('<p>ID: ' + id + '</p>');
+                // Display the updated test array
+                $('#test-array').html(JSON.stringify(testArray));
+            });
+        });
     </script>
-
 </body>
 </html>

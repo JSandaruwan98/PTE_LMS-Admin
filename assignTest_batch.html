@@ -48,7 +48,7 @@
       <div class="col">
           <h5 class="pb-3" style="float: left;">Assign Test</h5>
       </div>
-      <form id="attendanceForm"> 
+      <form id="assignForm"> 
       <div style="height: 380px;">
         <table class="table" id="data-table">
           <thead>
@@ -85,11 +85,20 @@
     var itemsPerPage = 10; // Number of items to display per page
     var currentPage = 1;  // Track the current page
 
+    const urlParams = new URLSearchParams(window.location.href);
+    
+    const fragment = window.location.hash;
+
+        // Remove the '#' character to get the value
+    const value = fragment.substring(1);
+        
+    $('#batchid').val(value);
+
     function loadData(page) {
         $.ajax({
             type: "GET",
-            url: "dataHandler/api/get.php?data_type=test",
-            data: { page: page },
+            url: "dataHandler/api/get.php?data_type=test_video_Assigning",
+            data: { page: page, id: value, table1: 'test', table2: 'testass', itemId: "test_id" },
             dataType: "json",
             success: function (response) {
                 var data = response.data;
@@ -99,7 +108,7 @@
                 $.each(data, function (index, item) {
                     var row = `
                     <tr>
-                        <td class="text-center" class="text-center" style="font-size:15px;"><input type="checkbox" name="test[${item.test_id}]" value="1" class="form-check-input" id="flexSwitchCheckDefault"></td>
+                        <td class="text-center" class="text-center" style="font-size:15px;"><input type="checkbox" data-id=${item.test_id} name="test[${item.test_id}]" value="1" class="test-checkbox" id="flexSwitchCheckDefault" ${(parseInt(item.isIn) ? "checked" : "")}></td>
                         <td class="text-center" class="text-center">${item.name}</td>
                         <td class="text-center" class="text-center">${item.module}</td>
                         <td class="text-center" class="text-center">${item.category}</td>
@@ -150,23 +159,40 @@
 
 </script>
 <script>
-  // Initialize the date picker
-  $(document).ready(function () {
-    // Your code here
-        const urlParams = new URLSearchParams(window.location.href);
+  $(document).ready(function() {
+      const urlParams = new URLSearchParams(window.location.href);
     
-        const fragment = window.location.hash;
+      const fragment = window.location.hash;
 
         // Remove the '#' character to get the value
-        const value = fragment.substring(1);
-        
-        $('#batchid').val(value);
-    });
+      const value = fragment.substring(1);
 
+      $('#data-table').on('change', '#flexSwitchCheckDefault', function() {
+          const id = $(this).data('id');
+          if ($(this).is(":checked")) {
+              // Checkbox is checked, add the test to the assignment table
+              // You can update the assignment table using AJAX here
+          }else{
+            $.ajax({
+                type: "POST",
+                url: "dataHandler/api/post.php", // Replace with the URL of your PHP script
+                data: { test_id: id, batch_id: value, task: 'removeTest' },
+                success: function(response) {
+                    console.log("Test " + testId + " removed");
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error removing test: " + error);
+                }
+            });
+          }
+      });
+  });
+</script>
+<script>
 
   // Use jQuery to handle form submission
-  $('#attendanceForm').submit(function (event) {
-    
+  $('#assignForm').submit(function (event) {
+     
       event.preventDefault();
       $.ajax({
           type: 'POST',

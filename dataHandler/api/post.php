@@ -69,6 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }elseif ($task === 'testassign') {
             if (isset($_POST['test']) && is_array($_POST['test'])) {
                 $batchId = $_POST['batchId'];
+    
                 
                 try {
                     $conn->autocommit(false); // Start a transaction
@@ -156,6 +157,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $featureEnabled = ($_POST['featureEnabled'] === 'true') ? 1 : 0; // Convert to 1 or 0
             $id = $_POST['id'];
             $response = $dataHandler->employeecheckbox($featureEnabled, $id);
+        }elseif ($task === 'removeTest') {
+            $batchId = $_POST['batch_id'];
+            $testId = $_POST['test_id'];
+            $response = $dataHandler->removeTest($batchId, $testId);
         }
         
     }

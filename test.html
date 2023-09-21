@@ -28,7 +28,7 @@
         <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / </span><a id="attendance" href="#attendance">Batch Select</a><span> / Assign Test</span></p>
     </div>
   </div>
-  <form id="attendanceForm"> 
+  <div id="bat"></div>
     <div id="data-container" class="content border mt-3 p-4">
       <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
         <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
@@ -48,6 +48,7 @@
       <div class="col">
           <h5 class="pb-3" style="float: left;">Assign Test</h5>
       </div>
+      <form id="assignForm"> 
       <div style="height: 380px;">
         <table class="table" id="data-table">
           <thead>
@@ -67,13 +68,16 @@
       <nav aria-label="Page navigation example" class="mt-4">
         <ul id="pagination" class="pagination"></ul>
         <input type="hidden" name="task" value="testassign">
-        <input type="hidden" name="batchId" value="12" class="form-control text-secondary" id="batchid">
-        <button type="submit" class="btn btn-secondary" style="float: right; margin-top: 35px;">Submit</button>
-        <button id="previous" class="btn btn-secondary me-2" style="float: right; margin-top: 35px;">Previous</button>
+        <input type="hidden" name="batchId" id="batchid" value="">
+        <input type="submit" value="Submit" class="btn btn-secondary" style="float: right; margin-top: 35px;">      
+        <div id="previous" class="btn btn-secondary me-2" style="float: right; margin-top: 35px;">Previous</div>
       </nav>
-    </div>  
-  </form>
+    </div> 
+  </form> 
+
   
+
+
   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
@@ -81,11 +85,15 @@
     var itemsPerPage = 10; // Number of items to display per page
     var currentPage = 1;  // Track the current page
 
+    const value = new URLSearchParams(window.location.href).window.location.hash.substring(1);
+  
+    $('#batchid').val(value);
+
     function loadData(page) {
         $.ajax({
             type: "GET",
             url: "dataHandler/api/get.php?data_type=test",
-            data: { page: page },
+            data: { page: page, id: value },
             dataType: "json",
             success: function (response) {
                 var data = response.data;
@@ -95,7 +103,7 @@
                 $.each(data, function (index, item) {
                     var row = `
                     <tr>
-                        <td class="text-center" class="text-center" style="font-size:15px;"><input type="checkbox" name="test[${item.test_id}]" value="1" class="form-check-input" id="flexSwitchCheckDefault"></td>
+                        <td class="text-center" class="text-center" style="font-size:15px;"><input type="checkbox" data-test-id="${item.test_id}" value="1" class="test-checkbox" id="flexSwitchCheckDefault" ${(parseInt(item.isIn) ? "checked" : "")}></td>
                         <td class="text-center" class="text-center">${item.name}</td>
                         <td class="text-center" class="text-center">${item.module}</td>
                         <td class="text-center" class="text-center">${item.category}</td>
@@ -146,11 +154,26 @@
 
 </script>
 <script>
-  // Initialize the date picker
-  
-
   // Use jQuery to handle form submission
-  $('#attendanceForm').submit(function (event) {
+  $('#assignForm').submit(function (event) {
+      var testArray = {};
+      const value = new URLSearchParams(window.location.href).window.location.hash.substring(1);
+
+      // Function to update the test array when a checkbox changes state
+      $('.test-checkbox').change(function() {
+        var testId = $(this).data('test-id');
+        var isChecked = this.checked ? 1 : 0;
+
+        // Update the test array with test_id and "1" or "0"
+        testArray[testId] = isChecked;
+      });
+
+      var dataToSend = {
+              batch_id: value,
+              test: testArray,
+              task: 'bactcheckbox'
+      };
+
       event.preventDefault();
       $.ajax({
           type: 'POST',

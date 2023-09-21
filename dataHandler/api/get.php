@@ -23,14 +23,14 @@ if (isset($_GET['data_type'])) {
         $data = $dataHandler->studentView_markTheAttendance();
     }elseif ($data_type === 'employee_markTheAttendance') {
         $data = $dataHandler->employee_markTheAttendance();
-    }elseif ($data_type === 'video') {
-        $data = $dataHandler->video();
-    }elseif ($data_type === 'test') {
-        $data = $dataHandler->test();
+    }elseif ($data_type === 'test_video_Assigning') {
+        $data = $dataHandler->video_Assigning();
+    }elseif ($data_type === 'video_Assigning') {
+        $data = $dataHandler->test_video_Assigning();
     }else {
         $data = array("error" => "Invalid data type");
     }
-
+    
     header('Content-Type: application/json');
     echo json_encode($data);
 } else {

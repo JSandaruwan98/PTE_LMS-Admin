@@ -23,13 +23,24 @@ class DataHandler {
     }
 
     //View all test details
-    public function test() {
+    public function test_video_Assigning() {
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $id = $_GET['id'];
+        $table1 = $_GET['table1'];
+        $table2 = $_GET['table2'];
+        $itemId = $_GET['itemId'];
 
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT * FROM test LIMIT $offset, $itemsPerPage";
+        $sql = "SELECT t.*, CASE 
+                        WHEN ta.$itemId IS NOT NULL THEN 1
+                            ELSE 0
+                        END AS isIn
+                FROM $table1 t
+                LEFT JOIN $table2 ta ON t.$itemId = ta.$itemId AND ta.batch_id = $id
+                ORDER BY t.$itemId ASC
+                LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
 
@@ -37,7 +48,7 @@ class DataHandler {
             $data[] = $row;
         }
 
-        $totalItemsQuery = "SELECT COUNT(*) as total FROM test";
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM $table1";
         $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
         $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
 
@@ -50,17 +61,26 @@ class DataHandler {
         return $response;
     }
 
-    
 
-
-    //View all videos details
-    public function video() {
+    //View all test details
+    public function video_Assigning() {
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $id = $_GET['id'];
+        $table1 = $_GET['table1'];
+        $table2 = $_GET['table2'];
+        $itemId = $_GET['itemId'];
 
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT * FROM video LIMIT $offset, $itemsPerPage";
+        $sql = "SELECT t.*, CASE 
+                        WHEN ta.video_id IS NOT NULL THEN 1
+                            ELSE 0
+                        END AS isIn
+                FROM video t
+                LEFT JOIN assignvideo ta ON t.video_id = ta.video_id AND ta.batch_id = $id
+                ORDER BY t.video_id ASC
+                LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
 
@@ -80,7 +100,7 @@ class DataHandler {
 
         return $response;
     }
-    
+
     
 
     //View all batch details
@@ -387,6 +407,8 @@ class DataHandler {
         return $response;
     }
 
+    
+
     //created test assigning table
     public function assignTest($batchId, $testId, $isPresent) {
         $response['success'] = false;
@@ -448,20 +470,41 @@ class DataHandler {
 
     //created the Mark the attendace
     public function testassign($batchId, $testId, $isPresent) {
-        
-        // Update the attendance for the student
-        $sql = "INSERT INTO testass (batch_id, test_id, assigned_on, ispresent) VALUES (?, ?, CURDATE(), ?) ON DUPLICATE KEY UPDATE ispresent = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('issi', $batchId, $testId, $isPresent, $isPresent);
-        $stmt->execute();
+        try{
+            // Update the attendance for the student
+            $sql = "INSERT INTO testass (batch_id, test_id, assigned_on, ispresent) VALUES (?, ?, CURDATE(), ?) ON DUPLICATE KEY UPDATE ispresent = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('issi', $batchId, $testId, $isPresent, $isPresent);
+            $stmt->execute();
 
-        if ($stmt->error) {
-            throw new Exception("Error adding attendance for student ID:");
-        }else{
-            $response['success'] = true;
-            $response['message'] = "Attendance in '$batchId' created successfully!";
+            if ($stmt->error) {
+                throw new Exception("Error adding attendance for student ID:");
+            }else{
+                $response['success'] = true;
+                $response['message'] = "Attendance in '$isPresent' created successfully!";
+            }
+            return $response;
+        }catch( Exception $e){
+            $response['success'] = false;
+            $response['message'] = "Something went wrong";
         }
-        return $response;
+        
+    }
+
+
+    //Remove the Test of Assigned the Batch 
+    public function removeTest($batchId, $testId) {
+        // Insert the employee data into the database (assuming you have an "employees" table)
+        $sql = "DELETE FROM testass WHERE batch_id = $batchId AND test_id = $testId";
+
+        if ($this->conn->query($sql) === TRUE) {
+            $response['success'] = true;
+            $response['message'] = "Employee '$batchId' created successfully!";
+        } else {
+            $response['success'] = false;
+            $response['message'] = "Employee creation failed. Please try again.";
+        }
+        
     }
 
         //return $response;
