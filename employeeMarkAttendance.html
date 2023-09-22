@@ -66,6 +66,7 @@
       </div>
       <nav aria-label="Page navigation example" class="mt-4">
         <ul id="pagination" class="pagination"></ul>
+        <input type="hidden" name="personIdName" value="employee_id">
         <input type="hidden" name="task" value="mark_attendance_emp">
         <button type="submit" class="btn btn-secondary" style="float: right; margin-top: 35px;">Submit</button>
       </nav>
@@ -82,8 +83,8 @@
     function loadData(page) {
         $.ajax({
             type: "GET",
-            url: "dataHandler/api/get.php?data_type=employee_markTheAttendance",
-            data: { page: page },
+            url: "dataHandler/api/get.php?data_type=View_markTheAttendance",
+            data: { page: page, table: 'employee' },
             dataType: "json",
             success: function (response) {
                 var data = response.data;
@@ -156,7 +157,7 @@
       $.ajax({
           type: 'POST',
           url: 'dataHandler/api/post.php',
-          data: $(this).serialize() + "&task=mark_attendance_emp",
+          data: $(this).serialize() + "&task=mark_attendance",
           success: function (response) {
               if (response.success) {
                   // Show success alert

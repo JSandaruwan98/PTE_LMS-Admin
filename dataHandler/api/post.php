@@ -39,37 +39,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              
 
             $response = $dataHandler->enrollStudent($studentid, $name, $phone, $program, $batchid, $starton);
-        }elseif ($task === 'assignTest') {
-            if (isset($_POST['attendance']) && is_array($_POST['attendance']) && isset($_POST['batchid'])) {
-                $batchId = $_POST['batchid'];
-                
-                try {
-                    $conn->autocommit(false); // Start a transaction
-                    
-                    foreach ($_POST['attendace'] as $testId => $isPresent) {
-                        // Sanitize inputs and perform error checking as needed
-                        
-                        $testId = intval($testId);
-                        $isPresent = intval($isPresent);
-        
-                        $response = $dataHandler->assignTest($batchId, $testId, $isPresent);
-                    }
-        
-                     // Commit the transaction
-                } catch (Exception $e) {
-                    $conn->rollback();// Rollback the transaction in case of an error
-                } finally {
-                    $conn->autocommit(true);// Restore autocommit mode
-                }
-            }else{
-                $response['success'] = false;
-                $response['message'] = "All students Absent";
-            }
-            
-        }elseif ($task === 'testassign') {
+        }elseif ($task === 'test_video_Assigning') {
             if (isset($_POST['test']) && is_array($_POST['test'])) {
                 $batchId = $_POST['batchId'];
-    
+                $table = $_POST['table'];
+                $itemId = $_POST['itemId'];
                 
                 try {
                     $conn->autocommit(false); // Start a transaction
@@ -79,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $testId = intval($testId);
                         $isPresent = intval($isPresent);
         
-                        $response = $dataHandler->testassign($batchId, $testId, $isPresent);
+                        $response = $dataHandler->test_video_Assigning($batchId, $testId, $isPresent, $table, $itemId);
                     }
         
                      // Commit the transaction
@@ -93,45 +67,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $response['message'] = "All employee Absent";
             }
             
-        }elseif ($task === 'mark_attendance_stu') {
+        }elseif ($task === 'mark_attendance') {
             if (isset($_POST['attendance']) && is_array($_POST['attendance']) && isset($_POST['attendanceDate'])) {
                 $attendanceDate = $_POST['attendanceDate'];
+                $personIdName = $_POST['personIdName'];
                 
                 try {
                     $conn->autocommit(false); // Start a transaction
                     
-                    foreach ($_POST['attendance'] as $studentId => $isPresent) {
+                    foreach ($_POST['attendance'] as $personId => $isPresent) {
                         // Sanitize inputs and perform error checking as needed
-                        $studentId = intval($studentId);
+                        $personId = intval($personId);
                         $isPresent = intval($isPresent);
         
-                        $response = $dataHandler->mark_attendance_stu($attendanceDate, $studentId, $isPresent);
-                    }
-        
-                     // Commit the transaction
-                } catch (Exception $e) {
-                    $conn->rollback();// Rollback the transaction in case of an error
-                } finally {
-                    $conn->autocommit(true);// Restore autocommit mode
-                }
-            }else{
-                $response['success'] = false;
-                $response['message'] = "All students Absent";
-            }
-            
-        }elseif ($task === 'mark_attendance_emp') {
-            if (isset($_POST['attendance']) && is_array($_POST['attendance']) && isset($_POST['attendanceDate'])) {
-                $attendanceDate = $_POST['attendanceDate'];
-                
-                try {
-                    $conn->autocommit(false); // Start a transaction
-                    
-                    foreach ($_POST['attendance'] as $employeeId => $isPresent) {
-                        // Sanitize inputs and perform error checking as needed
-                        $employeeId = intval($employeeId);
-                        $isPresent = intval($isPresent);
-        
-                        $response = $dataHandler->mark_attendance_emp($attendanceDate, $employeeId, $isPresent);
+                        $response = $dataHandler->mark_attendance($attendanceDate, $personId, $isPresent, $personIdName);
                     }
         
                      // Commit the transaction
@@ -157,10 +106,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $featureEnabled = ($_POST['featureEnabled'] === 'true') ? 1 : 0; // Convert to 1 or 0
             $id = $_POST['id'];
             $response = $dataHandler->employeecheckbox($featureEnabled, $id);
-        }elseif ($task === 'removeTest') {
+        }elseif ($task === 'test_video_Removing') {
             $batchId = $_POST['batch_id'];
-            $testId = $_POST['test_id'];
-            $response = $dataHandler->removeTest($batchId, $testId);
+            $itemId = $_POST['itemId'];
+            $table = $_POST['table'];
+            $itemIdName = $_POST['itemIdName'];
+            $response = $dataHandler->test_video_Removing($batchId, $itemId, $table, $itemIdName);
         }
         
     }

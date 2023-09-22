@@ -67,7 +67,9 @@
       </div>
       <nav aria-label="Page navigation example" class="mt-4">
         <ul id="pagination" class="pagination"></ul>
-        <input type="hidden" name="task" value="testassign">
+        <input type="hidden" name="table" value="testass">
+        <input type="hidden" name="itemId" value="test_id">
+        <input type="hidden" name="task" value="test_video_Assigning">
         <input type="hidden" name="batchId" id="batchid" value="">
         <input type="submit" value="Submit" class="btn btn-secondary" style="float: right; margin-top: 35px;">      
         <div id="previous" class="btn btn-secondary me-2" style="float: right; margin-top: 35px;">Previous</div>
@@ -97,7 +99,7 @@
     function loadData(page) {
         $.ajax({
             type: "GET",
-            url: "dataHandler/api/get.php?data_type=test_video_Assigning",
+            url: "dataHandler/api/get.php?data_type=test_video_Presenting",
             data: { page: page, id: value, table1: 'test', table2: 'testass', itemId: "test_id" },
             dataType: "json",
             success: function (response) {
@@ -176,7 +178,7 @@
             $.ajax({
                 type: "POST",
                 url: "dataHandler/api/post.php", // Replace with the URL of your PHP script
-                data: { test_id: id, batch_id: value, task: 'removeTest' },
+                data: { itemId: id, batch_id: value, task: 'test_video_Removing', table: 'testass', itemIdName: 'test_id' },
                 success: function(response) {
                     console.log("Test " + testId + " removed");
                 },
@@ -197,7 +199,7 @@
       $.ajax({
           type: 'POST',
           url: 'dataHandler/api/post.php',
-          data: $(this).serialize() + "&task=testassign",
+          data: $(this).serialize() + "&task=test_video_Assigning",
           success: function (response) {
               if (response.success) {
                   // Show success alert

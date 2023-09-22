@@ -22,85 +22,10 @@ class DataHandler {
         return $data;
     }
 
-    //View all test details
-    public function test_video_Assigning() {
-        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-        $id = $_GET['id'];
-        $table1 = $_GET['table1'];
-        $table2 = $_GET['table2'];
-        $itemId = $_GET['itemId'];
-
-        $itemsPerPage = 10; // Number of items to display per page
-        $offset = ($page - 1) * $itemsPerPage;
-
-        $sql = "SELECT t.*, CASE 
-                        WHEN ta.$itemId IS NOT NULL THEN 1
-                            ELSE 0
-                        END AS isIn
-                FROM $table1 t
-                LEFT JOIN $table2 ta ON t.$itemId = ta.$itemId AND ta.batch_id = $id
-                ORDER BY t.$itemId ASC
-                LIMIT $offset, $itemsPerPage";
-        $result = $this->conn->query($sql);
-        $data = array();
-
-        while ($row = $result->fetch_assoc()) {
-            $data[] = $row;
-        }
-
-        $totalItemsQuery = "SELECT COUNT(*) as total FROM $table1";
-        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
-        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+    
 
 
-        $response = [
-            'data' => $data,
-            'totalItems' => $totalItems
-        ];
-
-        return $response;
-    }
-
-
-    //View all test details
-    public function video_Assigning() {
-        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-        $id = $_GET['id'];
-        $table1 = $_GET['table1'];
-        $table2 = $_GET['table2'];
-        $itemId = $_GET['itemId'];
-
-        $itemsPerPage = 10; // Number of items to display per page
-        $offset = ($page - 1) * $itemsPerPage;
-
-        $sql = "SELECT t.*, CASE 
-                        WHEN ta.video_id IS NOT NULL THEN 1
-                            ELSE 0
-                        END AS isIn
-                FROM video t
-                LEFT JOIN assignvideo ta ON t.video_id = ta.video_id AND ta.batch_id = $id
-                ORDER BY t.video_id ASC
-                LIMIT $offset, $itemsPerPage";
-        $result = $this->conn->query($sql);
-        $data = array();
-
-        while ($row = $result->fetch_assoc()) {
-            $data[] = $row;
-        }
-
-        $totalItemsQuery = "SELECT COUNT(*) as total FROM video";
-        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
-        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
-
-
-        $response = [
-            'data' => $data,
-            'totalItems' => $totalItems
-        ];
-
-        return $response;
-    }
-
+    
     
 
     //View all batch details
@@ -170,7 +95,8 @@ class DataHandler {
 
         $sql = "SELECT S.activation AS activation,S.student_id AS student_id, S.name AS student_name, S.phone AS phone, B.program AS program, B.name AS batch_name
                 FROM student AS S, assignstudent AS SB, batch AS B 
-                WHERE S.student_id = SB.student_id AND B.batch_id = SB.batch_id";
+                WHERE S.student_id = SB.student_id AND B.batch_id = SB.batch_id
+                LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
 
@@ -193,61 +119,9 @@ class DataHandler {
         return $response;
     }
 
-    //View all student details for Mark the attendance
-    public function studentView_markTheAttendance() {
-        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    
 
-        $itemsPerPage = 10; // Number of items to display per page
-        $offset = ($page - 1) * $itemsPerPage;
-
-        $sql = "SELECT * FROM student LIMIT $offset, $itemsPerPage";
-        $result = $this->conn->query($sql);
-        $data = array();
-
-        while ($row = $result->fetch_assoc()) {
-            $data[] = $row;
-        }
-
-        $totalItemsQuery = "SELECT COUNT(*) as total FROM student";
-        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
-        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
-
-
-        $response = [
-            'data' => $data,
-            'totalItems' => $totalItems
-        ];
-
-        return $response;
-    }
-
-    //View all student details for Mark the attendance
-    public function employee_markTheAttendance() {
-        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-
-        $itemsPerPage = 10; // Number of items to display per page
-        $offset = ($page - 1) * $itemsPerPage;
-
-        $sql = "SELECT * FROM employee LIMIT $offset, $itemsPerPage";
-        $result = $this->conn->query($sql);
-        $data = array();
-
-        while ($row = $result->fetch_assoc()) {
-            $data[] = $row;
-        }
-
-        $totalItemsQuery = "SELECT COUNT(*) as total FROM employee";
-        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
-        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
-
-
-        $response = [
-            'data' => $data,
-            'totalItems' => $totalItems
-        ];
-
-        return $response;
-    }
+    
 
     // get the class id and name for the drop down input field of classes
     public function getClassData() {
@@ -264,9 +138,7 @@ class DataHandler {
         return $data;
     }
 
-    
 
-    
 
     // generate the student id for the student enrollment form that add the student id field
     function generateStudentID() {
@@ -407,42 +279,51 @@ class DataHandler {
         return $response;
     }
 
-    
 
-    //created test assigning table
-    public function assignTest($batchId, $testId, $isPresent) {
-        $response['success'] = false;
-        $response['message'] = "All wrong";
-        
-        $sql = "INSERT INTO testass (batch_id, test_id, assigned_on, isPresent) VALUES (?, ?, CURDATE(), ?) ON DUPLICATE KEY UPDATE isPresent = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('issi', $batchId, $testId, $isPresent, $isPresent);
-        $stmt->execute();
 
-        if ($stmt->error) {
-            $response['success'] = false;
-            $response['message'] = "Attendance in  created not!";
-            throw new Exception("Error adding attendance for student ID: $testId");
-        }else{
-            $response['success'] = true;
-            $response['message'] = "Attendance in  created successfully!";
+    //Attendance Section
+
+    //View all student and employee details for Mark the attendance
+    public function View_markTheAttendance() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $table = $_GET['table'];
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT * FROM $table LIMIT $offset, $itemsPerPage";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
         }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM $table";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
         return $response;
     }
-
     
 
-    //created the Mark the attendace
-    public function mark_attendance_stu($attendanceDate, $studentId, $isPresent) {
+    
+    //Created the Mark the attendace
+    public function mark_attendance($attendanceDate, $personId, $isPresent, $personIdName) {
         
         // Update the attendance for the student
-        $sql = "INSERT INTO attendance (student_id, attendance_date, ispresent) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ispresent = ?";
+        $sql = "INSERT INTO attendance ($personIdName, attendance_date, ispresent) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ispresent = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('issi', $studentId, $attendanceDate, $isPresent, $isPresent);
+        $stmt->bind_param('issi', $personId, $attendanceDate, $isPresent, $isPresent);
         $stmt->execute();
 
         if ($stmt->error) {
-            throw new Exception("Error adding attendance for student ID: $studentId");
+            throw new Exception("Error adding attendance for student ID: $personId");
         }else{
             $response['success'] = true;
             $response['message'] = "Attendance in '$attendanceDate' created successfully!";
@@ -450,29 +331,16 @@ class DataHandler {
         return $response;
     }
 
-    //created the Mark the attendace
-    public function mark_attendance_emp($attendanceDate, $employeeId, $isPresent) {
-        
-        // Update the attendance for the student
-        $sql = "INSERT INTO attendance (employee_id, attendance_date, ispresent) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ispresent = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('issi', $employeeId, $attendanceDate, $isPresent, $isPresent);
-        $stmt->execute();
+    //End the Section
 
-        if ($stmt->error) {
-            throw new Exception("Error adding attendance for student ID: $employeeId");
-        }else{
-            $response['success'] = true;
-            $response['message'] = "Attendance in '$attendanceDate' created successfully!";
-        }
-        return $response;
-    }
+    
+    //Test and Video Presenting, Assigning and Removing Section
 
-    //created the Mark the attendace
-    public function testassign($batchId, $testId, $isPresent) {
+    //Assigning
+    public function test_video_Assigning($batchId, $testId, $isPresent, $test, $itemId) {
         try{
             // Update the attendance for the student
-            $sql = "INSERT INTO testass (batch_id, test_id, assigned_on, ispresent) VALUES (?, ?, CURDATE(), ?) ON DUPLICATE KEY UPDATE ispresent = ?";
+            $sql = "INSERT INTO $test (batch_id, $itemId, assigned_on, ispresent) VALUES (?, ?, CURDATE(), ?) ON DUPLICATE KEY UPDATE ispresent = ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param('issi', $batchId, $testId, $isPresent, $isPresent);
             $stmt->execute();
@@ -492,10 +360,50 @@ class DataHandler {
     }
 
 
-    //Remove the Test of Assigned the Batch 
-    public function removeTest($batchId, $testId) {
+    //Presenting
+    public function test_video_Presenting() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $id = $_GET['id'];
+        $table1 = $_GET['table1'];
+        $table2 = $_GET['table2'];
+        $itemId = $_GET['itemId'];
+
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT t.*, CASE 
+                        WHEN ta.$itemId IS NOT NULL THEN 1
+                            ELSE 0
+                        END AS isIn
+                FROM $table1 t
+                LEFT JOIN $table2 ta ON t.$itemId = ta.$itemId AND ta.batch_id = $id
+                ORDER BY t.$itemId ASC
+                LIMIT $offset, $itemsPerPage";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM $table1";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+    }
+
+
+    //Removing 
+    public function test_video_Removing($batchId, $itemId, $table, $itemIdName) {
         // Insert the employee data into the database (assuming you have an "employees" table)
-        $sql = "DELETE FROM testass WHERE batch_id = $batchId AND test_id = $testId";
+        $sql = "DELETE FROM $table WHERE batch_id = $batchId AND $itemIdName = $itemId";
 
         if ($this->conn->query($sql) === TRUE) {
             $response['success'] = true;
@@ -507,7 +415,7 @@ class DataHandler {
         
     }
 
-        //return $response;
+    //End the Section
     
 }
 ?>
