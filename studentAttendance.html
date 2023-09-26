@@ -63,30 +63,47 @@
     function loadData(page) {
         $.ajax({
             type: "GET",
-            url: "get_data.php",
-            data: { page: page },
+            url: "dataHandler/api/get.php?data_type=attendance",
+            data: { page: page, personId: 'student_id', table: 'student' },
             dataType: "json",
             success: function (response) {
                 var data = response.data;
-
+                var i=0;
                 // Populate the table with data
                 var tableBody = $("#data-table tbody");
                 tableBody.empty();
                 $.each(data, function (index, item) {
+                    i++;
+                    var formattedStudentID = 'STU ' + ('0000' + item.student_id).slice(-4);
                     var row = `<tr>
-                        <td class="text-center">${item.id}</td>
+                        <td class="text-center">${i}</td>
+                        <td class="text-center">${formattedStudentID}</td>
                         <td class="text-center">${item.name}</td>
-                        <td class="text-center">${item.age}</td>
-                        <td class="text-center">${item.id}</td>
-                        <td class="text-center">${item.name}</td>
-                        <td class="text-center">${item.age}</td>
-                        <td class="text-center">${item.age}</td>
-                        <td class="text-center">${item.id}</td>
-                        <td class="text-center">${item.name}</td>
-                        <td class="text-center">${item.age}</td>
+                        <td class="text-center">${item.day7}</td>
+                        <td class="text-center">${item.day6}</td>
+                        <td class="text-center">${item.day5}</td>
+                        <td class="text-center">${item.day4}</td>
+                        <td class="text-center">${item.day3}</td>
+                        <td class="text-center">${item.day2}</td>
+                        <td class="text-center">${item.day1}</td>
                     </tr>`;
-                    tableBody.append(row);
+                    var newRow = $(row); // Convert the HTML string to a jQuery object
+
+                    // Change the text color based on the value of each <td>
+                    newRow.find('td').each(function () {
+                        var tdText = $(this).text();
+                        if (tdText === "absent") {
+                            $(this).css("color", "red");
+                        } else if (tdText === "present") {
+                            $(this).css("color", "green");
+                        } else if (tdText === "leave") {
+                            $(this).css("color", "blue");
+                        }
+                    });
+
+                    tableBody.append(newRow);
                 });
+
 
                 // Update pagination controls
                 var pagination = $("#pagination");
@@ -144,10 +161,10 @@
   }
 
   $(document).ready(function() {
-    var previousDates = getPreviousDates(8);
+    var previousDates = getPreviousDates(7);
 
     var dateList = $('#table-column');
-    for (var i = previousDates.length - 1; i > 0 ; i--) {
+    for (var i = previousDates.length - 1; i >= 0 ; i--) {
       dateList.append('<th class="text-center" scope="col"><span style="color: #666464;">'+ previousDates[i] +'</span></th>')
     }
   });

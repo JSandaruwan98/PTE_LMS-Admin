@@ -50,10 +50,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     
                     foreach ($_POST['test'] as $testId => $isPresent) {
                         // Sanitize inputs and perform error checking as needed
-                        $testId = intval($testId);
+                        $test1Id = intval($testId);
                         $isPresent = intval($isPresent);
         
-                        $response = $dataHandler->test_video_Assigning($batchId, $testId, $isPresent, $table, $itemId);
+                        $response = $dataHandler->test_video_Assigning($batchId, $test1Id, $isPresent, $table, $itemId);
                     }
         
                      // Commit the transaction
@@ -106,6 +106,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $featureEnabled = ($_POST['featureEnabled'] === 'true') ? 1 : 0; // Convert to 1 or 0
             $id = $_POST['id'];
             $response = $dataHandler->employeecheckbox($featureEnabled, $id);
+        }elseif ($task === 'evalupdate') {
+            $id = $_POST['id'];
+            $response = $dataHandler->evalupdate($id);
         }elseif ($task === 'test_video_Removing') {
             $batchId = $_POST['batch_id'];
             $itemId = $_POST['itemId'];

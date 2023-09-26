@@ -4,41 +4,36 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pagination Example</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">  
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-      $(document).ready(function () {
-        $('#attendance').click(function(){
-           $('#main').load('employeeMarkAttendance.html');
-        });
-      });
-    </script> 
 </head>
 <body>
   <div class="header border">
     <div class="card-body ms-3" style="margin-top: -7px;">
-        <h5 class="h4 card-title text-secondary">Employee Attendance</h5>
-        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / Attendance</span></p>
+        <h5 class="h4 card-title text-secondary">PTE Evaluation Details</h5>
+        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / PTE Evaluation</span></p>
     </div>
   </div>
-    
-    
+   
   <div id="data-container" class="content border mt-3 p-4">
     <div class="col">
-        <h5 class="pb-3" style="float: left;">View Attendance</h5>
-        <button id="attendance" type="button" class="btn btn-secondary btn-sm" style="float: right;">Mark Attendance</button>
+        <h5 class="pb-3" style="float: left;">VIEW EVALUATION</h5>
       </div>
     <div style="height: 380px;">
     <table class="table" id="data-table">
       <thead>
-        <tr id="table-column">
+        <tr>
           <th class="text-center" scope="col"><span style="color: #666464;">S.No</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Employee ID</span></th>
           <th class="text-center" scope="col"><span style="color: #666464;">Name</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Assigned On</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Attempted On</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Evaluation On</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Test</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Action</span></th>
         </tr>
       </thead>
       <tbody>
@@ -55,6 +50,7 @@
   
   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="script.js"></script>
   <script>
     $(document).ready(function () {
     var itemsPerPage = 10; // Number of items to display per page
@@ -63,8 +59,8 @@
     function loadData(page) {
         $.ajax({
             type: "GET",
-            url: "dataHandler/api/get.php?data_type=attendance",
-            data: { page: page, personId: 'employee_id', table: 'employee' },
+            url: "dataHandler/api/get.php?data_type=evaluationHistory",
+            data: { page: page },
             dataType: "json",
             success: function (response) {
                 var data = response.data;
@@ -74,36 +70,17 @@
                 tableBody.empty();
                 $.each(data, function (index, item) {
                     i++;
-                    var formattedStudentID = 'EMP ' + ('0000' + item.employee_id).slice(-4);
                     var row = `<tr>
-                        <td class="text-center">${i}</td>
-                        <td class="text-center">${formattedStudentID}</td>
-                        <td class="text-center">${item.name}</td>
-                        <td class="text-center">${item.day7}</td>
-                        <td class="text-center">${item.day6}</td>
-                        <td class="text-center">${item.day5}</td>
-                        <td class="text-center">${item.day4}</td>
-                        <td class="text-center">${item.day3}</td>
-                        <td class="text-center">${item.day2}</td>
-                        <td class="text-center">${item.day1}</td>
+                      <td class="text-center">${i}</td>
+                      <td class="text-center">${item.student_name}</td>
+                      <td class="text-center">${item.assigned_on}</td>
+                      <td class="text-center">${item.attempted_on}</td>
+                      <td class="text-center">${item.evaluation_on}</td>
+                      <td class="text-center">${item.test_name}</td>
+                      <td class="text-center"><a href="">${item.age}</a></td>
                     </tr>`;
-                    var newRow = $(row); // Convert the HTML string to a jQuery object
-
-                    // Change the text color based on the value of each <td>
-                    newRow.find('td').each(function () {
-                        var tdText = $(this).text();
-                        if (tdText === "absent") {
-                            $(this).css("color", "red");
-                        } else if (tdText === "present") {
-                            $(this).css("color", "green");
-                        } else if (tdText === "leave") {
-                            $(this).css("color", "blue");
-                        }
-                    });
-
-                    tableBody.append(newRow);
+                    tableBody.append(row);
                 });
-
 
                 // Update pagination controls
                 var pagination = $("#pagination");
@@ -144,30 +121,6 @@
     });
 });
 
-</script>
-<script>
-  // Function to get the previous n dates
-  function getPreviousDates(n) {
-    var dates = [];
-    var currentDate = new Date();
-    
-    for (var i = 0; i < n; i++) {
-      var previousDate = new Date(currentDate);
-      previousDate.setDate(currentDate.getDate() - i);
-      dates.push(previousDate.toLocaleDateString());
-    }
-    
-    return dates;
-  }
-
-  $(document).ready(function() {
-    var previousDates = getPreviousDates(7);
-
-    var dateList = $('#table-column');
-    for (var i = previousDates.length - 1; i >= 0 ; i--) {
-      dateList.append('<th class="text-center" scope="col"><span style="color: #666464;">'+ previousDates[i] +'</span></th>')
-    }
-  });
 </script>
 </body>
 </html>

@@ -103,6 +103,11 @@
             data: { page: page, id: value, table1: 'test', table2: 'testass', itemId: "test_id" },
             dataType: "json",
             success: function (response) {
+                // Update pagination controls
+                var pagination = $("#pagination");
+                
+                pagination.empty();
+                
                 var data = response.data;
                 // Populate the table with data
                 var tableBody = $("#data-table tbody");
@@ -120,10 +125,7 @@
                     i++;
                 });
 
-                // Update pagination controls
-                var pagination = $("#pagination");
                 
-                pagination.empty();
                 var totalPages = Math.ceil(response.totalItems / itemsPerPage);
 
                 // Add Previous button

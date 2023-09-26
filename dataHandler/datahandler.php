@@ -56,6 +56,85 @@ class DataHandler {
         return $response;
     }
 
+
+    //View all employee details
+    public function pendingEvaluation() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT DISTINCT e.evaluation_id AS id, stu.name AS student_name, te.name AS test_name, e.attempted_on AS attempted_on, t.assigned_on AS assigned_on
+                FROM assignstudent AS s
+                JOIN evaluation AS e ON s.student_id = e.student_id
+                JOIN testass AS t ON t.test_id = e.test_id
+                JOIN student AS stu ON s.student_id = stu.student_id
+                JOIN test AS te ON te.test_id = t.test_id
+                WHERE e.attempted_on IS NOT NULL";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM assignstudent AS s
+                            JOIN evaluation AS e ON s.student_id = e.student_id
+                            JOIN testass AS t ON t.test_id = e.test_id
+                            JOIN student AS stu ON s.student_id = stu.student_id
+                            JOIN test AS te ON te.test_id = t.test_id;";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+    }
+
+
+    //View all employee details
+    public function evaluationHistory() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT DISTINCT e.evaluation_id AS id, e.evaluation_on AS evaluation_on, stu.name AS student_name, te.name AS test_name, e.attempted_on AS attempted_on, t.assigned_on AS assigned_on
+                FROM assignstudent AS s
+                JOIN evaluation AS e ON s.student_id = e.student_id
+                JOIN testass AS t ON t.test_id = e.test_id
+                JOIN student AS stu ON s.student_id = stu.student_id
+                JOIN test AS te ON te.test_id = t.test_id
+                WHERE e.evaluation_on IS NOT NULL";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM assignstudent AS s
+                            JOIN evaluation AS e ON s.student_id = e.student_id
+                            JOIN testass AS t ON t.test_id = e.test_id
+                            JOIN student AS stu ON s.student_id = stu.student_id
+                            JOIN test AS te ON te.test_id = t.test_id
+                            WHERE e.evaluation_on IS NOT NULL";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+    }
+
     
 
     //View all employee details
@@ -227,6 +306,10 @@ class DataHandler {
     }
 
     //check boxsess
+    public function evalupdate($id) {
+        $sql = "UPDATE evaluation SET evaluation_on = CURDATE() WHERE evaluation_id = $id";
+        $this->conn->query($sql);
+    }
     public function bactcheckbox($featureEnabled, $id) {
         $sql = "UPDATE batch SET activation = $featureEnabled WHERE batch_id = $id";
         $this->conn->query($sql);
@@ -337,12 +420,12 @@ class DataHandler {
     //Test and Video Presenting, Assigning and Removing Section
 
     //Assigning
-    public function test_video_Assigning($batchId, $testId, $isPresent, $test, $itemId) {
+    public function test_video_Assigning($batchId, $test1Id, $isPresent, $test, $itemId) {
         try{
             // Update the attendance for the student
             $sql = "INSERT INTO $test (batch_id, $itemId, assigned_on, ispresent) VALUES (?, ?, CURDATE(), ?) ON DUPLICATE KEY UPDATE ispresent = ?";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param('issi', $batchId, $testId, $isPresent, $isPresent);
+            $stmt->bind_param('issi', $batchId, $test1Id, $isPresent, $isPresent);
             $stmt->execute();
 
             if ($stmt->error) {
@@ -416,6 +499,87 @@ class DataHandler {
     }
 
     //End the Section
+
+
+    //View all batch details
+    public function attendance() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $personId = $_GET['personId'];
+        $table =$_GET['table'];
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT 
+                    s.$personId,
+                    s.name,
+                    CASE 
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 'absent' THEN 'leave'
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() AND a.$personId IS NOT NULL THEN 1 ELSE NULL END) > 'absent' THEN 'present'
+                        ELSE 'absent'
+                    END AS day1,
+                    CASE 
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 1 DAY AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'leave'
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 1 DAY AND a.$personId IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'present'
+                        ELSE 'absent'
+                    END AS day2,
+                    CASE 
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 2 DAY AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'leave'
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 2 DAY AND a.$personId IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'present'
+                        ELSE 'absent'
+                    END AS day3,
+                    CASE 
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 3 DAY AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'leave'
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 3 DAY AND a.$personId IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'present'
+                        ELSE 'absent'
+                    END AS day4,
+                    CASE 
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 4 DAY AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'leave'
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 4 DAY AND a.$personId IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'present'
+                        ELSE 'absent'
+                    END AS day5,
+                    CASE 
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 5 DAY AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'leave'
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 5 DAY AND a.$personId IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'present'
+                        ELSE 'absent'
+                    END AS day6,
+                    CASE 
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 6 DAY AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'leave'
+                        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 6 DAY AND a.$personId IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'present'
+                        ELSE 'absent'
+                    END AS day7
+                FROM
+                    $table AS s
+                LEFT JOIN
+                    attendance AS a
+                ON
+                    s.$personId = a.$personId
+                GROUP BY
+                    s.$personId, s.name
+                LIMIT 
+                    $offset, $itemsPerPage";
+
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total 
+                            FROM $table";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+    }
+    
+
     
 }
 ?>

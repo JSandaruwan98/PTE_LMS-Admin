@@ -23,6 +23,12 @@ if (isset($_GET['data_type'])) {
         $data = $dataHandler->View_markTheAttendance();
     }elseif ($data_type === 'test_video_Presenting') {
         $data = $dataHandler->test_video_Presenting();
+    }elseif ($data_type === 'attendance') {
+        $data = $dataHandler->attendance();
+    }elseif ($data_type === 'pendingEvaluation') {
+        $data = $dataHandler->pendingEvaluation();
+    }elseif ($data_type === 'evaluationHistory') {
+        $data = $dataHandler->evaluationHistory();
     }else {
         $data = array("error" => "Invalid data type");
     }

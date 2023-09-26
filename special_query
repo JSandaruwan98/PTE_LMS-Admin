@@ -1,21 +1,46 @@
 SELECT 
-    dates.date AS attendance_date, 
-    s.*,
-    IFNULL(att.isIn, 0) AS isIn
-FROM (
-    SELECT CURDATE() AS date
-    UNION ALL SELECT DATE_SUB(CURDATE(), INTERVAL 1 DAY)
-    UNION ALL SELECT DATE_SUB(CURDATE(), INTERVAL 2 DAY)
-    UNION ALL SELECT DATE_SUB(CURDATE(), INTERVAL 3 DAY)
-    UNION ALL SELECT DATE_SUB(CURDATE(), INTERVAL 4 DAY)
-) AS dates
-LEFT JOIN (
-    SELECT student_id, attendance_date, 1 AS isIn
-    FROM attendance
-    WHERE student_id = 2
-      AND attendance_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 5 DAY) AND CURDATE()
-) AS att
-ON dates.date = att.attendance_date
-LEFT JOIN student s
-ON s.student_id = 2
-ORDER BY attendance_date;
+    s.student_id,
+    s.name,
+    CASE 
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 'absent' THEN 'leave'
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() AND a.student_id IS NOT NULL THEN 1 ELSE NULL END) > 'absent' THEN 'present'
+        ELSE 'absent'
+    END AS day1,
+    CASE 
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 1 DAY AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'leave'
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 1 DAY AND a.student_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'present'
+        ELSE 'absent'
+    END AS day2,
+    CASE 
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 2 DAY AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'leave'
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 2 DAY AND a.student_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'present'
+        ELSE 'absent'
+    END AS day3,
+    CASE 
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 3 DAY AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'leave'
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 3 DAY AND a.student_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'present'
+        ELSE 'absent'
+    END AS day4,
+    CASE 
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 4 DAY AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'leave'
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 4 DAY AND a.student_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'present'
+        ELSE 'absent'
+    END AS day5,
+    CASE 
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 5 DAY AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'leave'
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 5 DAY AND a.student_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'present'
+        ELSE 'absent'
+    END AS day6,
+    CASE 
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 6 DAY AND a.leave_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'leave'
+        WHEN COUNT(CASE WHEN a.attendance_date = CURDATE() - INTERVAL 6 DAY AND a.student_id IS NOT NULL THEN 1 ELSE NULL END) > 0 THEN 'present'
+        ELSE 'absent'
+    END AS day7
+FROM
+    student AS s
+LEFT JOIN
+    attendance AS a
+ON
+    s.student_id = a.student_id
+GROUP BY
+    s.student_id, s.name;
