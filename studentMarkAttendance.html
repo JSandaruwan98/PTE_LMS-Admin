@@ -43,7 +43,7 @@
       <div id="alertDanger" class="alert alert-danger align-items-center" style="display: none;">
           
       </div>
-      <div class="col">
+      <div class="col" style="position: static;">
           <h5 class="pb-3" style="float: left;">Mark Attendance</h5>
           <input type="date" name="attendanceDate" class="form-control text-secondary" id="attendanceDate" style="float: right; width: 150px;" required>
       </div>
@@ -63,7 +63,7 @@
         </table>
       </div>
       <nav aria-label="Page navigation example" class="mt-4">
-        <ul id="pagination" class="pagination"></ul>
+        <ul id="pagingMarkAttendanceSTU" class="pagination"></ul>
         <input type="hidden" name="personIdName" value="student_id">
         <input type="hidden" name="task" value="mark_attendance_stu">
         <button type="submit" class="btn btn-secondary" style="float: right; margin-top: 35px;">Submit</button>
@@ -104,7 +104,7 @@
                 });
 
                 // Update pagination controls
-                var pagination = $("#pagination");
+                var pagination = $("#pagingMarkAttendanceSTU");
                 
                 pagination.empty();
                 var totalPages = Math.ceil(response.totalItems / itemsPerPage);
@@ -134,11 +134,12 @@
     loadData(currentPage);
 
     // Pagination click event
-    $(document).on("click", "#pagination a", function (e) {
+    $(document).on("click", "#pagingMarkAttendanceSTU a", function (e) {
         e.preventDefault();
         var page = $(this).data("page");
         currentPage = page;  // Update the current page
         loadData(page);
+        page.empty();
     });
 });
 

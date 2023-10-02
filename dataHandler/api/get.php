@@ -29,6 +29,12 @@ if (isset($_GET['data_type'])) {
         $data = $dataHandler->pendingEvaluation();
     }elseif ($data_type === 'evaluationHistory') {
         $data = $dataHandler->evaluationHistory();
+    }elseif ($data_type === 'support') {
+        $data = $dataHandler->support();
+    }elseif ($data_type === 'transaction') {
+        $data = $dataHandler->transaction();
+    }elseif ($data_type === 'balance') {
+        $data = $dataHandler->balance();
     }else {
         $data = array("error" => "Invalid data type");
     }

@@ -28,7 +28,7 @@
     
     
   <div id="data-container" class="content border mt-3 p-4">
-    <div class="col">
+    <div class="col" style="position: static;">
         <h5 class="pb-3" style="float: left;">View Attendance</h5>
         <button id="attendance" type="button" class="btn btn-secondary btn-sm" style="float: right;">Mark Attendance</button>
       </div>
@@ -47,7 +47,7 @@
     </table>
   </div>
     <nav aria-label="Page navigation example">
-      <ul id="pagination" class="pagination">
+      <ul id="pagingEmployeeAttendance" class="pagination">
       </ul>
     </nav>
   </div>
@@ -106,7 +106,7 @@
 
 
                 // Update pagination controls
-                var pagination = $("#pagination");
+                var pagination = $("#pagingEmployeeAttendance");
                 
                 pagination.empty();
                 var totalPages = Math.ceil(response.totalItems / itemsPerPage);
@@ -136,11 +136,12 @@
     loadData(currentPage);
 
     // Pagination click event
-    $(document).on("click", "#pagination a", function (e) {
+    $(document).on("click", "#pagingEmployeeAttendance a", function (e) {
         e.preventDefault();
         var page = $(this).data("page");
         currentPage = page;  // Update the current page
         loadData(page);
+        page.empty();
     });
 });
 

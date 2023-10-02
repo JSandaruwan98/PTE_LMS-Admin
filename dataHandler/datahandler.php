@@ -9,7 +9,7 @@ class DataHandler {
 
     // get the batch id and name for the drop down input field of batches  
     public function getBatchData() {
-        $sql = "SELECT *,CONCAT(DATE_FORMAT(time_from, '%h:%i %p'), ' - ' , DATE_FORMAT(time_to, '%h:%i %p')) AS duration FROM batch";
+        $sql = "SELECT *,CONCAT(DATE_FORMAT(time_from, '%h:%i %p'), ' - ' , DATE_FORMAT(time_to, '%h:%i %p')) AS duration FROM batch WHERE activation = 1";
         $result = $this->conn->query($sql);
         $data = array();
 
@@ -22,6 +22,28 @@ class DataHandler {
         return $data;
     }
 
+
+    // get the batch id and name for the drop down input field of batches  
+    public function balance() {
+        $sql = "SELECT
+                    total_credits - total_other_transactions AS balance
+                FROM
+                    (SELECT
+                        SUM(CASE WHEN transactiontype = 'credit' THEN amount ELSE 0 END) AS total_credits,
+                        SUM(CASE WHEN transactiontype <> 'credit' THEN amount ELSE 0 END) AS total_other_transactions
+                    FROM
+                        transaction) AS subquery";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        }
+
+        return $data;
+    }
     
 
 
@@ -54,6 +76,65 @@ class DataHandler {
         ];
 
         return $response;
+        $page=0;
+    }
+
+    //View all Ticket details
+    public function support() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT * FROM ticket LIMIT $offset, $itemsPerPage";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM ticket";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+        $page=0;
+    }
+
+    //View all transaction details
+    public function transaction() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT * FROM transaction LIMIT $offset, $itemsPerPage";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM transaction";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+        $page=0;
     }
 
 
@@ -290,8 +371,8 @@ class DataHandler {
                 $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
 
                 // Insert the employee data into the database (assuming you have an "employees" table)
-                $sql = "INSERT INTO employee (name, email, role, phone, address, qualification, username, password) 
-                        VALUES ('$name', '$email', '$role', '$phone', '$address', '$qualification', '$uname', '$hashedPassword')";
+                $sql = "INSERT INTO employee (name, email, role, phone, address, qualification, username, password, activation) 
+                        VALUES ('$name', '$email', '$role', '$phone', '$address', '$qualification', '$uname', '$hashedPassword', 1)";
 
                 if ($this->conn->query($sql) === TRUE) {
                     $response['success'] = true;
@@ -553,6 +634,8 @@ class DataHandler {
                     attendance AS a
                 ON
                     s.$personId = a.$personId
+                WHERE
+	                s.activation = 1    
                 GROUP BY
                     s.$personId, s.name
                 LIMIT 

@@ -52,12 +52,23 @@
       });
     </script>
     <script>
-        $(document).ready(function () {
+      $(document).ready(function () {
+          
           $('.dropdown').click(function () {
-            $(this).find('.submenu').slideToggle();
+              const $submenu = $(this).find('.submenu');
+
+              $submenu.slideToggle();
+  
+              $('.dropdown').not(this).find('.submenu').slideUp();
+
+               event.stopPropagation();
           });
-        });
-    </script>
+
+          $('.submenu').click(function (event) {
+              event.stopPropagation();
+          });
+      });
+  </script>
 </head>
 <body style="cursor: context-menu;">
   <nav id="main-navbar" class="navbar fixed-top" style="position: fixed;">
@@ -123,5 +134,17 @@
         });
     });
   </script>
+  <script>
+    $(document).ready(function () {
+        // Add click event handling using jQuery
+        $('.text-decoration-none').click(function () {
+            // Remove 'clicked' class from all list items
+            $('.text-decoration-none').removeClass('clicked');
+
+            // Add 'clicked' class to the clicked list item
+            $(this).addClass('clicked');
+        });
+    });
+</script>
 </body>
 </html>

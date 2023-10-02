@@ -27,7 +27,7 @@
 </div>
     
   <div id="data-container" class="content border mt-3 p-4">
-    <div class="col">
+    <div class="col" style="position: static;">
         <h5 class="pb-3" style="float: left;">Employee Details</h5>
         <button id="addEmp" href="#" type="button" class="btn btn-secondary btn-sm" style="float: right;">Add Employee</button>
       </div>
@@ -49,7 +49,7 @@
     </table>
   </div>
     <nav aria-label="Page navigation example" class="mt-4">
-      <ul id="pagination" class="pagination">
+      <ul id="pagingEmployee" class="pagination">
       </ul>
     </nav>
   </div>
@@ -88,7 +88,7 @@
                 });
 
                 // Update pagination controls
-                var pagination = $("#pagination");
+                var pagination = $("#pagingEmployee");
                 
                 pagination.empty();
                 var totalPages = Math.ceil(response.totalItems / itemsPerPage);
@@ -118,11 +118,12 @@
     loadData(currentPage);
 
     // Pagination click event
-    $(document).on("click", "#pagination a", function (e) {
+    $(document).on("click", "#pagingEmployee a", function (e) {
         e.preventDefault();
         var page = $(this).data("page");
         currentPage = page;  // Update the current page
         loadData(page);
+        page.empty();
     });
 });
 
