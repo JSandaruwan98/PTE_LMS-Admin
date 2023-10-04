@@ -57,7 +57,6 @@
 
   .sidebar {
     width: 200px;
-    height: 615px;
     background-color: rgba(244, 227, 227, 1);
     color: #666464;
     font: 500 12px 'Inter', sans-serif;
@@ -70,21 +69,24 @@
     border-radius: 5px;
   }
 
-  .sidebar.open {
-    left: 0;
-}
-
   .sidebar li a:hover{
-    background-color: rgba(244, 227, 227, 1.5);
+    background-color: rgba(208, 178, 178, 1);
     border-radius: 5px;
     box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 4%);
 
   }
   .clicked{
-    background-color: rgba(244, 227, 227, 1.5);
+    background-color: rgba(208, 178, 178, 1);
     border-radius: 5px;
     box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 4%);
   }
+
+
+  .sidebar.open {
+    left: 0;
+}
+
+  
 
   .menu {
     list-style-type: none;
@@ -137,6 +139,7 @@
     }
 
     
+    
     @media (max-width: 991.98px) {
       #main{
         width: 100%;
@@ -147,6 +150,7 @@
       /* Apply styles when the screen width is 768px or wider */
       .sidebar {
           left: 0;
+          height: 615px;
           background-color: rgba(244, 227, 227, 0.5);
       }
   
@@ -156,8 +160,27 @@
       #space{
         padding: 30px;
       }
+
+      .sidebar li a:hover{
+        background-color: rgba(244, 227, 227, 1.5);
+        border-radius: 5px;
+        box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 4%);
+    
+      }
+      .clicked{
+        background-color: rgba(244, 227, 227, 1.5);
+        border-radius: 5px;
+        box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 4%);
+      }
+
+      .tblcard{
+        height: 380px;
+      }
+      .pgecard{
+        margin-top: 30px;
+      }
       
-  }
+    }
  
     .header, .content{
       background-color: #F9F1F1;
@@ -177,10 +200,13 @@
     }
     tbody{
       background-color: white;
+      max-height: 350px;
     }
     .table{
       cursor: pointer;
+      overflow-y: hidden;
     }
+    
 
     #form{
       position:static;

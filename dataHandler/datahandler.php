@@ -501,7 +501,7 @@ class DataHandler {
     //Test and Video Presenting, Assigning and Removing Section
 
     //Assigning
-    public function test_video_Assigning($batchId, $test1Id, $isPresent, $test, $itemId) {
+    public function test_video_Assigning($batchId, $test1Id, $isPresent, $test, $itemId, $item) {
         try{
             // Update the attendance for the student
             $sql = "INSERT INTO $test (batch_id, $itemId, assigned_on, ispresent) VALUES (?, ?, CURDATE(), ?) ON DUPLICATE KEY UPDATE ispresent = ?";
@@ -510,10 +510,10 @@ class DataHandler {
             $stmt->execute();
 
             if ($stmt->error) {
-                throw new Exception("Error adding attendance for student ID:");
+                throw new Exception("Error adding test or video data");
             }else{
                 $response['success'] = true;
-                $response['message'] = "Attendance in '$isPresent' created successfully!";
+                $response['message'] = "The inserted of $item of batches has been completed";
             }
             return $response;
         }catch( Exception $e){

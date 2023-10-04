@@ -54,7 +54,7 @@
           <h5 class="pb-3" style="float: left;">Assign Video</h5>
       </div>
       <form id="assignForm"> 
-      <div style="height: 380px;">
+      <div class="tblcard">
         <table class="table" id="data-table">
           <thead>
             <tr>
@@ -70,10 +70,11 @@
           </tbody>
         </table>
       </div>
-      <nav aria-label="Page navigation example" class="mt-4">
+      <nav aria-label="Page navigation example" class="pgecard">
         <ul id="pagingAssVideo" class="pagination"></ul>
         <input type="hidden" name="table" value="assignvideo">
         <input type="hidden" name="itemId" value="video_id">
+        <input type="hidden" name="item" value="videos">
         <input type="hidden" name="task" value="test_video_Assigning">
         <input type="hidden" name="batchId" id="batchid" value="">
         <input type="submit" value="Submit" class="btn btn-secondary" style="float: right; margin-top: 35px;">      
@@ -133,19 +134,19 @@
 
                 // Add Previous button
                 if (currentPage > 1) {
-                    var prevButton = `<li id="pagination-previous" class="page-item" id="prev-btn"><a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a></li>`;
+                    var prevButton = `<li id="pagination-previous" class="page-item" id="prev-btn"><a class="page-link position-static" href="#" data-page="${currentPage - 1}">Previous</a></li>`;
                     pagination.append(prevButton);
                 }
 
                 // Add numbered page buttons
                 for (var i = 1; i <= totalPages; i++) {
-                    var pageLink = `<li id="pagination-item" class="page-item"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+                    var pageLink = `<li id="pagination-item" class="page-item"><a class="page-link position-static" href="#" data-page="${i}">${i}</a></li>`;
                     pagination.append(pageLink);
                 }
 
                 // Add Next button
                 if (currentPage < totalPages) {
-                    var nextButton = `<li id="pagination-next" class="page-item" id="next-btn"><a class="page-link" href="#" data-page="${currentPage + 1}">Next</a></li>`;
+                    var nextButton = `<li id="pagination-next" class="page-item" id="next-btn"><a class="page-link position-static" href="#" data-page="${currentPage + 1}">Next</a></li>`;
                     pagination.append(nextButton);
                 }
             }

@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $batchId = $_POST['batchId'];
                 $table = $_POST['table'];
                 $itemId = $_POST['itemId'];
-                
+                $item = $_POST['item'];
                 try {
                     $conn->autocommit(false); // Start a transaction
                     
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $test1Id = intval($testId);
                         $isPresent = intval($isPresent);
         
-                        $response = $dataHandler->test_video_Assigning($batchId, $test1Id, $isPresent, $table, $itemId);
+                        $response = $dataHandler->test_video_Assigning($batchId, $test1Id, $isPresent, $table, $itemId, $item);
                     }
         
                      // Commit the transaction
@@ -63,8 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $conn->autocommit(true);// Restore autocommit mode
                 }
             }else{
-                $response['success'] = false;
-                $response['message'] = "All employee Absent";
+                
             }
             
         }elseif ($task === 'mark_attendance') {
