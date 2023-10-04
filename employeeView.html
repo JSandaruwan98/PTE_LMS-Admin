@@ -50,8 +50,9 @@
     </table>
   </div>
     <nav aria-label="Page navigation example" class="pgecard">
-      <ul id="pagingEmployee" class="pagination">
-    </ul>
+      <ul id="pagingEmployee" class="pagination"></ul>
+    <div id="export-button" class="btn btn-secondary me-2" style="float: right; margin-top: 35px;">Export</div>
+
   </nav>
   </div>
   
@@ -83,7 +84,7 @@
                         <td class="text-center">${item.role}</td>
                         <td class="text-center">${item.username}</td>
                         <td class="text-center">${item.password}</td>
-                        <td class="" style="font-size:15px;"><div class="form-check form-switch text-center"><input type="checkbox" name="task" class="form-check-input" id="myCheckbox" name="featureEnabled" data-id=${item.employee_id} ${(parseInt(item.activation) ? "checked" : "")}></div></td>
+                        <td data-hidden= ${(parseInt(item.activation))} class="active1" style="font-size:15px;"><div class="form-check form-switch text-center"><input type="checkbox" name="task" class="form-check-input" id="myCheckbox" name="featureEnabled" data-id=${item.employee_id} ${(parseInt(item.activation) ? "checked" : "")} ></div></td>
                     </tr>`;
                     tableBody.append(row);
                 });
@@ -160,6 +161,42 @@
           });
       });
   });
+</script>
+<script>
+  function exportToCSV() {
+            const table = document.getElementById('data-table');
+            const rows = table.querySelectorAll('tr');
+            let csvContent = "data:text/csv;charset=utf-8,";
+
+            for (const row of rows) {
+                const cells = row.querySelectorAll('td, th');
+                const rowData = Array.from(cells).map(cell => {
+                    if (cell.className === 'active1') {
+                        // Include hidden data in CSV
+                        return cell.getAttribute('data-hidden');
+                    }
+                    return cell.textContent;
+                });
+                csvContent += rowData.join(',') + '\n';
+            }
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'data.csv');
+            document.body.appendChild(link);
+
+            link.click();
+        }
+
+
+
+        $(document).ready(function() {
+            $('#export-button').on('click', function() {
+                exportToCSV();
+            });
+        });
+
 </script>
 </body>
 </html>

@@ -319,10 +319,23 @@ class DataHandler {
     public function createBatch($program, $class, $batchname, $timefrom, $timeto) {
         $response = array();
 
+        //checked the batch name exist or not
+        function batchnameExists($batchname_to_check, $conn) {
+            $name_to_check = mysqli_real_escape_string($conn, $batchname_to_check);
+            $sql = "SELECT * FROM batch WHERE name='$name_to_check'";
+            $result = mysqli_query($conn, $sql);
+            return mysqli_num_rows($result) > 0;
+        }
+
+        $batchname_to_check = $batchname;
+
         // Perform data validation
         if (empty($program) || empty($class) || empty($batchname) || empty($timefrom) || empty($timeto)) {
             $response['success'] = false;
             $response['message'] = "All fields are required.";
+        } elseif(batchnameExists($batchname_to_check, $this->conn)){
+            $response['success'] = false;
+            $response['message'] = "Batch name already exists";
         } else {
             // Data is valid, proceed with database insertion
 
@@ -351,6 +364,17 @@ class DataHandler {
         $emailRegex = "/^\S+@\S+\.\S+$/";
         $phoneRegex = "/^\d{10}$/"; // Assuming a 10-digit phone number format
 
+
+        //checked the user name exist or not
+        function usernameExists($username_to_check, $conn) {
+            $username_to_check = mysqli_real_escape_string($conn, $username_to_check);
+            $sql = "SELECT * FROM employee WHERE username='$username_to_check'";
+            $result = mysqli_query($conn, $sql);
+            return mysqli_num_rows($result) > 0;
+        }
+
+        $username_to_check = $uname;
+
         // Perform data validation
         if (empty($name) || empty($email) || empty($role) || empty($phone) || empty($address) || empty($qualification) || empty($uname) || empty($pass)) {
             $response['success'] = false;
@@ -364,6 +388,9 @@ class DataHandler {
         } elseif (!preg_match($phoneRegex, $phone)) {
             $response['success'] = false;
             $response['message'] = "Invalid phone number. Please enter a 10-digit number.";
+        } elseif(usernameExists($username_to_check, $this->conn)){
+            $response['success'] = false;
+            $response['message'] = "username already exists";
         } else {
                 // Data is valid, proceed with database insertion
 
@@ -404,6 +431,9 @@ class DataHandler {
         $this->conn->query($sql);
     }
 
+
+
+
     //created the student enrollement
     public function enrollStudent($studentid, $name, $phone, $program, $batchid, $starton) {
         $response = array();
@@ -411,6 +441,8 @@ class DataHandler {
         // Define regular expressions for password strength, email, and phone number validation
         $phoneRegex = "/^\d{10}$/"; // Assuming a 10-digit phone number format
 
+
+        
         // Perform data validation
         if (empty($name) || empty($phone) || empty($program) || empty($batchid) || empty($starton)) {
             $response['success'] = false;
