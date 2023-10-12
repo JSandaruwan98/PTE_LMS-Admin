@@ -86,7 +86,13 @@ class DataHandler {
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT * FROM ticket LIMIT $offset, $itemsPerPage";
+        $sql = "SELECT *,
+                        CASE
+                            WHEN student_id IS NOT NULL THEN CONCAT('STU ', LPAD(CAST(student_id AS CHAR), 4, '0'))
+                            ELSE CONCAT('EMP ', LPAD(CAST(employee_id AS CHAR), 4, '0'))
+                        END AS person_id
+                FROM ticket
+                LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
 
@@ -145,12 +151,12 @@ class DataHandler {
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT DISTINCT e.evaluation_id AS id, stu.name AS student_name, te.name AS test_name, e.attempted_on AS attempted_on, t.assigned_on AS assigned_on
-                FROM assignstudent AS s
-                JOIN evaluation AS e ON s.student_id = e.student_id
-                JOIN testass AS t ON t.test_id = e.test_id
-                JOIN student AS stu ON s.student_id = stu.student_id
-                JOIN test AS te ON te.test_id = t.test_id
+        $sql = "SELECT DISTINCT s.name AS student_name, e.attempted_on AS attempted_on, t.name AS test_name, ta.assigned_on AS assigned_on
+                FROM evaluation AS e
+                JOIN student AS s ON s.student_id = e.student_id
+                JOIN test AS t ON t.test_id = e.test_id
+                JOIN assignstudent AS sa ON sa.student_id = e.student_id
+                JOIN testass AS ta ON ta.batch_id = sa.batch_id
                 WHERE e.attempted_on IS NOT NULL";
         $result = $this->conn->query($sql);
         $data = array();
@@ -184,12 +190,12 @@ class DataHandler {
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT DISTINCT e.evaluation_id AS id, e.evaluation_on AS evaluation_on, stu.name AS student_name, te.name AS test_name, e.attempted_on AS attempted_on, t.assigned_on AS assigned_on
-                FROM assignstudent AS s
-                JOIN evaluation AS e ON s.student_id = e.student_id
-                JOIN testass AS t ON t.test_id = e.test_id
-                JOIN student AS stu ON s.student_id = stu.student_id
-                JOIN test AS te ON te.test_id = t.test_id
+        $sql = "SELECT DISTINCT s.name AS student_name, e.attempted_on AS attempted_on, t.name AS test_name, ta.assigned_on AS assigned_on, e.evaluation_on AS evaluation_on
+                FROM evaluation AS e
+                JOIN student AS s ON s.student_id = e.student_id
+                JOIN test AS t ON t.test_id = e.test_id
+                JOIN assignstudent AS sa ON sa.student_id = e.student_id
+                JOIN testass AS ta ON ta.batch_id = sa.batch_id
                 WHERE e.evaluation_on IS NOT NULL";
         $result = $this->conn->query($sql);
         $data = array();
@@ -413,6 +419,19 @@ class DataHandler {
         return $response;
     }
 
+    public function ticketCheck($ticketId, $comment, $status) {
+        
+        $sql = "UPDATE ticket SET comments = '$comment', status = '$status' WHERE ticket_no = $ticketId";
+        if ($this->conn->query($sql) === TRUE) {
+            $response['success'] = true;
+            $response['message'] = "data updated successfully!";
+        } else {
+            $response['success'] = false;
+            $response['message'] = "data updataion failed. Please try again.";
+        }
+        return $response;
+        
+    }
     //check boxsess
     public function evalupdate($id) {
         $sql = "UPDATE evaluation SET evaluation_on = CURDATE() WHERE evaluation_id = $id";
@@ -608,6 +627,21 @@ class DataHandler {
             $response['success'] = false;
             $response['message'] = "Employee creation failed. Please try again.";
         }
+        
+    }
+
+    public function removeTheAssigning($batchId, $studentId, $testId) {
+        // Insert the employee data into the database (assuming you have an "employees" table)
+        $sql = "DELETE FROM testass WHERE batch_id = $batchId AND test_id = $testId";
+        $this->conn->query($sql);
+
+        $sql1 = "DELETE FROM evaluation
+                 WHERE student_id IN (
+                    SELECT s.student_id
+                    FROM assignstudent AS s
+                    JOIN evaluation AS e ON s.student_id = e.student_id
+                    WHERE s.batch_id = $batchId AND e.test_id = $testId)";
+        $this->conn->query($sql1);        
         
     }
 

@@ -12,7 +12,37 @@
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
-  
+  <style>
+    /* CSS to style the message box */
+    #message-box {
+        display: none;
+        width: 400px;
+        background-color: #F2D9D9;
+        border: 1px solid #ccc;
+        padding: 20px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 5px;
+box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 30%);
+    }
+
+    /* Style for checkboxes */
+    label {
+        display: block;
+    }
+
+    
+    .button-container {
+        float: right;
+        margin-top: 10px;
+    }
+
+    .button-container button {
+        margin-right: 10px;
+    }
+</style>
   <script>
     $(document).ready(function () {
       $('#previous').click(function(){
@@ -83,7 +113,24 @@
     </div> 
   </form> 
 
-  
+  <div id="message-box">
+    <form action="dataHandler/api/post.php" method="POST" id="message-form">
+        <input type="hidden" name="batchId" id="batchId">
+        <input type="hidden" name="videoId" id="videoId">
+        <input type="hidden" name="studentId" id="studentId">
+        <input type="hidden" name="task" id="task">
+        
+        <div class="form-group row">
+            <label for="staticEmail" class="col-form-label">Warnning: The details of the student's exam will also be removed</label>
+        </div>
+        <br>
+        <div class="button-container">
+          <div id="cancel-button" class="btn btn-secondary me-2" style="float: right;">Cancel</div>
+          <button type="submit" class="btn btn-secondary" id="submit-button">Submit</button>
+        </div>
+        
+      </form>
+  </div>
 
 
   
@@ -167,36 +214,7 @@
 });
 
 </script>
-<script>
-  $(document).ready(function() {
-      const urlParams = new URLSearchParams(window.location.href);
-    
-      const fragment = window.location.hash;
 
-        // Remove the '#' character to get the value
-      const value = fragment.substring(1);
-
-      $('#data-table').on('change', '#flexSwitchCheckDefault', function() {
-          const id = $(this).data('id');
-          if ($(this).is(":checked")) {
-              // Checkbox is checked, add the test to the assignment table
-              // You can update the assignment table using AJAX here
-          }else{
-            $.ajax({
-                type: "POST",
-                url: "dataHandler/api/post.php", // Replace with the URL of your PHP script
-                data: { itemId: id, batch_id: value, task: 'test_video_Removing', table: 'assignvideo', itemIdName: 'video_id' },
-                success: function(response) {
-                    console.log("Test " + testId + " removed");
-                },
-                error: function(xhr, status, error) {
-                    console.error("Error removing test: " + error);
-                }
-            });
-          }
-      });
-  });
-</script>
 <script>
 
   // Use jQuery to handle form submission
@@ -235,6 +253,51 @@
       });
   });
 </script>
+<script>
+  $(document).ready(function(){
+    const urlParams = new URLSearchParams(window.location.href);
+    const fragment = window.location.hash;
+    const value = fragment.substring(1);
 
+    
+    $(document).on("click", ".test-checkbox", function(e){
+     
+      if(!$(this).prop("checked")){
+        e.preventDefault();
+        var studentId = $(this).data("student-id");
+        var testId = $(this).data("id");
+        $("#message-box").find("#studentId").val(studentId); 
+        $("#message-box").find("#testId").val(testId); 
+        $("#message-box").find("#batchId").val(value); 
+        $("#message-box").show();
+      }
+      
+    })
+    $("#cancel-button").click(function() {
+      $("#message-box").hide();
+    });
+    $("#message-form").submit(function (event) {
+      event.preventDefault()
+      
+      $.ajax({
+            url: 'dataHandler/api/post.php', // Replace with the URL to your server-side script
+            type: 'POST',
+            data: $(this).serialize() + "&task=test_video_Removing",
+            success: function(response) {
+                // Handle the server's response here if needed
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle errors here if needed
+                console.error(error);
+            }
+      });
+      $("#message-box").hide();
+      $('#main').load('assignTest_batch.html');
+    })
+    
+    
+  })
+</script>
 </body>
 </html>

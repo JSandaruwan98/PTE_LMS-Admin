@@ -10,8 +10,41 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
+    <style>
+        /* CSS to style the message box */
+        #message-box {
+            display: none;
+            width: 400px;
+            background-color: #F2D9D9;
+            border: 1px solid #ccc;
+            padding: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 5px;
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 30%);
+        }
+
+        /* Style for checkboxes */
+        label {
+            display: block;
+        }
+
+        
+        .button-container {
+            float: right;
+            margin-top: 10px;
+        }
+
+        .button-container button {
+            margin-right: 10px;
+        }
+    </style>
+  </head>
+<body id="main-content2">
+  
+  <div>
   <div class="header border">
     <div class="card-body ms-3" style="margin-top: -7px;">
         <h5 class="h4 card-title text-secondary">Support</h5>
@@ -19,7 +52,7 @@
     </div>
   </div>
     
-  <div id="data-container" class="content border mt-3 p-4">
+  <div id="data-container" class="content border mt-3 p-4" style=" position: static;">
     <div class="col" style="position: static;">
         <h5 class="pb-3" style="float: left;">Tickets</h5>
       </div>
@@ -44,12 +77,53 @@
     </table>
   </div>
     <nav aria-label="Page navigation example" class="pgecard"> 
-      <ul id="pagingSupport" class="pagination">
+      <ul id="pagingSupport" class="pagination" style=" position: static;">
       </ul>
     </nav>
   </div>
-  
-  
+</div>
+  <div id="message-box">
+      <form action="dataHandler/api/post.php" method="POST" id="message-form">
+          <input type="hidden" name="ticketId" id="ticketId">
+          <input type="hidden" name="task" id="task">
+          
+          <div class="form-group row">
+              <label for="staticEmail" class="col-sm-4 col-form-label">Person Id:</label>
+              <div class="col-sm-8">
+                <input type="text" readonly class="form-control-plaintext" name="personId" id="personId">
+              </div>
+              <label for="staticEmail" class="col-sm-4 col-form-label">Topic Area:</label>
+              <div class="col-sm-8">
+                <input type="text" readonly class="form-control-plaintext" name="topicArea" id="topicArea">
+              </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Add Comments</label>
+            <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
+          </div>
+          
+          <div class="form-check form-check-inline my-3">
+              <input class="form-check-input" type="radio" name="status" id="approve-checkbox" value="Resolved">
+              <label class="form-check-label" for="approve-checkbox">Approve</label>
+          </div>
+          
+          <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="status" id="reject-checkbox" value="Reject">
+              <label class="form-check-label" for="reject-checkbox">Reject</label>
+          </div>
+          
+          <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="status" id="pending-checkbox" value="Pending">
+              <label class="form-check-label" for="pending-checkbox">Pending</label>
+          </div>
+          <br>
+          <div class="button-container">
+            <div id="cancel-button" class="btn btn-secondary me-2" style="float: right;">Cancel</div>
+            <button type="submit" class="btn btn-secondary" id="submit-button">Submit</button>
+          </div>
+          
+        </form>
+  </div>
   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="script.js"></script>
@@ -72,6 +146,8 @@
                 tableBody.empty();
                 $.each(data, function (index, item) {
                   var formattedTicketNo = 'TICK ' + ('0000' + item.ticket_no).slice(-4);
+                  var pid = 'kamal';
+                  var is = "item.issue";
                     var row = `<tr>
                         <td class="text-center">${formattedTicketNo}</td>
                         <td class="text-center">${item.date}</td>
@@ -80,17 +156,19 @@
                         <td class="text-center">${item.status}</td>
                         <td class="text-center">${item.comments}</td>
                         <td class="text-center">${item.comments}</td>
-                        <td class="text-center">${item.action}</td>       
+                        <td class="text-center"><div class="reopen-link" data-person-id= "${item.person_id}" data-issue= "${item.issue}" data-ticket-id= "${item.ticket_no}">Reopen</div</td>       
                     </tr>`;
                     var newRow = $(row); // Convert the HTML string to a jQuery object
 
                     // Change the text color based on the value of each <td>
                     newRow.find('td').each(function () {
                         var tdText = $(this).text();
-                        if (tdText === "Pending") {
+                        if (tdText === "Reject") {
                             $(this).css("color", "red");
                         } else if (tdText === "Resolved") {
                             $(this).css("color", "green");
+                        } else if (tdText === "Pending") {
+                            $(this).css("color", "orange");
                         }
                     });
 
@@ -131,10 +209,59 @@
     $(document).on("click", "#pagingSupport a", function (e) {
         e.preventDefault();
         var page = $(this).data("page");
+
         currentPage = page;  // Update the current page
         loadData(page);
     });
 });
+
+</script>
+<script>
+  $(document).ready(function() {
+    // Show the message box when any reopen link is clicked
+    $(document).on("click", ".reopen-link", function(e) {
+        e.preventDefault();
+        var personId = $(this).data("person-id"); 
+        var issue = $(this).data("issue");
+        var ticketId = $(this).data("ticket-id")
+        console.log(ticketId)
+        $("#message-box").find("#personId").val(personId);
+        $("#message-box").find("#topicArea").val(issue);
+        $("#message-box").find("#ticketId").val(ticketId)
+        $("#message-box").show();       
+    });
+    $("#cancel-button").click(function() {
+        $("#message-box").hide();
+        $("#comment").val(""); 
+        $("#approve-checkbox").prop("checked", false); 
+        $("#reject-checkbox").prop("checked", false); 
+    });
+
+    // Hide the message box when the submit button is clicked
+    
+    $("#message-form").submit(function (event) {
+        event.preventDefault()
+        
+        $.ajax({
+              url: 'dataHandler/api/post.php', // Replace with the URL to your server-side script
+              type: 'POST',
+              data: $(this).serialize() + "&task=ticketCheck",
+              success: function(response) {
+                  // Handle the server's response here if needed
+                  console.log(response);
+              },
+              error: function(xhr, status, error) {
+                  // Handle errors here if needed
+                  console.error(error);
+              }
+        });
+        $("#message-box").hide();
+        $('#main').load('support.html');
+      })
+        
+      
+    });
+
 
 </script>
 </body>

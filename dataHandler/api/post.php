@@ -39,6 +39,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              
 
             $response = $dataHandler->enrollStudent($studentid, $name, $phone, $program, $batchid, $starton);
+        }elseif ($task === 'ticketCheck') {
+            $ticketId = $_POST['ticketId'];
+            $comment = $_POST['comment'];
+            $status = $_POST['status'];
+            
+            $response = $dataHandler->ticketCheck($ticketId, $comment, $status);
+            
         }elseif ($task === 'test_video_Assigning') {
             if (isset($_POST['test']) && is_array($_POST['test'])) {
                 $batchId = $_POST['batchId'];
@@ -110,10 +117,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $response = $dataHandler->evalupdate($id);
         }elseif ($task === 'test_video_Removing') {
             $batchId = $_POST['batch_id'];
-            $itemId = $_POST['itemId'];
-            $table = $_POST['table'];
-            $itemIdName = $_POST['itemIdName'];
+            $itemId = $_POST['videoId'];
+            $table = 'assignvideo';
+            $itemIdName = 'video_id';
             $response = $dataHandler->test_video_Removing($batchId, $itemId, $table, $itemIdName);
+        }elseif ($task === 'removeTheAssigning') {
+            $batchId = $_POST['batchId'];
+            $studentId = $_POST['studentId'];
+            $testId = $_POST['testId'];
+            $response = $dataHandler->removeTheAssigning($batchId, $studentId, $testId);
         }
         
     }
