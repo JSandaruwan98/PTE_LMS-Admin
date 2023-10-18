@@ -25,6 +25,9 @@ class DataHandler {
 
     // get the batch id and name for the drop down input field of batches  
     public function balance() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $itemsPerPage = 10;
+        $offset = ($page - 1) * $itemsPerPage;
         $sql = "SELECT
                     total_credits - total_other_transactions AS balance
                 FROM
@@ -32,13 +35,17 @@ class DataHandler {
                         SUM(CASE WHEN transactiontype = 'credit' THEN amount ELSE 0 END) AS total_credits,
                         SUM(CASE WHEN transactiontype <> 'credit' THEN amount ELSE 0 END) AS total_other_transactions
                     FROM
-                        transaction) AS subquery";
+                        transaction) AS subquery
+                LIMIT $offset, $itemsPerPage";        ;
+
         $result = $this->conn->query($sql);
         $data = array();
-
+        $i=1;
         if ($result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
+                $row['serial_number'] = ($page - 1) * $itemsPerPage + $i;
                 $data[] = $row;
+                $i++;
             }
         }
 
@@ -265,9 +272,11 @@ class DataHandler {
                 LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
-
+        $i=1;
         while ($row = $result->fetch_assoc()) {
+            $row['serial_number'] = ($page - 1) * $itemsPerPage + $i;
             $data[] = $row;
+            $i++;
         }
 
         $totalItemsQuery = "SELECT COUNT(*) as total 
@@ -419,9 +428,9 @@ class DataHandler {
         return $response;
     }
 
-    public function ticketCheck($ticketId, $comment, $status) {
+    public function ticketCheck($ticketId, $comment, $status, $rating) {
         
-        $sql = "UPDATE ticket SET comments = '$comment', status = '$status' WHERE ticket_no = $ticketId";
+        $sql = "UPDATE ticket SET comments = '$comment', status = '$status', rating = '$rating'  WHERE ticket_no = $ticketId";
         if ($this->conn->query($sql) === TRUE) {
             $response['success'] = true;
             $response['message'] = "data updated successfully!";
@@ -508,9 +517,11 @@ class DataHandler {
         $sql = "SELECT * FROM $table LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
-
+        $i=1;
         while ($row = $result->fetch_assoc()) {
+            $row['serial_number'] = ($page - 1) * $itemsPerPage + $i;
             $data[] = $row;
+            $i++;
         }
 
         $totalItemsQuery = "SELECT COUNT(*) as total FROM $table";
@@ -616,9 +627,9 @@ class DataHandler {
 
 
     //Removing 
-    public function test_video_Removing($batchId, $itemId, $table, $itemIdName) {
+    public function test_video_Removing($batchId, $itemId) {
         // Insert the employee data into the database (assuming you have an "employees" table)
-        $sql = "DELETE FROM $table WHERE batch_id = $batchId AND $itemIdName = $itemId";
+        $sql = "DELETE FROM assignvideo WHERE batch_id = $batchId AND video_id = $itemId";
 
         if ($this->conn->query($sql) === TRUE) {
             $response['success'] = true;
@@ -629,6 +640,7 @@ class DataHandler {
         }
         
     }
+
 
     public function removeTheAssigning($batchId, $studentId, $testId) {
         // Insert the employee data into the database (assuming you have an "employees" table)
@@ -709,9 +721,11 @@ class DataHandler {
 
         $result = $this->conn->query($sql);
         $data = array();
-
+        $i=1;
         while ($row = $result->fetch_assoc()) {
+            $row['serial_number'] = ($page - 1) * $itemsPerPage + $i;
             $data[] = $row;
+            $i++;
         }
 
         $totalItemsQuery = "SELECT COUNT(*) as total 

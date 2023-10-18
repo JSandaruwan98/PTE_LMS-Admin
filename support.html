@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pagination Example</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">  
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -43,7 +43,6 @@
     </style>
   </head>
 <body id="main-content2">
-  
   <div>
   <div class="header border">
     <div class="card-body ms-3" style="margin-top: -7px;">
@@ -97,6 +96,30 @@
                 <input type="text" readonly class="form-control-plaintext" name="topicArea" id="topicArea">
               </div>
           </div>
+          <label for="staticEmail" class="col-form-label form-check-inline mb-4">Rating:</label>
+
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="rating" id="approve-checkbox" value="1">
+            <label class="form-check-label" for="approve-checkbox">1</label>
+        </div>
+        
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="rating" id="reject-checkbox" value="2">
+            <label class="form-check-label" for="reject-checkbox">2</label>
+        </div>
+        
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="rating" id="pending-checkbox" value="3">
+            <label class="form-check-label" for="pending-checkbox">3</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="rating" id="pending-checkbox" value="4">
+          <label class="form-check-label" for="pending-checkbox">4</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="rating" id="pending-checkbox" value="5">
+        <label class="form-check-label" for="pending-checkbox">5</label>
+    </div>
           <div class="form-group">
             <label for="exampleFormControlTextarea1">Add Comments</label>
             <textarea class="form-control" name="comment" id="comment" rows="3"></textarea>
@@ -126,7 +149,7 @@
   </div>
   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="script.js"></script>
+  <script src="js/script.js"></script>
   <script>
     $(document).ready(function () {
     var itemsPerPage = 10; // Number of items to display per page
@@ -155,7 +178,7 @@
                         <td class="text-center">${item.issue_type}</td>
                         <td class="text-center">${item.status}</td>
                         <td class="text-center">${item.comments}</td>
-                        <td class="text-center">${item.comments}</td>
+                        <td class="text-center">${item.rating}/5</td>
                         <td class="text-center"><div class="reopen-link" data-person-id= "${item.person_id}" data-issue= "${item.issue}" data-ticket-id= "${item.ticket_no}">Reopen</div</td>       
                     </tr>`;
                     var newRow = $(row); // Convert the HTML string to a jQuery object

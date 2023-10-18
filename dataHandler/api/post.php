@@ -43,8 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $ticketId = $_POST['ticketId'];
             $comment = $_POST['comment'];
             $status = $_POST['status'];
-            
-            $response = $dataHandler->ticketCheck($ticketId, $comment, $status);
+            $rating = $_POST['rating'];
+            $response = $dataHandler->ticketCheck($ticketId, $comment, $status, $rating);
             
         }elseif ($task === 'test_video_Assigning') {
             if (isset($_POST['test']) && is_array($_POST['test'])) {
@@ -116,11 +116,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id = $_POST['id'];
             $response = $dataHandler->evalupdate($id);
         }elseif ($task === 'test_video_Removing') {
-            $batchId = $_POST['batch_id'];
-            $itemId = $_POST['videoId'];
-            $table = 'assignvideo';
-            $itemIdName = 'video_id';
-            $response = $dataHandler->test_video_Removing($batchId, $itemId, $table, $itemIdName);
+            $batchId = $_POST['batchId'];
+            $itemId = $_POST['testId'];
+            
+            $response = $dataHandler->test_video_Removing($batchId, $itemId);
         }elseif ($task === 'removeTheAssigning') {
             $batchId = $_POST['batchId'];
             $studentId = $_POST['studentId'];

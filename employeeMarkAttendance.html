@@ -96,7 +96,7 @@
                     var formattedEmployeeID = 'EMP ' + ('0000' + item.employee_id).slice(-4);
                     var row = `
                     <tr>
-                        <td class="text-center" class="text-center">${i}</td>
+                        <td class="text-center" class="text-center">${item.serial_number}</td>
                         <td class="text-center" class="text-center">${item.name}</td>
                         <td class="text-center" class="text-center">${formattedEmployeeID}</td>
                         <td class="text-center" class="text-center" style="font-size:15px;"><div class="form-check form-switch"><input type="checkbox" name="attendance[${item.employee_id}]" value="1" class="form-check-input" id="flexSwitchCheckDefault"></div></td>

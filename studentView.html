@@ -79,7 +79,7 @@
                 $.each(data, function (index, item) {
                   var formattedStudentID = 'STU ' + ('0000' + item.student_id).slice(-4);
                     var row = `<tr>
-                        <td class="text-center">${i}</td>
+                        <td class="text-center">${item.serial_number}</td>
                         <td class="text-center">${formattedStudentID}</td>
                         <td class="text-center">${item.student_name}</td>
                         <td class="text-center">${item.phone}</td>

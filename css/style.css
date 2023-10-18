@@ -230,3 +230,34 @@
       background-color: white;
       padding: 10px;
     }
+
+
+    /* CSS to style the message box */
+    #message-box {
+      display: none;
+      width: 400px;
+      background-color: #F2D9D9;
+      border: 1px solid #ccc;
+      padding: 20px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 5px;
+box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 30%);
+  }
+
+  /* Style for checkboxes */
+  label {
+      display: block;
+  }
+
+  
+  .button-container {
+      float: right;
+      margin-top: 10px;
+  }
+
+  .button-container button {
+      margin-right: 10px;
+  }
