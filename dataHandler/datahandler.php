@@ -330,6 +330,43 @@ class DataHandler {
         }
     }
 
+
+    public function login($name, $password){
+        if (empty($name) && empty($password)) {
+            $response['success'] = false;
+            $response['message'] = "All fields are required.";
+        }elseif(empty($name)){
+            $response['success'] = false;
+            $response['message'] = "All fields are required.";
+        }elseif(empty($password)){
+            $response['success'] = false;
+            $response['message'] = "User Password is required.";
+        }else{
+    
+            $sql ="SELECT * FROM user WHERE name='$name' AND password ='$password'";
+            $result = $this->conn->query($sql);
+    
+            if(mysqli_num_rows($result) === 1){
+                $row =mysqli_fetch_assoc($result);
+                if($row['name'] === $name && $row['password'] === $password){
+                    $response['success'] = true;
+                    $response['message'] = "index.html";
+                    session_start();
+                    $_SESSION['user'] = $_POST['name'];
+                }else{
+                    $response['success'] = false;
+                    $response['message'] = "Incorect User name or password";
+                }
+            }else{
+                $response['success'] = false;
+                $response['message'] = "Incorect User name or password";
+            }
+    
+        }
+        return $response;
+    }
+
+
     //created the batch table
     public function createBatch($program, $class, $batchname, $timefrom, $timeto) {
         $response = array();
@@ -741,6 +778,8 @@ class DataHandler {
 
         return $response;
     }
+
+    
     
 
     

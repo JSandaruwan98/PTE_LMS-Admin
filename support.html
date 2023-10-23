@@ -40,9 +40,26 @@
         .button-container button {
             margin-right: 10px;
         }
+        .text-center{
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width: 100px; /* Adjust as needed */
+        }
+        .toolti {
+            position: absolute;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 1;
+            max-width: 300px;
+            display: none;
+        }
+        
     </style>
   </head>
 <body id="main-content2">
+  
   <div>
   <div class="header border">
     <div class="card-body ms-3" style="margin-top: -7px;">
@@ -50,7 +67,7 @@
         <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / Tickets</span></p>
     </div>
   </div>
-    
+  <div class="tooltip" style="display:block;"></div>
   <div id="data-container" class="content border mt-3 p-4" style=" position: static;">
     <div class="col" style="position: static;">
         <h5 class="pb-3" style="float: left;">Tickets</h5>
@@ -74,6 +91,7 @@
         
       </tbody>
     </table>
+    <div class="toolti"></div>
   </div>
     <nav aria-label="Page navigation example" class="pgecard"> 
       <ul id="pagingSupport" class="pagination" style=" position: static;">
@@ -84,6 +102,7 @@
   <div id="message-box">
       <form action="dataHandler/api/post.php" method="POST" id="message-form">
           <input type="hidden" name="ticketId" id="ticketId">
+          
           <input type="hidden" name="task" id="task">
           
           <div class="form-group row">
@@ -155,6 +174,7 @@
     var itemsPerPage = 10; // Number of items to display per page
     var currentPage = 1;  // Track the current page
 
+    
     function loadData(page) {
         $.ajax({
             type: "GET",
@@ -177,7 +197,7 @@
                         <td class="text-center">${item.issue}</td>
                         <td class="text-center">${item.issue_type}</td>
                         <td class="text-center">${item.status}</td>
-                        <td class="text-center">${item.comments}</td>
+                        <td class="text-center" id="comment">${item.comments}</td>
                         <td class="text-center">${item.rating}/5</td>
                         <td class="text-center"><div class="reopen-link" data-person-id= "${item.person_id}" data-issue= "${item.issue}" data-ticket-id= "${item.ticket_no}">Reopen</div</td>       
                     </tr>`;
@@ -194,6 +214,29 @@
                             $(this).css("color", "orange");
                         }
                     });
+
+                    newRow.find('#comment').each(function(){
+                        const tooltip = $('.toolti');
+                        $(this).hover(
+                            function() {
+                                const fullText = $(this).text();
+                                console.log(fullText);
+                                if (this.offsetWidth < this.scrollWidth) {
+                                    tooltip.text(fullText);
+                                    tooltip.css({
+                                        top: $(this).offset().top + 30,
+                                        left: $(this).offset().left + 20,
+                                    });
+                                    tooltip.show();
+                                }
+                            },
+                            function hideTooltip() {
+                                tooltip.hide();
+                            }
+                        )
+                       
+                        
+                    })
 
                     tableBody.append(newRow);
                 });
@@ -222,6 +265,8 @@
                     pagination.append(nextButton);
                 }
             }
+
+            
         });
     }
 
@@ -280,12 +325,13 @@
         });
         $("#message-box").hide();
         $('#main').load('support.html');
-      })
+    })
         
       
     });
 
 
 </script>
+
 </body>
 </html>

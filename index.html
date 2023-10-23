@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src='https://code.jquery.com/jquery-3.7.0.js'></script>
     
     <script>
       $(document).ready(function () {
@@ -71,12 +70,20 @@
   </script>
 </head>
 <body style="cursor: context-menu;" id="main-content">
-  <nav id="main-navbar" class="navbar fixed-top" style="position: fixed;">
-    <a id="toggle-btn" href="javascript:void(0);" onclick="openNav()" class="link-dark">
-      <img class="logo_icon" src="images/LMS_icon.png" />
-      <div href="" class="logo_name text-decoration-none"><span>PTE EXAM LMS</span></div>
-    </a>  
+  <nav id="main-navbar" class="navbar1 fixed-top" style="position: fixed;">
+    <a id="toggle-btn" href="javascript:void(0);" onclick="" class="link-dark">
+        <img class="logo_icon" src="images/LMS_icon.png" />
+        <div href="" class="logo_name text-decoration-none"><span>PTE EXAM LMS</span></div>
+        <div class="profile-dropdown-box m-4 me-4" style="float: right;">
+          <img src="images/profile-user.png" alt="Profile Icon" class="icon" style="width: 30px; height: 30px;">
+          <div class="dropdown-content-profile" style="right: 0; ">
+              <label>Profile</label><label style="float: right;">Admin</label>
+              <a href="#" onclick="logoutUser()" style="text-align: center; background-color: rgba(244, 227, 227, 1);"><b>Logout</b></a>
+          </div>
+      </div>
+    </a>
   </nav>
+
   <div class="sidebar">
     <ul class="menu">
       <li class="menu-item">
@@ -120,6 +127,8 @@
         </ul>
       </li>
     </ul>
+    
+  
   </div>
   <div id="main">
     <h1>scdsc</h1>
@@ -145,6 +154,83 @@
             $(this).addClass('clicked');
         });
     });
+</script>
+<script>
+  document.querySelector('.icon').addEventListener('click', function() {
+    var dropdown = document.querySelector('.dropdown-content-profile');
+    if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+        dropdown.style.display = 'block';
+    } else {
+        dropdown.style.display = 'none';
+    }
+  });
+
+  function logout() {
+    // Add logout functionality here, such as redirecting to a logout endpoint or clearing session data.
+    alert('Logout button clicked!');
+  }
+
+ </script>
+
+<script>
+      let timeout;
+
+      function checkLoginStatus() {
+            $.ajax({
+                type: "GET",
+                url: "dataHandler/api/get.php?data_type=check_login", // Create this PHP file
+                success: function (data) {
+                    if (data === "success") {
+                        // User is logged in, do nothing
+                    } else {
+                        window.location.href = "login.html"; // Redirect to the login page
+                    }
+                }
+            });
+        }
+
+        // Event listener to check login status on page load
+        $(document).ready(function () {
+            checkLoginStatus();
+        });
+
+
+
+      // Function to reset the timer
+      function resetTimeout() {
+          clearTimeout(timeout);
+          timeout = setTimeout(function () {
+              logoutUser();
+          }, 1* 60* 1000 ); // 1 minute (1 * 60 * 1000 milliseconds)
+      }
+
+      // Function to initiate logout
+      function logoutUser() {
+          $.ajax({
+              type: "GET",
+              url: "dataHandler/api/get.php?data_type=logout",
+              success: function (data) {
+                    if (data === "success") {
+                        window.location.href = "login.html"; // Redirect to the login page
+                    } else {
+                        alert("Logout failed.");
+                    }
+                }
+          });
+      }
+
+      // Event listener to reset the timer on user activity
+      $(document).on('click mousemove', function () {
+          resetTimeout();
+      });
+
+      // Initial timer start
+      resetTimeout();
+
+      // Click event for the logout button
+      $("#logoutButton").click(function () {
+          logoutUser();
+      });
 </script>
 </body>
 </html>

@@ -125,6 +125,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $studentId = $_POST['studentId'];
             $testId = $_POST['testId'];
             $response = $dataHandler->removeTheAssigning($batchId, $studentId, $testId);
+        }elseif ($task === 'login') {
+            $name = $_POST['name'];
+            $password = $_POST['password'];
+           
+            $response = $dataHandler->login($name, $password);
         }
         
     }

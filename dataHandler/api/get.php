@@ -35,6 +35,17 @@ if (isset($_GET['data_type'])) {
         $data = $dataHandler->transaction();
     }elseif ($data_type === 'balance') {
         $data = $dataHandler->balance();
+    }elseif ($data_type === 'logout') {
+        session_start();
+        session_destroy();
+        $data = "success";
+    }elseif ($data_type === 'check_login') {
+        session_start();
+        if (isset($_SESSION['user'])) {
+            $data = "success";
+        } else {
+            $data = "error";
+        }
     }else {
         $data = array("error" => "Invalid data type");
     }
