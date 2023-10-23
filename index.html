@@ -77,10 +77,18 @@
         <div class="profile-dropdown-box m-4 me-4" style="float: right;">
           <img src="images/profile-user.png" alt="Profile Icon" class="icon" style="width: 30px; height: 30px;">
           <div class="dropdown-content-profile" style="right: 0; ">
-              <label>Profile</label><label style="float: right;">Admin</label>
+              <label>Profile <span style="margin-left: 35px;">Admin</span></label>
               <a href="#" onclick="logoutUser()" style="text-align: center; background-color: rgba(244, 227, 227, 1);"><b>Logout</b></a>
           </div>
-      </div>
+        </div>
+        <button type="button" class="btn btn-secondary position-relative mt-4" style="float: right;">
+          Notification
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            99+
+            <span class="visually-hidden">unread messages</span>
+          </span>
+        </button>
+
     </a>
   </nav>
 
@@ -201,7 +209,7 @@
           clearTimeout(timeout);
           timeout = setTimeout(function () {
               logoutUser();
-          }, 1* 60* 1000 ); // 1 minute (1 * 60 * 1000 milliseconds)
+          }, 30* 60* 1000 ); // 30 minute (30 * 60 * 1000 milliseconds)
       }
 
       // Function to initiate logout

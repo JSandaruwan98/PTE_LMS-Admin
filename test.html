@@ -1,78 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="styles.css">
-</head>
-<style>
-    .table {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-.table, .table th, .table td {
-    border: 1px solid black;
-}
-
-.table th, .table td {
-    padding: 10px;
-    text-align: left;
-}
-
-.tooltip-cell {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 150px; /* Adjust as needed */
-}
-
-.tooltip {
-    position: absolute;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    padding: 10px;
-    z-index: 1;
-    max-width: 300px; /* Adjust as needed */
-}
-
-</style>
-<body>
-    <table>
-        <thead>
-            <tr>
-                <th>Column 1</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="tooltip-cell">qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq</td>
-            </tr>
-        </tbody>
-    </table>
-    <div class="tooltip" style="display: none;"></div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Button</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="script.js"></script>
+    <style>
+        /* Add some basic CSS styles for the button */
+        #notification-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        .notification {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            max-width: 300px;
+        }
+
+        .close-button {
+            cursor: pointer;
+            float: right;
+        }
+    </style>
+</head>
+<body>
+    <button id="notification-button">Show Notification</button>
+    <div id="notification-container"></div>
     <script>
         $(document).ready(function () {
-            const cell = $('.tooltip-cell');
-            const tooltip = $('.tooltip');
-            
-            cell.hover(
-                function () {
-                    const fullText = $(this).text();
-                    if (this.offsetWidth < this.scrollWidth) {
-                        tooltip.text(fullText);
-                        tooltip.css({
-                            top: $(this).offset().top + 30,
-                            left: $(this).offset().left,
-                        });
-                        tooltip.show();
-                    }
-                },
-                function () {
-                    tooltip.hide();
-                }
-            );
+    const notificationButton = $("#notification-button");
+    let isNotificationEnabled = true;
+
+    notificationButton.on("click", function () {
+        if (isNotificationEnabled) {
+            showNotification('John Doe has been added as a student.', 'student-added');
+            showNotification('John Doe has been added as a student.', 'student-added');
+            isNotificationEnabled = false;
+            notificationButton.prop("disabled", true);
+
+            // Enable the button after 3 seconds (when the notification disappears)
+            setTimeout(function () {
+                isNotificationEnabled = true;
+                notificationButton.prop("disabled", false);
+            }, 3000);
+        }
+    });
+
+    function showNotification(message, type) {
+        const notification = $('<div>').addClass(`notification ${type}`).text(message);
+        const closeButton = $('<span>').addClass('close-button').text('X');
+
+        $("body").append(notification);
+
+        notification.slideDown(700, function () {
+            setTimeout(function () {
+                notification.slideUp(400, function () {
+                    notification.remove();
+                });
+            }, 3000);
         });
+
+        notification.append(closeButton);
+        $('#notification-container').append(notification);
+
+        closeButton.on('click', function() {
+            notification.remove();
+        });
+    }
+});
 
     </script>
 </body>

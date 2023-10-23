@@ -323,8 +323,11 @@
                   console.error(error);
               }
         });
-        $("#message-box").hide();
-        $('#main').load('support.html');
+        setTimeout(function(){
+          $("#message-box").hide();
+          $('#main').load('support.html');
+        },100)
+        
     })
         
       
