@@ -72,10 +72,24 @@
       </nav>
     </div>  
   </form>
+  <div id="message-box">
+    <form action="" method="POST" id="message-form">
+        
+        <div class="form-group row">
+            <label for="staticEmail" class="col-form-label">Warnning: Enter the student attendance data here before proceeding to the next page.</label>
+        </div>
+        <br>
+        <div class="button-container">
+          <div class="btn btn-secondary" id="cancel-button"> OK </div>
+        </div>
+        
+      </form>
+</div>
   
   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
+    var submissionChecked = true;
     $(document).ready(function () {
     var itemsPerPage = 10; // Number of items to display per page
     var currentPage = 1;  // Track the current page
@@ -137,21 +151,33 @@
 
     // Pagination click event
     $(document).on("click", "#pagingMarkAttendanceEMP a", function (e) {
-        e.preventDefault();
-        var page = $(this).data("page");
-        currentPage = page;  // Update the current page
-        loadData(page);
-        page.empty();
+        if(submissionChecked){
+          event.preventDefault();
+          $("#message-box").show(); 
+          $("#cancel-button").click(function() {
+              $("#message-box").hide();
+          });
+        }else{
+          submissionChecked  = true;
+          var page = $(this).data("page");
+          currentPage = page;  // Update the current page
+          loadData(page);
+          page.empty();
+        }
+        
+         
+        
     });
 });
 
 </script>
 <script>
+  
   // Initialize the date picker
   $( function() {
-      $('#attendanceDate').datepicker({ dateFormat: 'yy-mm-dd' });
+      $('#attendanceDate').datepicker({ dateFormat: 'yy-mm-dd' }); 
   });
-
+  
   // Use jQuery to handle form submission
   $('#attendanceForm').submit(function (event) {
       event.preventDefault();
@@ -185,8 +211,10 @@
               }
           }
       });
+      submissionChecked  = false;
   });
 </script>
+
 
 </body>
 </html>
