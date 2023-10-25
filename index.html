@@ -4,87 +4,241 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src='https://code.jquery.com/jquery-3.7.0.js'></script>
     
     <script>
       $(document).ready(function () {
       $('#addEmployee').click(function(){
-           $('#main').load('addEmployee.html');
+           $('#main').load('employeeAdd.html');
       });
-      $('#batch').click(function(){
-           $('#main').load('addBatch.html');
+      $('#batchAdd').click(function(){
+           $('#main').load('batchView.html');
       });
       $('#wallet').click(function(){
            $('#main').load('wallet.html');
       });
-      
+      $('#studentView').click(function(){
+           $('#main').load('studentView.html');
+      });
+      $('#studentAttendance').click(function(){
+           $('#main').load('studentAttendance.html');
+      });
+      $('#assTest').click(function(){
+           $('#main').load('assignTest.html');
+      });
+      $('#assVideo').click(function(){
+           $('#main').load('assignVideo.html');
+      });
+      $('#pendingEvaluation').click(function(){
+           $('#main').load('evaluationPending.html');
+      });
+      $('#evaluationHistory').click(function(){
+           $('#main').load('evaluationHistory.html');
+      });
+      $('#employeeView').click(function(){
+           $('#main').load('employeeView.html');
+      });
+      $('#employeeAttendance').click(function(){
+           $('#main').load('employeeAttendance.html');
+      });
+      $('#ticket').click(function(){
+           $('#main').load('support.html');
+      });
       });
     </script>
     <script>
-        $(document).ready(function () {
+      $(document).ready(function () {
+          
           $('.dropdown').click(function () {
-            $(this).find('.submenu').slideToggle();
+              const $submenu = $(this).find('.submenu');
+
+              $submenu.slideToggle();
+  
+              $('.dropdown').not(this).find('.submenu').slideUp();
+
+               event.stopPropagation();
           });
-        });
-    </script>
+
+          $('.submenu').click(function (event) {
+              event.stopPropagation();
+          });
+      });
+  </script>
 </head>
-<body>
-  <nav id="main-navbar" class="navbar fixed-top" style="position: fixed;">
-    <a href="javascript:void(0);" onclick="openNav()" class="link-dark">
-      <img class="logo_icon" src="images/LMS_icon.png" />
-      <div href="" class="logo_name text-decoration-none"><span>PTE LMS</span></div>
+<body style="cursor: context-menu;" id="main-content">
+  <nav id="main-navbar" class="navbar1 fixed-top" style="position: fixed;">
+    <a id="toggle-btn" href="javascript:void(0);" onclick="" class="link-dark">
+        <img class="logo_icon" src="images/LMS_icon.png" />
+        <div href="" class="logo_name text-decoration-none"><span>PTE EXAM LMS</span></div>
+        <div class="profile-dropdown-box m-4 me-4" style="float: right;">
+          <img src="images/profile-user.png" alt="Profile Icon" class="icon" style="width: 30px; height: 30px;">
+          <div class="dropdown-content-profile" style="right: 0; ">
+              <label>Profile <span style="margin-left: 35px;">Admin</span></label>
+              <a href="#" onclick="logoutUser()" style="text-align: center; background-color: rgba(244, 227, 227, 1);"><b>Logout</b></a>
+          </div>
+        </div>
+        <button type="button" class="btn btn-secondary position-relative mt-4" style="float: right;">
+          Notification
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            99+
+            <span class="visually-hidden">unread messages</span>
+          </span>
+        </button>
+
+    </a>
   </nav>
+
   <div class="sidebar">
     <ul class="menu">
       <li class="menu-item">
-        <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/dashboard.png" />Dashboard</a>
+        <a href="#" class="text-decoration-none mt-2"><img class="icon me-4" src="images/dashboard.png" />Dashboard</a>
       </li>
       <li class="menu-item dropdown">
         <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/Admin.png" />Admin</a>
         <ul class="submenu">
           <li><a href="#" id="addEmployee" class="text-decoration-none">Add Empolyee</a></li>
-          <li><a href="#" id="batch" class="text-decoration-none">Batch</a></li>
+          <li><a href="#" id="batchAdd" class="text-decoration-none">Batch</a></li>
           <li><a href="#" id="wallet" class="text-decoration-none">Wallet</a></li>
         </ul>
       </li>
       <li class="menu-item dropdown">
         <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/student.png" />Student</a>
         <ul class="submenu">
-          <li><a href="#" class="text-decoration-none">Enrolment</a></li>
-          <li><a href="#" class="text-decoration-none" class="text-decoration-none">Attendance</a></li>
+          <li><a id="studentView" href="#" class="text-decoration-none">View</a></li>
+          <li><a id="studentAttendance" href="#" class="text-decoration-none">Attendance</a></li>
         </ul>
       </li>
       <li class="menu-item dropdown">
         <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/programs.png" />Program PTE</a>
         <ul class="submenu">
-          <li><a href="#" class="text-decoration-none">Assign Test</a></li>
-          <li><a href="#" class="text-decoration-none">Pending Evaluation</a></li>
-          <li><a href="#" class="text-decoration-none">Evaluation History</a></li>
+          <li><a id="assTest" href="#" class="text-decoration-none">Assign Test</a></li>
+          <li><a href="#" id="pendingEvaluation" class="text-decoration-none">Pending Evaluation</a></li>
+          <li><a href="#" id="evaluationHistory" class="text-decoration-none">Evaluation History</a></li>
+          <li><a id="assVideo" href="#" class="text-decoration-none">Assign Videos</a></li>
         </ul>
       </li>
       <li class="menu-item dropdown">
         <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/employee.png" />Employee</a>
         <ul class="submenu">
-          <li><a href="#" class="text-decoration-none">View</a></li>
-          <li><a href="#" class="text-decoration-none">Attendance</a></li>
+          <li><a id="employeeView" href="#" class="text-decoration-none">View</a></li>
+          <li><a id="employeeAttendance" href="#" class="text-decoration-none">Attendance</a></li>
         </ul>
       </li>
       <li class="menu-item dropdown">
         <a href="#" class="text-decoration-none"><img class="icon me-4" src="images/support.png" />Support</a>
         <ul class="submenu">
-          <li><a href="#" class="text-decoration-none">Ticket</a></li>
+          <li><a id="ticket" href="#" class="text-decoration-none">Ticket</a></li>
         </ul>
       </li>
     </ul>
+    
+  
   </div>
   <div id="main">
     <h1>scdsc</h1>
   </div>
-  
+  <script>
+    $(document).ready(function() {
+        const toggleBtn = $("#toggle-btn");
+        const sidebar = $(".sidebar");
+
+        toggleBtn.click(function() {
+            sidebar.toggleClass("open");
+        });
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+        // Add click event handling using jQuery
+        $('.text-decoration-none').click(function () {
+            // Remove 'clicked' class from all list items
+            $('.text-decoration-none').removeClass('clicked');
+
+            // Add 'clicked' class to the clicked list item
+            $(this).addClass('clicked');
+        });
+    });
+</script>
+<script>
+  document.querySelector('.icon').addEventListener('click', function() {
+    var dropdown = document.querySelector('.dropdown-content-profile');
+    if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+        dropdown.style.display = 'block';
+    } else {
+        dropdown.style.display = 'none';
+    }
+  });
+
+  function logout() {
+    // Add logout functionality here, such as redirecting to a logout endpoint or clearing session data.
+    alert('Logout button clicked!');
+  }
+
+ </script>
+
+<script>
+      let timeout;
+
+      function checkLoginStatus() {
+            $.ajax({
+                type: "GET",
+                url: "dataHandler/api/get.php?data_type=check_login", // Create this PHP file
+                success: function (data) {
+                    if (data === "success") {
+                        // User is logged in, do nothing
+                    } else {
+                        window.location.href = "login.html"; // Redirect to the login page
+                    }
+                }
+            });
+        }
+
+        // Event listener to check login status on page load
+        $(document).ready(function () {
+            checkLoginStatus();
+        });
+
+
+
+      // Function to reset the timer
+      function resetTimeout() {
+          clearTimeout(timeout);
+          timeout = setTimeout(function () {
+              logoutUser();
+          }, 30* 60* 1000 ); // 30 minute (30 * 60 * 1000 milliseconds)
+      }
+
+      // Function to initiate logout
+      function logoutUser() {
+          $.ajax({
+              type: "GET",
+              url: "dataHandler/api/get.php?data_type=logout",
+              success: function (data) {
+                    if (data === "success") {
+                        window.location.href = "login.html"; // Redirect to the login page
+                    } else {
+                        alert("Logout failed.");
+                    }
+                }
+          });
+      }
+
+      // Event listener to reset the timer on user activity
+      $(document).on('click mousemove', function () {
+          resetTimeout();
+      });
+
+      // Initial timer start
+      resetTimeout();
+
+      // Click event for the logout button
+      $("#logoutButton").click(function () {
+          logoutUser();
+      });
+</script>
 </body>
 </html>

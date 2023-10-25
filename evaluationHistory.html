@@ -14,27 +14,26 @@
 <body>
   <div class="header border">
     <div class="card-body ms-3" style="margin-top: -7px;">
-        <h5 class="h4 card-title text-secondary">Wallet</h5>
-        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / Wallet</span></p>
+        <h5 class="h4 card-title text-secondary">PTE Evaluation Details</h5>
+        <p class="card-text text-secondary"><a href="/">Dashboard</a><span> / PTE Evaluation</span></p>
     </div>
   </div>
-    
+   
   <div id="data-container" class="content border mt-3 p-4">
     <div class="col" style="position: static;">
-        <h5 class="pb-3" style="float: left;">PASSBOOK</h5>
-        <button type="button" class="btn btn-secondary btn-sm" style="float: right;">Fund Transfer</button>
-        
+        <h5 class="pb-3" style="float: left;">VIEW EVALUATION</h5>
       </div>
     <div class="tblcard">
     <table class="table" id="data-table">
       <thead>
         <tr>
           <th class="text-center" scope="col"><span style="color: #666464;">S.No</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Date</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Type</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Amount</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Transaction</span></th>
-          <th class="text-center" scope="col"><span style="color: #666464;">Description</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Name</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Assigned On</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Attempted On</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Evaluation On</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Test</span></th>
+          <th class="text-center" scope="col"><span style="color: #666464;">Action</span></th>
         </tr>
       </thead>
       <tbody>
@@ -43,7 +42,7 @@
     </table>
   </div>
     <nav aria-label="Page navigation example" class="pgecard">
-      <ul id="pagination" class="pagination">
+      <ul id="pagingEvalHis" class="pagination">
       </ul>
     </nav>
   </div>
@@ -60,7 +59,7 @@
     function loadData(page) {
         $.ajax({
             type: "GET",
-            url: "dataHandler/api/get.php?data_type=transaction",
+            url: "dataHandler/api/get.php?data_type=evaluationHistory",
             data: { page: page },
             dataType: "json",
             success: function (response) {
@@ -72,18 +71,19 @@
                 $.each(data, function (index, item) {
                     i++;
                     var row = `<tr>
-                        <td class="text-center">${i}</td>
-                        <td class="text-center">${item.date}</td>
-                        <td class="text-center">${item.type}</td>
-                        <td class="text-center">${item.amount}</td>
-                        <td class="text-center">${item.transactiontype}</td>
-                        <td class="text-center">${item.description}</td>
+                      <td class="text-center">${i}</td>
+                      <td class="text-center">${item.student_name}</td>
+                      <td class="text-center">${item.assigned_on}</td>
+                      <td class="text-center">${item.attempted_on}</td>
+                      <td class="text-center">${item.evaluation_on}</td>
+                      <td class="text-center">${item.test_name}</td>
+                      <td class="text-center"><a href="">View Analysis</a></td>
                     </tr>`;
                     tableBody.append(row);
                 });
 
                 // Update pagination controls
-                var pagination = $("#pagination");
+                var pagination = $("#pagingEvalHis");
                 
                 pagination.empty();
                 var totalPages = Math.ceil(response.totalItems / itemsPerPage);
@@ -113,26 +113,15 @@
     loadData(currentPage);
 
     // Pagination click event
-    $(document).on("click", "#pagination a", function (e) {
+    $(document).on("click", "#pagingEvalHis a", function (e) {
         e.preventDefault();
         var page = $(this).data("page");
         currentPage = page;  // Update the current page
         loadData(page);
+        page.empty();
     });
 });
 
-</script>
-<script>
-  // Use jQuery to fetch data from the server-side script
-  $(document).ready(function () {
-      $.ajax({
-          url: 'dataHandler/api/get.php?data_type=balance', // Replace with the correct URL
-          method: 'GET',
-          success: function (data) {
-              $('.col').append('<div class="btn border border-secondary btn-sm  me-2" style="float: right;">Balance: $'+data[0].balance+'</div>');
-          }
-      });
-  });
 </script>
 </body>
 </html>
