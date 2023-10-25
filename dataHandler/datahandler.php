@@ -580,7 +580,7 @@ class DataHandler {
     public function mark_attendance($attendanceDate, $personId, $isPresent, $personIdName) {
         
         // Update the attendance for the student
-        $sql = "INSERT INTO attendance ($personIdName, attendance_date, ispresent) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ispresent = ?";
+        $sql = "INSERT IGNORE INTO attendance ($personIdName, attendance_date, ispresent) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ispresent = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param('issi', $personId, $attendanceDate, $isPresent, $isPresent);
         $stmt->execute();
