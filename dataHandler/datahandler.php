@@ -548,10 +548,17 @@ class DataHandler {
     public function View_markTheAttendance() {
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
         $table = $_GET['table'];
+        $personId = $_GET['personId'];
+        $date = $_GET['date'];
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT * FROM $table LIMIT $offset, $itemsPerPage";
+        $sql = "SELECT s.$personId, s.name, a.attendance_id,
+                    CASE WHEN a.$personId IS NOT NULL THEN 1 ELSE 0 END AS present
+                FROM $table AS s
+                LEFT JOIN attendance AS a ON s.$personId = a.$personId AND a.attendance_date = '$date'
+                WHERE s.activation = 1 
+                LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
         $i=1;
@@ -561,7 +568,9 @@ class DataHandler {
             $i++;
         }
 
-        $totalItemsQuery = "SELECT COUNT(*) as total FROM $table";
+        $totalItemsQuery = "SELECT COUNT(*) AS total
+                            FROM $table AS s
+                            LEFT JOIN attendance AS a ON s.$personId = a.$personId AND a.attendance_date = '$date'";
         $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
         $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
 
@@ -573,27 +582,39 @@ class DataHandler {
 
         return $response;
     }
-    
 
-    
-    //Created the Mark the attendace
-    public function mark_attendance($attendanceDate, $personId, $isPresent, $personIdName) {
+
+    public function mark_attendance($attendanceDate, $personId, $personIdName) {
+
+        $sql = "INSERT IGNORE INTO attendance ($personIdName, attendance_date) 
+                    VALUES ($personId, '$attendanceDate')";
+
+            if ($this->conn->query($sql) === TRUE) {
+                $response['success'] = true;
+                $response['message'] = "Batch created successfully!";
+            } else {
+                $response['success'] = false;
+                $response['message'] = "Batch creation failed. Please try again.";
+            }
         
-        // Update the attendance for the student
-        $sql = "INSERT IGNORE INTO attendance ($personIdName, attendance_date, ispresent) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ispresent = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('issi', $personId, $attendanceDate, $isPresent, $isPresent);
-        $stmt->execute();
-
-        if ($stmt->error) {
-            throw new Exception("Error adding attendance for student ID: $personId");
-        }else{
-            $response['success'] = true;
-            $response['message'] = "Attendance in '$attendanceDate' created successfully!";
-        }
+        
         return $response;
     }
 
+    
+    public function Attendance_Removing($AttendanceId) {
+        // Insert the employee data into the database (assuming you have an "employees" table)
+        $sql = "DELETE FROM attendance WHERE attendance_id = $AttendanceId";
+
+        if ($this->conn->query($sql) === TRUE) {
+            $response['success'] = true;
+            $response['message'] = "Employee '$AttendanceId' created successfully!";
+        } else {
+            $response['success'] = false;
+            $response['message'] = "Employee creation failed. Please try again.";
+        }
+        
+    }
     //End the Section
 
     

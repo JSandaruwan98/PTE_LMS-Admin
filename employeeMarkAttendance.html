@@ -47,7 +47,7 @@
       </div>
       <div class="col" style="position: static;">
           <h5 class="pb-3" style="float: left;">Mark Attendance</h5>
-          <input type="date" name="attendanceDate" class="form-control text-secondary" id="attendanceDate" style="float: right; width: 150px;" required>
+          <input type="date" name="attendanceDate" class="form-control text-secondary" id="attendanceDate" style="float: right; width: 150px;" required value="YYYY-MM-DD">
       </div>
       <div class="tblcard">
         <table class="table table-responsive-md" id="data-table">
@@ -66,39 +66,22 @@
       </div>
       <nav aria-label="Page navigation example" class="pgecard">
         <ul id="pagingMarkAttendanceEMP" class="pagination"></ul>
-        <input type="hidden" name="personIdName" value="employee_id">
-        <input type="hidden" name="task" value="mark_attendance_emp">
-        <button type="submit" class="btn btn-secondary" style="float: right; margin-top: 35px;">Submit</button>
-      </nav>
     </div>  
   </form>
-  <div id="message-box">
-    <form action="" method="POST" id="message-form">
-        
-        <div class="form-group row">
-            <label for="staticEmail" class="col-form-label">Warnning: Enter the student attendance data here before proceeding to the next page.</label>
-        </div>
-        <br>
-        <div class="button-container">
-          <div class="btn btn-secondary" id="cancel-button"> OK </div>
-        </div>
-        
-      </form>
-</div>
   
   
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-    var submissionChecked = true;
     $(document).ready(function () {
     var itemsPerPage = 10; // Number of items to display per page
     var currentPage = 1;  // Track the current page
 
-    function loadData(page) {
+    function loadData(page, date) {
+      
         $.ajax({
             type: "GET",
             url: "dataHandler/api/get.php?data_type=View_markTheAttendance",
-            data: { page: page, table: 'employee' },
+            data: { page: page, table: 'employee', date : date, personId : 'employee_id' },
             dataType: "json",
             success: function (response) {
                 var data = response.data;
@@ -113,7 +96,16 @@
                         <td class="text-center" class="text-center">${item.serial_number}</td>
                         <td class="text-center" class="text-center">${item.name}</td>
                         <td class="text-center" class="text-center">${formattedEmployeeID}</td>
-                        <td class="text-center" class="text-center" style="font-size:15px;"><div class="form-check form-switch"><input type="checkbox" name="attendance[${item.employee_id}]" value="1" class="form-check-input" id="flexSwitchCheckDefault"></div></td>
+                        <td class="text-center" class="text-center" style="font-size:15px;">
+                          <div class="form-check form-switch">
+                            <input type="checkbox" 
+                            data-id=${item.attendance_id} 
+                            data-employee-id=${item.employee_id} 
+                            name="attendance[${item.employee_id}]" 
+                            value="1" class="form-check-input" id="flexSwitchCheckDefault" 
+                            ${(parseInt(item.present) ? "checked" : "")}>
+                          </div>
+                        </td>
                     </tr>`;
                     tableBody.append(row);
                     i++;
@@ -146,72 +138,84 @@
         });
     }
 
+    var currentDate = new Date().toISOString().split('T')[0];
+    $("#attendanceDate").val(currentDate);
+    loadData(currentPage, currentDate);
+
     // Initial data load
-    loadData(currentPage);
+    $('#attendanceDate').change(function() {
+      loadData(currentPage, $(this).val());
+    });
 
     // Pagination click event
     $(document).on("click", "#pagingMarkAttendanceEMP a", function (e) {
-        if(submissionChecked){
-          event.preventDefault();
-          $("#message-box").show(); 
-          $("#cancel-button").click(function() {
-              $("#message-box").hide();
-          });
-        }else{
-          submissionChecked  = true;
-          var page = $(this).data("page");
-          currentPage = page;  // Update the current page
-          loadData(page);
-          page.empty();
-        }
-        
-         
-        
+        e.preventDefault();
+        var page = $(this).data("page");
+        currentPage = page;  // Update the current page
+        loadData(page, $("#attendanceDate").val());
+        page.empty();
     });
 });
 
 </script>
 <script>
-  
   // Initialize the date picker
   $( function() {
-      $('#attendanceDate').datepicker({ dateFormat: 'yy-mm-dd' }); 
+      $('#attendanceDate').datepicker({ dateFormat: 'yy-mm-dd' });
   });
-  
+
   // Use jQuery to handle form submission
-  $('#attendanceForm').submit(function (event) {
+  $('#attendanceForm').on('change', '#flexSwitchCheckDefault', function() {
+      const employeeId = $(this).data('employee-id');
+      const id =$(this).data('id');
+      const attendanceDate = $('#attendanceDate').val();
       event.preventDefault();
-      $.ajax({
-          type: 'POST',
-          url: 'dataHandler/api/post.php',
-          data: $(this).serialize() + "&task=mark_attendance",
-          success: function (response) {
-              if (response.success) {
-                  // Show success alert
-                  $("#alertSuccess").css("display","flex")
-                  $("#alertSuccess").html(`
-                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
-                        <div>` + response.message + `</div>`
-                  );
-                  $("#alertSuccess").fadeIn();
-                  setTimeout(function () {
-                    $("#alertSuccess").fadeOut();
-                  }, 1000)
-              }else{
-                  // Show error alert
-                  $("#alertDanger").css("display","flex")
-                  $("#alertDanger").html(`
-                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-                    <div>` + response.message + `</div>`
-                  );
-                  $("#alertDanger").fadeIn();
-                  setTimeout(function () {
-                    $("#alertDanger").fadeOut();
-                  }, 5000)
-              }
-          }
-      });
-      submissionChecked  = false;
+      if ($(this).is(":checked")) {
+              $.ajax({
+                type: 'POST',
+                url: 'dataHandler/api/post.php',
+                data: { $personIdName: 'employee_id', personId: employeeId, attendanceDate: attendanceDate, task: 'mark_attendance' },
+                success: function (response) {
+                    if (response.success) {
+                        // Show success alert
+                        $("#alertSuccess").css("display","flex")
+                        $("#alertSuccess").html(`
+                              <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                              <div>` + response.message + `</div>`
+                        );
+                        $("#alertSuccess").fadeIn();
+                        setTimeout(function () {
+                          $("#alertSuccess").fadeOut();
+                        }, 1000)
+                    }else{
+                        // Show error alert
+                        $("#alertDanger").css("display","flex")
+                        $("#alertDanger").html(`
+                          <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                          <div>` + response.message + `</div>`
+                        );
+                        $("#alertDanger").fadeIn();
+                        setTimeout(function () {
+                          $("#alertDanger").fadeOut();
+                        }, 5000)
+                    }
+                }
+              });
+      }else{
+
+            $.ajax({
+                type: "POST",
+                url: "dataHandler/api/post.php", // Replace with the URL of your PHP script
+                data: { attendanceId: id, task: 'Attendance_Removing' },
+                success: function(response) {
+                    console.log(response.message);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error removing test: " + error);
+                }
+            });
+      }
+     
   });
 </script>
 
