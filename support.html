@@ -317,16 +317,17 @@
               success: function(response) {
                   // Handle the server's response here if needed
                   console.log(response);
+                  if (response.success) {
+                      // Reload the support.html page
+                      $('#main').load('support.html');
+                      $("#message-box").hide();
+                  }
               },
               error: function(xhr, status, error) {
                   // Handle errors here if needed
                   console.error(error);
               }
         });
-        setTimeout(function(){
-          $("#message-box").hide();
-          $('#main').load('support.html');
-        },100)
         
     })
         
