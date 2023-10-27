@@ -123,7 +123,7 @@
                 console.log(response.totalItems)
                 pagination.empty();
                 var totalPages = Math.ceil(response.totalItems / itemsPerPage);
-                cons
+                
                 // Add Previous button
                 if (currentPage > 1) {
                     var prevButton = `<li id="pagination-previous" class="page-item" id="prev-btn"><a class="page-link position-static" href="#" data-page="${currentPage - 1}">Previous</a></li>`;
