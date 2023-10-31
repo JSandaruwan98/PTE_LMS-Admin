@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 23, 2023 at 08:53 AM
+-- Generation Time: Oct 31, 2023 at 03:16 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -52,8 +52,28 @@ CREATE TABLE `assignstudent` (
 
 INSERT INTO `assignstudent` (`batch_id`, `student_id`, `enrollment_date`, `activation`) VALUES
 (15, 1, '2023-09-15', 0),
+(15, 5, '2023-10-17', 1),
+(15, 6, '2023-10-17', 1),
+(15, 7, '2023-10-17', 1),
+(15, 8, '2023-10-17', 1),
+(15, 9, '2023-10-17', 1),
+(15, 20, '2023-10-03', 1),
+(15, 22, '2023-10-11', 0),
 (16, 2, '2023-09-16', 0),
-(52, 3, '2023-09-19', 0);
+(16, 8, '2023-10-27', 1),
+(16, 10, '2023-10-27', 1),
+(18, 4, '2023-10-17', 1),
+(18, 5, '2023-10-03', 1),
+(18, 6, '2023-10-03', 1),
+(18, 7, '2023-10-03', 1),
+(18, 8, '2023-10-17', 1),
+(18, 9, '2023-10-03', 1),
+(18, 10, '2023-10-03', 1),
+(18, 11, '2023-10-03', 1),
+(52, 1, '2023-10-03', 1),
+(52, 2, '2023-10-03', 1),
+(52, 3, '2023-09-19', 0),
+(52, 20, '2023-10-03', 1);
 
 -- --------------------------------------------------------
 
@@ -98,79 +118,29 @@ CREATE TABLE `attendance` (
   `attendance_id` int(11) NOT NULL,
   `employee_id` int(11) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL,
-  `role` varchar(250) DEFAULT NULL,
+  `role` varchar(250) NOT NULL,
   `attendance_date` date NOT NULL,
-  `leave_id` int(11) DEFAULT NULL,
-  `ispresent` tinyint(1) NOT NULL
+  `leave_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `attendance`
 --
 
-INSERT INTO `attendance` (`attendance_id`, `employee_id`, `student_id`, `role`, `attendance_date`, `leave_id`, `ispresent`) VALUES
-(84, NULL, 1, NULL, '2023-09-21', 1, 1),
-(85, NULL, 3, NULL, '2023-09-21', NULL, 1),
-(86, NULL, 1, NULL, '2023-09-20', NULL, 1),
-(87, NULL, 2, NULL, '2023-09-20', NULL, 1),
-(88, NULL, 3, NULL, '2023-09-20', NULL, 1),
-(89, NULL, 2, NULL, '2023-09-19', NULL, 1),
-(90, NULL, 3, NULL, '2023-09-19', NULL, 1),
-(91, NULL, 2, NULL, '2023-09-18', NULL, 1),
-(92, NULL, 3, NULL, '2023-09-18', NULL, 1),
-(93, NULL, 2, NULL, '2023-09-17', NULL, 1),
-(94, NULL, 3, NULL, '2023-09-17', NULL, 1),
-(95, NULL, 1, NULL, '2023-09-16', NULL, 1),
-(96, NULL, 2, NULL, '2023-09-16', NULL, 1),
-(97, NULL, 3, NULL, '2023-09-16', NULL, 1),
-(98, NULL, 1, NULL, '2023-09-15', NULL, 1),
-(99, NULL, 2, NULL, '2023-09-15', NULL, 1),
-(100, NULL, 1, NULL, '2023-09-23', NULL, 1),
-(101, NULL, 3, NULL, '2023-09-23', NULL, 1),
-(102, 57, NULL, NULL, '2023-09-23', NULL, 1),
-(103, 60, NULL, NULL, '2023-09-23', NULL, 1),
-(104, 63, NULL, NULL, '2023-09-23', NULL, 1),
-(105, 66, NULL, NULL, '2023-09-23', NULL, 1),
-(106, 57, NULL, NULL, '2023-09-20', NULL, 1),
-(107, 58, NULL, NULL, '2023-09-20', NULL, 1),
-(108, 60, NULL, NULL, '2023-09-20', NULL, 1),
-(109, 61, NULL, NULL, '2023-09-20', NULL, 1),
-(110, 62, NULL, NULL, '2023-09-20', NULL, 1),
-(111, 63, NULL, NULL, '2023-09-20', NULL, 1),
-(112, 64, NULL, NULL, '2023-09-20', NULL, 1),
-(113, 65, NULL, NULL, '2023-09-20', NULL, 1),
-(114, 66, NULL, NULL, '2023-09-20', NULL, 1),
-(115, 67, NULL, NULL, '2023-09-20', NULL, 1),
-(116, 68, NULL, NULL, '2023-09-20', NULL, 1),
-(117, NULL, 1, NULL, '2023-09-17', NULL, 1),
-(118, NULL, 2, NULL, '2023-09-17', NULL, 1),
-(119, NULL, 3, NULL, '2023-09-17', NULL, 1),
-(120, NULL, 2, NULL, '2023-09-17', NULL, 1),
-(121, NULL, 1, NULL, '2023-09-26', NULL, 1),
-(122, NULL, 3, NULL, '2023-09-26', NULL, 1),
-(123, 57, NULL, NULL, '2023-09-26', NULL, 1),
-(124, 58, NULL, NULL, '2023-09-26', NULL, 1),
-(125, 61, NULL, NULL, '2023-09-26', NULL, 1),
-(126, 64, NULL, NULL, '2023-09-26', NULL, 1),
-(127, 66, NULL, NULL, '2023-09-26', NULL, 1),
-(128, 68, NULL, NULL, '2023-09-26', NULL, 1),
-(129, NULL, 1, NULL, '2023-09-25', NULL, 1),
-(130, NULL, 2, NULL, '2023-09-25', NULL, 1),
-(131, NULL, 1, NULL, '2023-09-23', NULL, 1),
-(132, NULL, 2, NULL, '2023-09-23', NULL, 1),
-(133, NULL, 3, NULL, '2023-09-23', NULL, 1),
-(134, 57, NULL, NULL, '2023-09-27', NULL, 1),
-(135, 58, NULL, NULL, '2023-09-27', NULL, 1),
-(136, 60, NULL, NULL, '2023-09-27', NULL, 1),
-(137, 61, NULL, NULL, '2023-09-27', NULL, 1),
-(138, 62, NULL, NULL, '2023-09-27', NULL, 1),
-(139, 68, NULL, NULL, '2023-09-27', NULL, 1),
-(140, NULL, 1, NULL, '2023-10-06', NULL, 1),
-(141, NULL, 3, NULL, '2023-10-06', NULL, 1),
-(142, NULL, 1, NULL, '2023-10-03', NULL, 1),
-(143, NULL, 2, NULL, '2023-10-03', NULL, 1),
-(144, NULL, 2, NULL, '2023-10-04', NULL, 1),
-(145, NULL, 1, NULL, '2023-10-05', NULL, 1);
+INSERT INTO `attendance` (`attendance_id`, `employee_id`, `student_id`, `role`, `attendance_date`, `leave_id`) VALUES
+(7, NULL, 2, '', '2023-10-17', NULL),
+(8, NULL, 2, '', '2023-10-25', NULL),
+(19, NULL, 3, '', '2023-10-26', NULL),
+(26, 60, NULL, '', '2023-10-26', NULL),
+(28, 67, NULL, '', '2023-10-26', NULL),
+(29, 60, NULL, '', '2023-10-25', NULL),
+(30, 61, NULL, '', '2023-10-26', NULL),
+(31, 73, NULL, '', '2023-10-25', NULL),
+(32, 60, NULL, '', '2023-10-27', NULL),
+(33, 62, NULL, '', '2023-10-27', NULL),
+(34, NULL, 13, '', '2023-10-31', NULL),
+(35, NULL, 2, '', '2023-10-31', NULL),
+(36, NULL, 3, '', '2023-10-31', NULL);
 
 -- --------------------------------------------------------
 
@@ -195,7 +165,7 @@ CREATE TABLE `batch` (
 INSERT INTO `batch` (`batch_id`, `name`, `program`, `class_id`, `time_from`, `time_to`, `activation`) VALUES
 (15, 'Batch01', 'Program I', 1, '12:12:00', '12:12:00', 1),
 (16, 'Batch02', 'Program II', 4, '12:12:00', '12:12:00', 1),
-(18, 'Batch03', 'Program I', 4, '12:12:00', '12:12:00', 0),
+(18, 'Batch03', 'Program I', 4, '12:12:00', '12:12:00', 1),
 (19, 'Batch04', 'Program I', 1, '12:12:00', '12:12:00', 1),
 (20, 'Batch05', 'Program IV', 1, '12:12:00', '12:12:00', 1),
 (21, 'Batch06', 'Program IV', 4, '12:12:00', '12:12:00', 0),
@@ -266,7 +236,9 @@ INSERT INTO `employee` (`employee_id`, `name`, `email`, `role`, `phone`, `addres
 (70, 'Niwantha', 'niwa123@ikma.com', 'Kamalsad', 912034290, 'adasdsdsad', 'kasdmasdasd', 'asdasdasdasd', '$2y$10$LJelHCJN8sqwDbHqMjmkv.YqjgKjbwlKwyP3wjDtoVWuodrZPH246', 0),
 (71, 'Kamal', 'Kasdas@asd.com', 'asdasd', 713253017, 'sdasdsad', 'asdasd', 'sdsadad', '$2y$10$fazxZNwnpcRSG.oZGI8/heBQ5F0Jry0ebW9RMWg5xte4XoUcWNK9W', 1),
 (72, 'Imalakasd', 'asdasd@asd.com', 'asdasd', 891212191, 'asdsad', 'adasd', 'Kamal', '$2y$10$kknpkzsXH/2Sr57ue20X4utufcliIz3QrNrcJFvjWNo1HxV0.bjU.', 1),
-(73, 'adasd', 'janams@zsd.com', 'aasd', 702036268, 'asdasd', 'asdasd', 'a12as', '$2y$10$5Umq8E0sLgzDfYlaxU50vuX6jdSI/iDOIpfJWcHup8Xn4MQ36k0G6', 1);
+(73, 'adasd', 'janams@zsd.com', 'aasd', 702036268, 'asdasd', 'asdasd', 'a12as', '$2y$10$5Umq8E0sLgzDfYlaxU50vuX6jdSI/iDOIpfJWcHup8Xn4MQ36k0G6', 1),
+(74, 'Kamal', 'tnpfqr@exelica.com', 'sdsdsdf', 702036268, 'dasdasdas', 'dsadas', 'asdasdasd', '$2y$10$RDeMwLMQ0AJ4qUl7xJyUt.2nP/QTB85/Z7PM/OXlSIeD3SGKYhmVi', 1),
+(75, 'ssdsdfsdf', 'tnpfqr@exelica.com', 'sdfsdfsdf', 702036683, 'asdasdad', 'asdasd', 'asdasdad', '$2y$10$/klNEaHc0o0iyW3iXCuGQ.ghflJU2i5pG4CG10YCXFXiVIP7UAnIe', 1);
 
 -- --------------------------------------------------------
 
@@ -276,8 +248,8 @@ INSERT INTO `employee` (`employee_id`, `name`, `email`, `role`, `phone`, `addres
 
 CREATE TABLE `evaluation` (
   `evaluation_id` int(11) NOT NULL,
-  `student_id` int(11) DEFAULT NULL,
-  `test_id` int(11) DEFAULT NULL,
+  `student_id` int(11) NOT NULL,
+  `test_id` int(11) NOT NULL,
   `attempted_on` date DEFAULT NULL,
   `transaction_id` int(11) DEFAULT NULL,
   `evaluation_on` date DEFAULT NULL
@@ -288,7 +260,22 @@ CREATE TABLE `evaluation` (
 --
 
 INSERT INTO `evaluation` (`evaluation_id`, `student_id`, `test_id`, `attempted_on`, `transaction_id`, `evaluation_on`) VALUES
-(15, 3, 2, '2023-10-10', 7, '2023-10-04');
+(61, 2, 2, '2023-10-31', 7, NULL),
+(63, 10, 2, '2023-10-31', 7, NULL),
+(65, 1, 3, '2023-10-31', NULL, NULL),
+(66, 5, 3, '2023-10-31', NULL, NULL),
+(67, 6, 3, '2023-10-31', NULL, NULL),
+(68, 7, 3, '2023-10-31', NULL, NULL),
+(69, 8, 3, '2023-10-31', NULL, NULL),
+(70, 9, 3, '2023-10-31', NULL, NULL),
+(71, 20, 3, '2023-10-31', NULL, NULL),
+(72, 22, 3, '2023-10-31', NULL, NULL),
+(73, 4, 1, '2023-10-31', NULL, NULL),
+(74, 5, 1, '2023-10-31', NULL, NULL),
+(75, 6, 1, '2023-10-31', NULL, NULL),
+(76, 7, 1, '2023-10-31', NULL, NULL),
+(77, 8, 1, '2023-10-31', NULL, NULL),
+(78, 9, 1, '2023-10-31', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -317,6 +304,26 @@ INSERT INTO `leavetable` (`leave_id`, `student_id`, `employee_id`, `role`, `star
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `notification`
+--
+
+CREATE TABLE `notification` (
+  `id` int(11) NOT NULL,
+  `type` varchar(250) NOT NULL,
+  `message` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notification`
+--
+
+INSERT INTO `notification` (`id`, `type`, `message`) VALUES
+(1, 'student-added', 'Kamalas has been added as a student'),
+(2, 'student-added', 'Nimala has been added as a student');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `student`
 --
 
@@ -334,7 +341,26 @@ CREATE TABLE `student` (
 INSERT INTO `student` (`student_id`, `name`, `phone`, `activation`) VALUES
 (1, 'Kamal', 702036268, 0),
 (2, 'Nimali', 777828290, 1),
-(3, 'Shamali', 713253017, 1);
+(3, 'Shamali', 713253017, 1),
+(4, 'Ukamsaa', 702012112, 0),
+(5, 'Oakamsaa', 702036268, 1),
+(6, 'Tyauwa', 702036268, 1),
+(7, 'Oakamsaa', 702036268, 1),
+(8, 'Tyauwa', 702036268, 1),
+(9, 'Tyauwa', 702036268, 1),
+(10, 'Tadauwa', 702036268, 1),
+(11, 'Tyauwa', 702036268, 1),
+(12, 'Ioasda', 702036268, 1),
+(13, 'Tyauwa', 702036268, 1),
+(14, 'Tyauwa', 702036268, 1),
+(15, 'Tyasda', 702036268, 1),
+(16, 'Ioasdaa', 702012112, 1),
+(17, 'Ioasdaa', 702012112, 1),
+(18, 'Ioaqwe', 702012112, 1),
+(19, 'Ioasdsdfaa', 702012112, 1),
+(20, 'WADdsdfaa', 702012112, 1),
+(21, 'FSDdsdfaa', 702012112, 1),
+(22, 'AASsdfaa', 702012112, 1);
 
 -- --------------------------------------------------------
 
@@ -379,8 +405,11 @@ CREATE TABLE `testass` (
 --
 
 INSERT INTO `testass` (`batch_id`, `test_id`, `assigned_on`, `ispresent`) VALUES
-(15, 1, '2023-10-16', 1),
-(52, 2, '2023-10-11', 1);
+(15, 3, '2023-10-31', 1),
+(16, 1, '2023-10-31', 1),
+(16, 2, '2023-10-31', 1),
+(18, 1, '2023-10-31', 1),
+(19, 1, '2023-10-31', 1);
 
 -- --------------------------------------------------------
 
@@ -394,7 +423,7 @@ CREATE TABLE `ticket` (
   `issue` varchar(250) NOT NULL,
   `issue_type` varchar(250) DEFAULT NULL,
   `status` varchar(250) DEFAULT NULL,
-  `comments` varchar(250) DEFAULT NULL,
+  `comments` varchar(500) DEFAULT NULL,
   `action` varchar(250) DEFAULT NULL,
   `student_id` int(11) DEFAULT NULL,
   `employee_id` int(11) DEFAULT NULL,
@@ -406,8 +435,8 @@ CREATE TABLE `ticket` (
 --
 
 INSERT INTO `ticket` (`ticket_no`, `date`, `issue`, `issue_type`, `status`, `comments`, `action`, `student_id`, `employee_id`, `rating`) VALUES
-(1, '2023-09-21', 'Assign Test', 'Complaint', 'Pending', 'By checking these points and using debugging statements, you can identify and resolve the issue with the tooltips not showing as expected.', 'Re-Ope', 1, NULL, 5),
-(2, '2023-09-14', 'Assign Test ', 'Complaint', 'Resolved', 'In this modified code, the tooltip will display the full comment text, regardless of whether it overflows the cell or not. It simply shows the entire text when you hover over the comment column.', NULL, NULL, 60, 4);
+(1, '2023-09-21', 'Assign Test', 'Complaint', 'Reject', 'qwqq', 'Re-Ope', 1, NULL, 5),
+(2, '2023-09-14', 'Assign Test ', 'Complaint', 'Resolved', 'asdasdasd', NULL, NULL, 60, 1);
 
 -- --------------------------------------------------------
 
@@ -558,7 +587,7 @@ ALTER TABLE `employee`
 -- Indexes for table `evaluation`
 --
 ALTER TABLE `evaluation`
-  ADD PRIMARY KEY (`evaluation_id`),
+  ADD PRIMARY KEY (`evaluation_id`,`student_id`,`test_id`),
   ADD KEY `student_id` (`student_id`),
   ADD KEY `test_id` (`test_id`),
   ADD KEY `transaction_id` (`transaction_id`);
@@ -570,6 +599,12 @@ ALTER TABLE `leavetable`
   ADD PRIMARY KEY (`leave_id`),
   ADD KEY `student_id` (`student_id`),
   ADD KEY `employee_id` (`employee_id`);
+
+--
+-- Indexes for table `notification`
+--
+ALTER TABLE `notification`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `student`
@@ -631,7 +666,7 @@ ALTER TABLE `watched`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=146;
+  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `batch`
@@ -649,13 +684,13 @@ ALTER TABLE `class`
 -- AUTO_INCREMENT for table `employee`
 --
 ALTER TABLE `employee`
-  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `employee_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
 
 --
 -- AUTO_INCREMENT for table `evaluation`
 --
 ALTER TABLE `evaluation`
-  MODIFY `evaluation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `evaluation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT for table `leavetable`
@@ -664,10 +699,16 @@ ALTER TABLE `leavetable`
   MODIFY `leave_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `notification`
+--
+ALTER TABLE `notification`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `test`
