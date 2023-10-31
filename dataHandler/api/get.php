@@ -35,6 +35,9 @@ if (isset($_GET['data_type'])) {
         $data = $dataHandler->transaction();
     }elseif ($data_type === 'balance') {
         $data = $dataHandler->balance();
+    }elseif ($data_type === 'notification') {
+        $data = $dataHandler->notification();
+        
     }elseif ($data_type === 'logout') {
         session_start();
         session_destroy();

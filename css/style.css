@@ -234,7 +234,7 @@
 
     /* CSS to style the message box */
     #message-box {
-      display: block;
+      display: none;
       width: 400px;
       background-color: #F2D9D9;
       border: 1px solid #ccc;
@@ -293,3 +293,5 @@
 .dropdown-content-profile a:hover {
     background-color: #f1f1f1;
 }
+
+ 

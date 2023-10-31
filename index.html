@@ -81,17 +81,20 @@
               <a href="#" onclick="logoutUser()" style="text-align: center; background-color: rgba(244, 227, 227, 1);"><b>Logout</b></a>
           </div>
         </div>
-        <button type="button" class="btn btn-secondary position-relative mt-4" style="float: right;">
+        <button type="button" id="button-show-simple" class="btn btn-secondary position-relative mt-4" style="float: right;">
           Notification
           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
             99+
             <span class="visually-hidden">unread messages</span>
           </span>
-        </button>
+        </button><br><br>
+        <div id="notificationContainer" style="position: fixed; top: 60px; right: 80px;">
+          <div id="notifyArea"></div>
+      </div>
 
     </a>
   </nav>
-
+ 
   <div class="sidebar">
     <ul class="menu">
       <li class="menu-item">
@@ -240,5 +243,63 @@
           logoutUser();
       });
 </script>
+<script>
+  var notificationsVisible = false;
+
+  $(document).on("click", "#button-show-simple", function() {
+      
+
+      var notifyArea = $('#notifyArea');
+      
+      function insertAlert(message) {
+          var htmlToInsert = `
+              <div class="alert alert-secondary" role="alert" style = "margin-bottom: 5px; max-width: 550px">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" style = "margin-left: 15px">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                ${message}
+              </div>
+          `;
+          var newAlert = $(htmlToInsert);
+          newAlert.hide();
+          notifyArea.append(newAlert);
+          newAlert.fadeIn(500); // Fade in the new notification
+      }
+
+      if (notificationsVisible) {
+          // Hide and remove existing notifications
+          notifyArea.children().fadeOut(500, function() {
+              $(this).remove();
+          });
+          notificationsVisible = false;
+      } else {
+          $.ajax({
+            type: 'GET',
+            url: 'dataHandler/api/get.php?data_type=notification',
+            dataType: "json",
+            success: function(response){
+              var data = response.data;
+              console.log(data)
+              $.each(data, function(index, item){
+                console.log(item.message);
+                insertAlert(item.message);
+              })
+              
+            }
+          })
+          for (var i = 0; i < 3; i++) { // Change '3' to the number of times you want to repeat
+              insertAlert("kasmdlasd asdasdsad");
+          }
+          notificationsVisible = true;
+      }
+  });
+
+  $(document).on("click", ".close", function() {
+    $(this).parent().fadeOut(500, function() {
+      $(this).remove();
+    });
+  });
+</script>
+
 </body>
 </html>
