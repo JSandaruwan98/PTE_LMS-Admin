@@ -206,7 +206,7 @@ class DataHandler {
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT DISTINCT s.name AS student_name, e.attempted_on AS attempted_on, t.name AS test_name, ta.assigned_on AS assigned_on, e.evaluation_on AS evaluation_on
+        $sql = "SELECT DISTINCT s.student_id, s.name AS student_name, e.attempted_on AS attempted_on, t.name AS test_name, ta.assigned_on AS assigned_on, e.evaluation_on AS evaluation_on
                 FROM evaluation AS e
                 JOIN student AS s ON s.student_id = e.student_id
                 JOIN test AS t ON t.test_id = e.test_id
@@ -216,16 +216,15 @@ class DataHandler {
                 LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
-
+        $i=1;
         while ($row = $result->fetch_assoc()) {
+            $row['serial_number'] = ($page - 1) * $itemsPerPage + $i;
             $data[] = $row;
+            $i++;
         }
 
-        $totalItemsQuery = "SELECT s.name AS student_name, e.attempted_on AS attempted_on, t.name AS test_name, ta.assigned_on AS assigned_on, e.evaluation_on AS evaluation_on, COUNT(*) as total FROM assignstudent AS s
-                            JOIN evaluation AS e ON s.student_id = e.student_id
-                            JOIN testass AS t ON t.test_id = e.test_id
-                            JOIN student AS stu ON s.student_id = stu.student_id
-                            JOIN test AS te ON te.test_id = t.test_id
+        $totalItemsQuery = "SELECT COUNT(*) AS total 
+                            FROM `evaluation` AS e 
                             WHERE e.evaluation_on IS NOT NULL";
         $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
         $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
