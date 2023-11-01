@@ -145,9 +145,11 @@ class DataHandler {
         $sql = "SELECT * FROM transaction LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
-
+        $i=1;
         while ($row = $result->fetch_assoc()) {
+            $row['serial_number'] = ($page - 1) * $itemsPerPage + $i;
             $data[] = $row;
+            $i++;
         }
 
         $totalItemsQuery = "SELECT COUNT(*) as total FROM transaction";
