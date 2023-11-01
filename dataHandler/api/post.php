@@ -74,32 +74,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             
         }elseif ($task === 'mark_attendance') {
-            if (isset($_POST['attendance']) && is_array($_POST['attendance']) && isset($_POST['attendanceDate'])) {
-                $attendanceDate = $_POST['attendanceDate'];
-                $personIdName = $_POST['personIdName'];
-                
-                try {
-                    $conn->autocommit(false); // Start a transaction
-                    
-                    foreach ($_POST['attendance'] as $personId => $isPresent) {
-                        // Sanitize inputs and perform error checking as needed
-                        $personId = intval($personId);
-                        $isPresent = intval($isPresent);
-        
-                        $response = $dataHandler->mark_attendance($attendanceDate, $personId, $isPresent, $personIdName);
-                    }
-        
-                     // Commit the transaction
-                } catch (Exception $e) {
-                    $conn->rollback();// Rollback the transaction in case of an error
-                } finally {
-                    $conn->autocommit(true);// Restore autocommit mode
-                }
-            }else{
-                $response['success'] = false;
-                $response['message'] = "All employee Absent";
-            }
-            
+            $attendanceDate = $_POST['attendanceDate'];
+            $personId = $_POST['personId'];
+            $personIdName = $_POST['$personIdName'];
+
+            $response = $dataHandler->mark_attendance($attendanceDate, $personId, $personIdName);
         }elseif ($task === 'bactcheckbox') {
             $featureEnabled = ($_POST['featureEnabled'] === 'true') ? 1 : 0; // Convert to 1 or 0
             $id = $_POST['id'];
@@ -120,6 +99,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $itemId = $_POST['testId'];
             
             $response = $dataHandler->test_video_Removing($batchId, $itemId);
+        }elseif ($task === 'Attendance_Removing') {
+            $attendanceId = $_POST['attendanceId'];
+            
+            $response = $dataHandler->Attendance_Removing($attendanceId);
         }elseif ($task === 'removeTheAssigning') {
             $batchId = $_POST['batchId'];
             $studentId = $_POST['studentId'];

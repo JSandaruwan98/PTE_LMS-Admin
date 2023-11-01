@@ -22,6 +22,20 @@ class DataHandler {
         return $data;
     }
 
+    public function notification(){
+        $sql = "SELECT * FROM notification";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+        }
+        $data = 'asas';
+        return $data;
+    }
+
 
     // get the batch id and name for the drop down input field of batches  
     public function balance() {
@@ -131,9 +145,11 @@ class DataHandler {
         $sql = "SELECT * FROM transaction LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
-
+        $i=1;
         while ($row = $result->fetch_assoc()) {
+            $row['serial_number'] = ($page - 1) * $itemsPerPage + $i;
             $data[] = $row;
+            $i++;
         }
 
         $totalItemsQuery = "SELECT COUNT(*) as total FROM transaction";
@@ -158,25 +174,20 @@ class DataHandler {
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT DISTINCT s.name AS student_name, e.attempted_on AS attempted_on, t.name AS test_name, ta.assigned_on AS assigned_on
-                FROM evaluation AS e
-                JOIN student AS s ON s.student_id = e.student_id
-                JOIN test AS t ON t.test_id = e.test_id
-                JOIN assignstudent AS sa ON sa.student_id = e.student_id
-                JOIN testass AS ta ON ta.batch_id = sa.batch_id
-                WHERE e.attempted_on IS NOT NULL";
+        $sql = "SELECT DISTINCT ta.assigned_on, e.student_id, e.attempted_on,t.name AS test_name,s.name AS student_name 
+                FROM evaluation AS e, testass AS ta, test AS t, student AS s 
+                WHERE e.test_id = ta.test_id AND t.test_id = e.test_id AND s.student_id = e.student_id 
+                LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
-
+        $i=1;
         while ($row = $result->fetch_assoc()) {
+            $row['serial_number'] = ($page - 1) * $itemsPerPage + $i;
             $data[] = $row;
+            $i++;
         }
 
-        $totalItemsQuery = "SELECT COUNT(*) as total FROM assignstudent AS s
-                            JOIN evaluation AS e ON s.student_id = e.student_id
-                            JOIN testass AS t ON t.test_id = e.test_id
-                            JOIN student AS stu ON s.student_id = stu.student_id
-                            JOIN test AS te ON te.test_id = t.test_id;";
+        $totalItemsQuery = "SELECT COUNT(*) AS total FROM `evaluation`";
         $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
         $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
 
@@ -197,25 +208,25 @@ class DataHandler {
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT DISTINCT s.name AS student_name, e.attempted_on AS attempted_on, t.name AS test_name, ta.assigned_on AS assigned_on, e.evaluation_on AS evaluation_on
+        $sql = "SELECT DISTINCT s.student_id, s.name AS student_name, e.attempted_on AS attempted_on, t.name AS test_name, ta.assigned_on AS assigned_on, e.evaluation_on AS evaluation_on
                 FROM evaluation AS e
                 JOIN student AS s ON s.student_id = e.student_id
                 JOIN test AS t ON t.test_id = e.test_id
                 JOIN assignstudent AS sa ON sa.student_id = e.student_id
                 JOIN testass AS ta ON ta.batch_id = sa.batch_id
-                WHERE e.evaluation_on IS NOT NULL";
+                WHERE e.evaluation_on IS NOT NULL
+                LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
-
+        $i=1;
         while ($row = $result->fetch_assoc()) {
+            $row['serial_number'] = ($page - 1) * $itemsPerPage + $i;
             $data[] = $row;
+            $i++;
         }
 
-        $totalItemsQuery = "SELECT COUNT(*) as total FROM assignstudent AS s
-                            JOIN evaluation AS e ON s.student_id = e.student_id
-                            JOIN testass AS t ON t.test_id = e.test_id
-                            JOIN student AS stu ON s.student_id = stu.student_id
-                            JOIN test AS te ON te.test_id = t.test_id
+        $totalItemsQuery = "SELECT COUNT(*) AS total 
+                            FROM `evaluation` AS e 
                             WHERE e.evaluation_on IS NOT NULL";
         $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
         $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
@@ -548,10 +559,17 @@ class DataHandler {
     public function View_markTheAttendance() {
         $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
         $table = $_GET['table'];
+        $personId = $_GET['personId'];
+        $date = $_GET['date'];
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT * FROM $table LIMIT $offset, $itemsPerPage";
+        $sql = "SELECT s.$personId, s.name, a.attendance_id,
+                    CASE WHEN a.$personId IS NOT NULL THEN 1 ELSE 0 END AS present
+                FROM $table AS s
+                LEFT JOIN attendance AS a ON s.$personId = a.$personId AND a.attendance_date = '$date'
+                WHERE s.activation = 1 
+                LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();
         $i=1;
@@ -561,7 +579,9 @@ class DataHandler {
             $i++;
         }
 
-        $totalItemsQuery = "SELECT COUNT(*) as total FROM $table";
+        $totalItemsQuery = "SELECT COUNT(*) AS total
+                            FROM $table AS s
+                            LEFT JOIN attendance AS a ON s.$personId = a.$personId AND a.attendance_date = '$date'";
         $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
         $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
 
@@ -573,27 +593,39 @@ class DataHandler {
 
         return $response;
     }
-    
 
-    
-    //Created the Mark the attendace
-    public function mark_attendance($attendanceDate, $personId, $isPresent, $personIdName) {
+
+    public function mark_attendance($attendanceDate, $personId, $personIdName) {
+
+        $sql = "INSERT IGNORE INTO attendance ($personIdName, attendance_date) 
+                    VALUES ($personId, '$attendanceDate')";
+
+            if ($this->conn->query($sql) === TRUE) {
+                $response['success'] = true;
+                $response['message'] = "Batch created successfully!";
+            } else {
+                $response['success'] = false;
+                $response['message'] = "Batch creation failed. Please try again.";
+            }
         
-        // Update the attendance for the student
-        $sql = "INSERT IGNORE INTO attendance ($personIdName, attendance_date, ispresent) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE ispresent = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param('issi', $personId, $attendanceDate, $isPresent, $isPresent);
-        $stmt->execute();
-
-        if ($stmt->error) {
-            throw new Exception("Error adding attendance for student ID: $personId");
-        }else{
-            $response['success'] = true;
-            $response['message'] = "Attendance in '$attendanceDate' created successfully!";
-        }
+        
         return $response;
     }
 
+    
+    public function Attendance_Removing($AttendanceId) {
+        // Insert the employee data into the database (assuming you have an "employees" table)
+        $sql = "DELETE FROM attendance WHERE attendance_id = $AttendanceId";
+
+        if ($this->conn->query($sql) === TRUE) {
+            $response['success'] = true;
+            $response['message'] = "Employee '$AttendanceId' created successfully!";
+        } else {
+            $response['success'] = false;
+            $response['message'] = "Employee creation failed. Please try again.";
+        }
+        
+    }
     //End the Section
 
     
@@ -631,7 +663,7 @@ class DataHandler {
         $table2 = $_GET['table2'];
         $itemId = $_GET['itemId'];
 
-        $itemsPerPage = 10; // Number of items to display per page
+        $itemsPerPage = 9; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
         $sql = "SELECT t.*, CASE 
@@ -779,7 +811,6 @@ class DataHandler {
         return $response;
     }
 
-    
     
 
     

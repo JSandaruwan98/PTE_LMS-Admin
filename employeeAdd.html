@@ -89,7 +89,7 @@
                     <div class="form-group col-md-6">
                         <label class="text-secondary" for="inputPassword4">Password</label>
                         <input type="password" class="form-control mb-4" id="pass" placeholder="Password" name="pass">
-                        <div id="message" style="display: none;">
+                        <div id="message">
                             <ul>
                             <div class="row">
                                 <div class="col-6">
@@ -108,7 +108,7 @@
                 </div>
             </div>
             
-            <div class="text-center py-4">
+            <div class="text-center py-4 mt-4">
                 <input type="hidden" name="task" value="create_employee">
                 <button type="submit" class="btn btn-secondary" style="left: 50%;">CREATE</button>
             </div>
@@ -170,12 +170,12 @@
 
         // When the user clicks on the password field, show the message box
         myInput.onfocus = function() {
-            document.getElementById("message").style.display = "block";
+            //document.getElementById("message").style.display = "block";
         }
 
         // When the user clicks outside of the password field, hide the message box
         myInput.onblur = function() {
-            document.getElementById("message").style.display = "none";
+            //document.getElementById("message").style.display = "none";
         }
 
         // When the user starts to type something inside the password field
