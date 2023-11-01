@@ -661,7 +661,7 @@ class DataHandler {
         $table2 = $_GET['table2'];
         $itemId = $_GET['itemId'];
 
-        $itemsPerPage = 10; // Number of items to display per page
+        $itemsPerPage = 9; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
         $sql = "SELECT t.*, CASE 
