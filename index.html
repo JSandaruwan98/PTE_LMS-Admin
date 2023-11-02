@@ -6,17 +6,20 @@
   <title>Document</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+
     <script>
       $(document).ready(function () {
       $('#addEmployee').click(function(){
            $('#main').load('employeeAdd.html');
       });
       $('#batchAdd').click(function(){
-           $('#main').load('batchView.html');
+           $('#main').load('batchView.html');  
       });
       $('#wallet').click(function(){
            $('#main').load('wallet.html');
@@ -144,6 +147,7 @@
   <div id="main">
     <h1>scdsc</h1>
   </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {
         const toggleBtn = $("#toggle-btn");
@@ -245,21 +249,53 @@
 </script>
 <script>
   var notificationsVisible = false;
+  $(document).ready(function () {
+
+      var notification_count = $('#show-simple');
+
+      function notification_count(count){
+        var htmlToInsertNotificationCount = `
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            +${count}
+                  <span class="visually-hidden">unread messages</span>
+          </span>
+            `;
+
+        var count = $(htmlToInsertNotificationCount);
+        count.hide;
+        notification_count.append(count);
+      }
+      
+  })
 
   $(document).on("click", "#button-show-simple", function() {
       
-
       var notifyArea = $('#notifyArea');
+
+      function notification_count(count){
+        var htmlToInsertNotificationCount = `
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            +${count}
+                  <span class="visually-hidden">unread messages</span>
+          </span>
+            `;
+
+        var count = $(htmlToInsertNotificationCount);
+        count.hide;
+        notification_count.append(count);
+      }
       
-      function insertAlert(message) {
+      function insertAlert(message,type) {
           var htmlToInsert = `
-              <div class="alert alert-secondary" role="alert" style = "margin-bottom: 5px; max-width: 550px">
+              <div class="alert alert-primary" role="alert" style = "margin-bottom: 5px; max-width: 550px">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" style = "margin-left: 15px">
                   <span aria-hidden="true">&times;</span>
                 </button>
-                ${message}
+                <b>${type}</b>  -  ${message}
               </div>
           `;
+
+          
           var newAlert = $(htmlToInsert);
           newAlert.hide();
           notifyArea.append(newAlert);
@@ -277,19 +313,16 @@
             type: 'GET',
             url: 'dataHandler/api/get.php?data_type=notification',
             dataType: "json",
-            success: function(response){
-              var data = response.data;
-              console.log(data)
+            success: function(data){
+              console.log(data.length)
+              var dataLength = data.length
               $.each(data, function(index, item){
                 console.log(item.message);
-                insertAlert(item.message);
+                insertAlert(item.message, item.type, dataLength);
               })
               
             }
           })
-          for (var i = 0; i < 3; i++) { // Change '3' to the number of times you want to repeat
-              insertAlert("kasmdlasd asdasdsad");
-          }
           notificationsVisible = true;
       }
   });

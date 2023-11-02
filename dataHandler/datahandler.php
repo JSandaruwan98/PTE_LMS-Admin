@@ -32,7 +32,6 @@ class DataHandler {
                 $data[] = $row;
             }
         }
-        $data = 'asas';
         return $data;
     }
 
@@ -798,7 +797,8 @@ class DataHandler {
         }
 
         $totalItemsQuery = "SELECT COUNT(*) as total 
-                            FROM $table";
+                            FROM $table
+                            WHERE activation = 1";
         $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
         $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
 
