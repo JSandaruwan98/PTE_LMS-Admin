@@ -1,53 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.0-beta2/css/bootstrap.min.css">
-    <style>
-        .alert {
-            margin-bottom: 5px; /* Reduce the bottom margin to reduce the gap between notifications */
-        }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 </head>
 <body>
-    <button id="button-show-simple" class="btn btn-primary" style="position: fixed; top: 10px; right: 10px;">Show/Hide Notifications</button>
-
-    <div id="notificationContainer" style="position: fixed; top: 50px; right: 10px;">
-        <div id="notifyArea"></div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.0-beta2/js/bootstrap.min.js"></script>
-
+    <button id="myButton" data-value="Hello, World!">Click Me</button>
     <script>
-        var notificationsVisible = false;
-
-        $(document).on("click", "#button-show-simple", function() {
-            var notifyArea = $('#notifyArea');
-            
-            function insertAlert() {
-                var htmlToInsert = `
-                    <div class="alert alert-primary" role="alert">
-                        This is a primary alert—check it out!
-                    </div>
-                `;
-                var newAlert = $(htmlToInsert);
-                newAlert.hide();
-                notifyArea.append(newAlert);
-                newAlert.fadeIn(500); // Fade in the new notification
-            }
-
-            if (notificationsVisible) {
-                // Hide and remove existing notifications
-                notifyArea.children().fadeOut(500, function() {
-                    $(this).remove();
-                });
-                notificationsVisible = false;
-            } else {
-                for (var i = 0; i < 3; i++) { // Change '3' to the number of times you want to repeat
-                    insertAlert();
-                }
-                notificationsVisible = true;
-            }
+        $(document).ready(function () {
+            // Attach a click event handler to the button
+            $('#myButton').on('click', function () {
+                // Retrieve the data from the button
+                var dataValue = $(this).data('value');
+                
+                // Do something with the data (e.g., display it)
+                alert(dataValue);
+            });
         });
     </script>
 </body>

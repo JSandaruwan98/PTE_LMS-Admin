@@ -86,10 +86,7 @@
         </div>
         <button type="button" id="button-show-simple" class="btn btn-secondary position-relative mt-4" style="float: right;">
           Notification
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            99+
-            <span class="visually-hidden">unread messages</span>
-          </span>
+         
         </button><br><br>
         <div id="notificationContainer" style="position: fixed; top: 60px; right: 80px;">
           <div id="notifyArea"></div>
@@ -249,46 +246,43 @@
 </script>
 <script>
   var notificationsVisible = false;
+  
   $(document).ready(function () {
-
-      var notification_count = $('#show-simple');
-
+      notifyCount = $('#button-show-simple')
       function notification_count(count){
-        var htmlToInsertNotificationCount = `
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            +${count}
-                  <span class="visually-hidden">unread messages</span>
-          </span>
-            `;
+          var htmlToInsertNotificationCount = `
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              +${count}
+                    <span class="visually-hidden">unread messages</span>
+            </span>
+              `;
 
-        var count = $(htmlToInsertNotificationCount);
-        count.hide;
-        notification_count.append(count);
+          var count = $(htmlToInsertNotificationCount);
+          notifyCount.append(count);
       }
-      
-  })
 
-  $(document).on("click", "#button-show-simple", function() {
+
+      $.ajax({
+            type: 'GET',
+            url: 'dataHandler/api/get.php?data_type=notification',
+            dataType: "json",
+            success: function(data){
+              console.log(data.length);
+              var dataLength = data.length;
+              notification_count(dataLength);  
+            }
+      })
+    })
+
+    $(document).on("click", "#button-show-simple", function() {
       
       var notifyArea = $('#notifyArea');
-
-      function notification_count(count){
-        var htmlToInsertNotificationCount = `
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            +${count}
-                  <span class="visually-hidden">unread messages</span>
-          </span>
-            `;
-
-        var count = $(htmlToInsertNotificationCount);
-        count.hide;
-        notification_count.append(count);
-      }
-      
-      function insertAlert(message,type) {
+ 
+      function insertAlert(message, type, id) {
+          console.log(id)
           var htmlToInsert = `
               <div class="alert alert-primary" role="alert" style = "margin-bottom: 5px; max-width: 550px">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close" style = "margin-left: 15px">
+                <button type="button" data-id=${id}  class="close" data-dismiss="alert" aria-label="Close" style = "margin-left: 15px">
                   <span aria-hidden="true">&times;</span>
                 </button>
                 <b>${type}</b>  -  ${message}
@@ -317,19 +311,29 @@
               console.log(data.length)
               var dataLength = data.length
               $.each(data, function(index, item){
-                console.log(item.message);
-                insertAlert(item.message, item.type, dataLength);
+                console.log(item.id);
+                insertAlert(item.message, item.type, item.id);
               })
-              
             }
           })
           notificationsVisible = true;
       }
-  });
+    });
 
   $(document).on("click", ".close", function() {
+    var id = $(this).data('id');
     $(this).parent().fadeOut(500, function() {
+      console.log(id)
       $(this).remove();
+      $.ajax({
+        type: "POST",
+        url: "dataHandler/api/post.php", // Replace with the URL of your PHP script
+        data: { itemId: id, task: 'removeNotification' },
+        success: function(response) {
+          console.log("Test " + testId + " removed");
+        },
+                
+      })
     });
   });
 </script>

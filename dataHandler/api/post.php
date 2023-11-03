@@ -113,6 +113,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $password = $_POST['password'];
            
             $response = $dataHandler->login($name, $password);
+        }elseif ($task === 'removeNotification') {
+            $id = $_POST['itemId'];
+           
+            $response = $dataHandler->removeNotification($id);
         }
         
     }
