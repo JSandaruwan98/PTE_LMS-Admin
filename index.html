@@ -84,11 +84,12 @@
               <a href="#" onclick="logoutUser()" style="text-align: center; background-color: rgba(244, 227, 227, 1);"><b>Logout</b></a>
           </div>
         </div>
-        <button type="button" id="button-show-simple" class="btn btn-secondary position-relative mt-4" style="float: right;">
-          Notification
+        
+        <a type="button" id="button-show-simple" class="position-relative mt-4" style="float: right;">
+          <img src="images/notification.png" alt="Profile Icon" class="icon" style="width: 30px; height: 30px; float: right;">
          
-        </button><br><br>
-        <div id="notificationContainer" style="position: fixed; top: 60px; right: 80px;">
+        </a>
+        <div id="notificationContainer" style="position: fixed; top: 50px; right: 100px;">
           <div id="notifyArea"></div>
       </div>
 
@@ -277,11 +278,11 @@
     $(document).on("click", "#button-show-simple", function() {
       
       var notifyArea = $('#notifyArea');
- 
+      
       function insertAlert(message, type, id) {
           console.log(id)
           var htmlToInsert = `
-              <div class="alert alert-primary" role="alert" style = "margin-bottom: 5px; max-width: 550px">
+              <div class="alert alert-primary" role="alert" style = "margin-bottom: 5px; max-width: 550px;">
                 <button type="button" data-id=${id}  class="close" data-dismiss="alert" aria-label="Close" style = "margin-left: 15px">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -295,6 +296,7 @@
           notifyArea.append(newAlert);
           newAlert.fadeIn(500); // Fade in the new notification
       }
+      
 
       if (notificationsVisible) {
           // Hide and remove existing notifications
@@ -321,6 +323,18 @@
     });
 
   $(document).on("click", ".close", function() {
+    notifyCount = $('#button-show-simple')
+    function notification_count(count){
+      var htmlToInsertNotificationCount = `
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          +${count}
+          <span class="visually-hidden">unread messages</span>
+        </span>
+        `;
+
+      var count = $(htmlToInsertNotificationCount);
+      notifyCount.append(count);
+    }
     var id = $(this).data('id');
     $(this).parent().fadeOut(500, function() {
       console.log(id)
@@ -332,7 +346,16 @@
         success: function(response) {
           console.log("Test " + testId + " removed");
         },
-                
+      })
+      $.ajax({
+            type: 'GET',
+            url: 'dataHandler/api/get.php?data_type=notification',
+            dataType: "json",
+            success: function(data){
+              console.log(data.length);
+              var dataLength = data.length;
+              notification_count(dataLength);  
+            }
       })
     });
   });
