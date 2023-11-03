@@ -35,6 +35,11 @@ class DataHandler {
         return $data;
     }
 
+    public function removeNotification($id){
+        $sql = "DELETE FROM notification WHERE id=$id";
+        $this->conn->query($sql);
+    }
+
 
     // get the batch id and name for the drop down input field of batches  
     public function balance() {
