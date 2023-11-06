@@ -423,7 +423,7 @@ class DataHandler {
     }
 
     //created the employee table
-    public function createEmployee($name, $email, $role, $phone, $address, $qualification, $uname, $pass) {
+    public function createEmployee($name, $email, $role, $phone, $address, $qualification, $uname, $pass, $DOB) {
         $response = array();
 
         // Define regular expressions for password strength, email, and phone number validation
@@ -465,8 +465,8 @@ class DataHandler {
                 $hashedPassword = password_hash($pass, PASSWORD_DEFAULT);
 
                 // Insert the employee data into the database (assuming you have an "employees" table)
-                $sql = "INSERT INTO employee (name, email, role, phone, address, qualification, username, password, activation) 
-                        VALUES ('$name', '$email', '$role', '$phone', '$address', '$qualification', '$uname', '$hashedPassword', 1)";
+                $sql = "INSERT INTO employee (name, email, role, phone, address, qualification, username, password, date_of_birth, activation) 
+                        VALUES ('$name', '$email', '$role', '$phone', '$address', '$qualification', '$uname', '$hashedPassword','$DOB', 1)";
 
                 if ($this->conn->query($sql) === TRUE) {
                     $response['success'] = true;

@@ -27,8 +27,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $qualification = $_POST['qualification'];
             $uname = $_POST['uname'];
             $pass = $_POST['pass'];
+            $DOB = $_POST['dob'];
 
-            $response = $dataHandler->createEmployee($name, $email, $role, $phone, $address, $qualification, $uname, $pass);
+            $response = $dataHandler->createEmployee($name, $email, $role, $phone, $address, $qualification, $uname, $pass, $DOB);
         } elseif ($task === 'enroll_student') {
             $studentid = $_POST['studentid'];
             $name = $_POST['name'];
