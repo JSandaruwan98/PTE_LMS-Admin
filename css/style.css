@@ -179,7 +179,13 @@
       .pgecard{
         margin-top: 30px;
       }
+     
       
+    }
+    #notificationContainer{
+      right: 100px;
+      position: fixed;
+      top: 50px;
     }
  
     .header, .content{

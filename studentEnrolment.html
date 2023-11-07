@@ -136,6 +136,28 @@
                             // Handle errors here
                         }
                     });
+                    notifyCount = $('#button-show-simple')
+                    function notification_count(count){
+                        var htmlToInsertNotificationCount = `
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            +${count}
+                            <span class="visually-hidden">unread messages</span>
+                            </span>
+                            `;
+
+                        var count = $(htmlToInsertNotificationCount);
+                        notifyCount.append(count);
+                    }
+                    $.ajax({
+                        type: 'GET',
+                        url: 'dataHandler/api/get.php?data_type=notification',
+                        dataType: "json",
+                        success: function(data){
+                            console.log(data.length);
+                            var dataLength = data.length;
+                            notification_count(dataLength);  
+                        }
+                    })
                 });
             });
         </script>

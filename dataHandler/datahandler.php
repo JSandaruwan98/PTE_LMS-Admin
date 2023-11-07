@@ -410,6 +410,11 @@ class DataHandler {
             $sql = "INSERT INTO batch (name, program, class_id, time_from, time_to) 
                     VALUES ('$batchname', '$program', '$class', '$timefrom', '$timeto')";
 
+            $sql1 = "INSERT INTO notification (type, message) 
+                    VALUES ('Added a new Batch', 'Admin Added a $batchname')";        
+
+            $this->conn->query($sql1);
+
             if ($this->conn->query($sql) === TRUE) {
                 $response['success'] = true;
                 $response['message'] = "Batch '$batchname' created successfully!";
@@ -467,6 +472,11 @@ class DataHandler {
                 // Insert the employee data into the database (assuming you have an "employees" table)
                 $sql = "INSERT INTO employee (name, email, role, phone, address, qualification, username, password, date_of_birth, activation) 
                         VALUES ('$name', '$email', '$role', '$phone', '$address', '$qualification', '$uname', '$hashedPassword','$DOB', 1)";
+
+                $sql1 = "INSERT INTO notification (type, message) 
+                        VALUES ('New Employee Added', 'Admin Added a $name')";
+                 
+                $this->conn->query($sql1); 
 
                 if ($this->conn->query($sql) === TRUE) {
                     $response['success'] = true;
@@ -540,6 +550,11 @@ class DataHandler {
                 VALUES ('$name', '$phone')";
                 $sqlnext = "INSERT INTO assignstudent (batch_id, student_id, enrollment_date) 
                 VALUES ('$batchid', '$stu_id','$starton')";
+
+                $sql1 = "INSERT INTO notification (type, message) 
+                VALUES ('Enrol a Student', 'Admin Enroll a new student of $name')";
+
+                $this->conn->query($sql1);
 
                 if ($this->conn->query($sql) === TRUE) {
                     if($this->conn->query($sqlnext) === TRUE){
