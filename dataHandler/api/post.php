@@ -118,6 +118,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $id = $_POST['itemId'];
            
             $response = $dataHandler->removeNotification($id);
+        }elseif ($task === 'resetPasswordForm') {
+            $newPassword = $_POST['newPassword'];
+            $confirmPassword = $_POST['confirmPassword'];
+            $id = 1;
+           
+            $response = $dataHandler->resetPasswordForm($newPassword, $confirmPassword, $id);
         }
         
     }

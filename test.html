@@ -1,41 +1,87 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
   <link rel="stylesheet" href="css/style.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">  
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
+  
 <style>
-.cla {
-  background-color: lightgreen;
-  margin-left: 100px;
+table{
+  border-collapse: collapse;
+  
 }
 
-@media only screen and (max-width: 600px) {
-  .cla {
-    background-color: lightblue;
-    margin-left: 300px;
-  }
-  
+th {
+  padding: 7px;
+  border: 5px solid white;
+  background-color: rgba(244, 227, 227, 0.5);
+}
+#tdata{
+  padding: 7px;
+  border: 5px solid white;
+  background-color: rgba(236, 229, 229, 0.5);
 }
 
 </style>
 </head>
 <body>
-<img src="images/profile-user.png" alt="" class="cla" style="width: 30px; height: 30px;">
 
-<div id="notificationContainer" class="cla" style=" top: 50px;">
-    <div id="notifyArea">
-        <p>adsasdasd</p>
-    </div>
-</div>
+<table class="table" id="data-table">
+  <thead>
+    <tr>
+      <th class="text-center" scope="col" class="text-center" style="width: 5%;"><span style="color: #666464;">S.No</th>
+      <th class="text-center" scope="col" class="text-center" style="width: 40%;"><span style="color: #666464;">Question Type</span></th>
+      <th class="text-center" scope="col" class="text-center" style="width: 15%;"><span style="color: #666464;">Solution</span></th>
+      <th class="text-center" scope="col" class="text-center" style="width: 30%;"><span style="color: #666464;">User Answer</span></th>
+      <th class="text-center" scope="col" class="text-center" style="width: 10%;"><span style="color: #666464;">Score</span></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td id="tdata" class="text-center" class="text-center" style="font-size:15px;">1</td>
+      <td id="tdata" class="" class="">Read Aloud<br> <a href=""><span style="color: rgb(246, 166, 166);">Hide Questions</span></a><br><b>Question:<br><br>Read the test aloud as clearly and naturally as possible within 40 seconds.You have 40 seconds to practice the reading of the test</b><br><br>The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy<br><br></td>
+      <td id="tdata" class="text-center" class="text-center">The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy</td>
+      <td id="tdata" class="" class=""><span style="color: rgb(246, 166, 166);">Show User Audio</span><br><br>The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy</td>
+      <td id="tdata" class="" class=""><div class="row" style="margin-left: 10px;"><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div></div></td>
+    </tr>
+    <tr>
+      <td id="tdata" class="text-center" class="text-center" style="font-size:15px;">2</td>
+      <td id="tdata" class="" class="">Repeat Sentence<br> <a href=""><span style="color: rgb(246, 166, 166);">Hide Questions</span></a><br><b>Question:<br><br>Read the test aloud as clearly and naturally as possible within 40 seconds.You have 40 seconds to practice the reading of the test</b><br><br><br></td>
+      <td id="tdata" class="text-center" class="text-center">The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy</td>
+      <td id="tdata" class="" class=""><span style="color: rgb(246, 166, 166);">Show User Audio</span><br><br>The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy</td>
+      <td id="tdata" class="" class=""><div class="row" style="margin-left: 10px;"><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div></div></td>
+    </tr>
+    <tr>
+      <td id="tdata" class="text-center" class="text-center" style="font-size:15px;">3</td>
+      <td id="tdata" class="" class="">Read Aloud<br> <a href=""><span style="color: rgb(246, 166, 166);">Hide Questions</span></a><br><b>Question:<br><br>Read the test aloud as clearly and naturally as possible within 40 seconds.You have 40 seconds to practice the reading of the test</b><br><br>The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy<br><br></td>
+      <td id="tdata" class="text-center" class="text-center">The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy</td>
+      <td id="tdata" class="" class=""><span style="color: rgb(246, 166, 166);">Show User Audio</span><br><br>The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy</td>
+      <td id="tdata" class="" class=""><div class="row" style="margin-left: 10px;"><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div></div></td>
+    </tr>
+    <tr>
+      <td id="tdata" class="text-center" class="text-center" style="font-size:15px;">4</td>
+      <td id="tdata" class="" class="">Read Aloud<br> <a href=""><span style="color: rgb(246, 166, 166);">Hide Questions</span></a><br><b>Question:<br><br>Read the test aloud as clearly and naturally as possible within 40 seconds.You have 40 seconds to practice the reading of the test</b><br><br>The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy<br><br></td>
+      <td id="tdata" class="text-center" class="text-center">The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy</td>
+      <td id="tdata" class="" class=""><span style="color: rgb(246, 166, 166);">Show User Audio</span><br><br>The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy</td>
+      <td id="tdata" class="" class=""><div class="row" style="margin-left: 10px;"><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div></div></td>
+    </tr>
+    <tr>
+      <td id="tdata" class="text-center" class="text-center" style="font-size:15px;">5</td>
+      <td id="tdata" class="" class="">Read Aloud<br> <a href=""><span style="color: rgb(246, 166, 166);">Hide Questions</span></a><br><b>Question:<br><br>Read the test aloud as clearly and naturally as possible within 40 seconds.You have 40 seconds to practice the reading of the test</b><br><br>The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy<br><br></td>
+      <td id="tdata" class="text-center" class="text-center">The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy</td>
+      <td id="tdata" class="" class=""><span style="color: rgb(246, 166, 166);">Show User Audio</span><br><br>The more we learn about how people really think the more we must rethink economic theory. Changes in fundamental beliefs play a major role in the fluctuations of the econnomy</td>
+      <td id="tdata" class="" class=""><div class="row" style="margin-left: 10px;"><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div><label for="" style="font-size: 13px;">content</label><div style="background-color: black; width:120px; height: 30px;"></div></div></td>
+    </tr>
+
+  </tbody>
+</table>
+
 </body>
 </html>
+
+

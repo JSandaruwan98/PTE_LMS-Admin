@@ -1,4 +1,6 @@
+
 <?php
+
 class DataHandler {
     private $conn;
 
@@ -352,18 +354,18 @@ class DataHandler {
             $response['message'] = "All fields are required.";
         }elseif(empty($name)){
             $response['success'] = false;
-            $response['message'] = "All fields are required.";
+            $response['message'] = "User Email fields are required.";
         }elseif(empty($password)){
             $response['success'] = false;
             $response['message'] = "User Password is required.";
         }else{
     
-            $sql ="SELECT * FROM user WHERE name='$name' AND password ='$password'";
+            $sql ="SELECT * FROM user WHERE name='$name' AND user_password ='$password'";
             $result = $this->conn->query($sql);
     
             if(mysqli_num_rows($result) === 1){
                 $row =mysqli_fetch_assoc($result);
-                if($row['name'] === $name && $row['password'] === $password){
+                if($row['name'] === $name && $row['user_password'] === $password){
                     $response['success'] = true;
                     $response['message'] = "index.html";
                     session_start();
@@ -831,8 +833,30 @@ class DataHandler {
         return $response;
     }
 
-    
 
+
+    public function resetPasswordForm($newPassword, $confirmPassword) {
+        
+        if ($newPassword != $confirmPassword) {
+            $response['success'] = false;
+            $response['message'] = "Password doesn't match.";
+        }else{
+            $sql = "UPDATE user SET user_password = '$newPassword'  WHERE id = 1";
+            $this->conn->query($sql);
+
+
+            if ($this->conn->query($sql) === TRUE) {
+                $response['success'] = true;
+                $response['message'] = "Password reset is completed";
+            } else {
+                $response['success'] = false;
+                $response['message'] = "Password doesn't match.";
+            }
+        }
+        // Insert the employee data into the database (assuming you have an "employees" table)
     
+        return $response;
+        
+    } 
 }
 ?>
