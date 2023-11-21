@@ -358,12 +358,12 @@ class DataHandler {
             $response['message'] = "User Password is required.";
         }else{
     
-            $sql ="SELECT * FROM user WHERE name='$name' AND password ='$password'";
+            $sql ="SELECT * FROM user WHERE name='$name' AND user_password ='$password'";
             $result = $this->conn->query($sql);
-    
+            
             if(mysqli_num_rows($result) === 1){
                 $row =mysqli_fetch_assoc($result);
-                if($row['name'] === $name && $row['password'] === $password){
+                if($row['name'] === $name && $row['user_password'] === $password){
                     $response['success'] = true;
                     $response['message'] = "index.html";
                     session_start();
