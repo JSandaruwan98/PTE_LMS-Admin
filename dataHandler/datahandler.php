@@ -362,7 +362,7 @@ class DataHandler {
     
             $sql ="SELECT * FROM user WHERE name='$name' AND user_password ='$password'";
             $result = $this->conn->query($sql);
-    
+            
             if(mysqli_num_rows($result) === 1){
                 $row =mysqli_fetch_assoc($result);
                 if($row['name'] === $name && $row['user_password'] === $password){
