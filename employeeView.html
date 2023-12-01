@@ -198,5 +198,37 @@
         });
 
 </script>
+<script>
+    $(document).ready(function() {
+        $('#exportButton').on('click', function() {
+            // Make an AJAX request to the PHP script
+            $.ajax({
+                url: 'dataHandler/api/get.php?data_type=employeeData',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    // Handle the data, e.g., display it in a table or export to a file
+                    console.log(data);
+    
+                    // Convert data to CSV format
+                    const csvContent = "data:text/csv;charset=utf-8," + 
+                        data.map(row => Object.values(row).join(',')).join('\n');
+    
+                    // Create a Blob and trigger a download
+                    const blob = new Blob([csvContent], { type: 'text/csv' });
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = 'exported_data.csv';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                },
+                error: function(error) {
+                    console.error('Error fetching data:', error);
+                }
+            });
+        });
+      });
+  </script>
 </body>
 </html>

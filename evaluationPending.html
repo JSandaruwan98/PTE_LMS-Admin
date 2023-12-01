@@ -75,9 +75,12 @@
                         <td class="text-center">${item.assigned_on}</td>
                         <td class="text-center">${item.attempted_on}</td>
                         <td class="text-center">${item.test_name}</td>
-                        <td class="text-center"><a class="addTestLink" href="evaluation.php?id=${item.id}">evaluation</a></td>       
+                        <td class="text-center"><a class="addTestLink" href="#${item.student_id}">evaluation</a></td>       
                     </tr>`;
                     tableBody.append(row);
+                    $('.addTestLink').click(function () {
+                      $('#main').load('evalutionSheet.html');
+                    });
                 });
                 
                 

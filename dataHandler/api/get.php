@@ -35,6 +35,8 @@ if (isset($_GET['data_type'])) {
         $data = $dataHandler->transaction();
     }elseif ($data_type === 'balance') {
         $data = $dataHandler->balance();
+    }elseif ($data_type === 'evaluationSheet') {
+        $data = $dataHandler->evaluationSheet();
     }elseif ($data_type === 'notification') {
         $data = $dataHandler->notification();
         

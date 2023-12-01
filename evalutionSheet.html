@@ -60,11 +60,16 @@ audio::-webkit-media-controls {
   var itemsPerPage = 10; // Number of items to display per page
   var currentPage = 1;  // Track the current page
 
+  const urlParams = new URLSearchParams(window.location.href);//get the parsing data
+  const fragment = window.location.hash;
+  const value = fragment.substring(1);// Remove the '#' character to get the value
+
+
   function loadData(page) {
       $.ajax({
           type: "GET",
           url: "dataHandler/api/get.php?data_type=evaluationSheet",
-          data: { page: page },
+          data: { page: page, student_id : value },
           dataType: "json",
           success: function (response) {
               var data = response.data;
@@ -76,7 +81,7 @@ audio::-webkit-media-controls {
                     const row = $('<tr>');
 
                     //first row  
-                    const tdata1 = $('<td>').text('1');
+                    const tdata1 = $('<td>').text(item.serial_number);
                     tdata1.addClass('text-center');    
                     row.append(tdata1);  
 
@@ -84,7 +89,8 @@ audio::-webkit-media-controls {
                     const tdata2 = $('<td>');
                     tdata2.addClass('px-3'); 
 
-                    const div1 = $('<div>').text('Read Aloud');
+                    const div1 = $('<div>').text(item.type);
+                      
 
                     const div2 = $('<div>');
                       div2.addClass('pt-3');
@@ -102,9 +108,38 @@ audio::-webkit-media-controls {
                       const div32 = $('<div>').text(item.question).addClass('font-weight-bold pt-3')
                       const div33 = $('<div>').text(item.solution).addClass('py-3')
 
-                    div3.append(div31, div32, div33)    
+                    if(item.type == 'Read Aloud'){
+                      div3.append(div31, div32, div3);
+                    }else if(item.type == 'Repeat Sentence') {
+                      div3.append(div31, div32);
+                    }     
+                     
+                    
+                    const div4 = $('<div>')
+                      div4.attr('id', 'hidden')
+                      div4.css({'display': 'none'})
+                      div4.addClass('pt-3')
+                      const audioQuestion = $('<audio>')
+                        audioQuestion.attr('id', 'audioQuestion')
+                        audioQuestion.attr('controls','')
+                        audioQuestion.css({
+                          'pendding': '5px',
+                          'border-radius': '30px',
+                          'width': '300px',
+                          'margin': '10px'
+                        })
+                        const source1 = $('<source>')
+                          source1.attr('src', item.mp4File)
+                          source1.attr('type','audio/mpeg')
+                        audioQuestion.append(source1)  
+                    div4.append(audioQuestion)  
 
-                    tdata2.append(div1, div2, div3); 
+                    if(item.type == 'Read Aloud'){
+                      tdata2.append(div1, div2, div3);
+                    }else if(item.type == 'Repeat Sentence') {
+                      tdata2.append(div1, div2, div4, div3);
+                    }   
+                     
                     row.append(tdata2); 
                     
                     //third row

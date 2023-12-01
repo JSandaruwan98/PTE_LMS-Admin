@@ -71,6 +71,41 @@ class DataHandler {
 
         return $data;
     }
+
+
+    //evaluatio sheet print 
+    //View all batch details
+    public function evaluationSheet() {
+        $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $studentId = $_GET['student_id'];
+
+        $itemsPerPage = 10; // Number of items to display per page
+        $offset = ($page - 1) * $itemsPerPage;
+
+        $sql = "SELECT q.type, a.content, a.pronunciation, a.student_id, a.oral_fluency, a.totalScore, a.mp4File, a.userAnswer, q.question, q.solution FROM answering AS a, question AS q WHERE q.question_id = a.question_id AND a.student_id = $studentId  LIMIT $offset, $itemsPerPage";
+        $result = $this->conn->query($sql);
+        $data = array();
+
+        $i=1;
+        while ($row = $result->fetch_assoc()) {
+            $row['serial_number'] = ($page - 1) * $itemsPerPage + $i;
+            $data[] = $row;
+            $i++;
+        }
+
+        $totalItemsQuery = "SELECT COUNT(*) as total FROM answering AS a, question AS q WHERE q.question_id = a.question_id AND a.student_id = $studentId";
+        $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
+        $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
+
+
+        $response = [
+            'data' => $data,
+            'totalItems' => $totalItems
+        ];
+
+        return $response;
+        $page=0;
+    }
     
 
 

@@ -111,12 +111,9 @@
     var itemsPerPage = 10; // Number of items to display per page
     var currentPage = 1;  // Track the current page
 
-    const urlParams = new URLSearchParams(window.location.href);
-    
+    const urlParams = new URLSearchParams(window.location.href);//get the parsing data
     const fragment = window.location.hash;
-
-        // Remove the '#' character to get the value
-    const value = fragment.substring(1);
+    const value = fragment.substring(1);// Remove the '#' character to get the value
         
     $('#batchid').val(value);
 
