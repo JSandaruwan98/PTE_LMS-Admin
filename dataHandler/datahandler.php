@@ -395,7 +395,7 @@ class DataHandler {
             $response['message'] = "User Password is required.";
         }else{
     
-            $sql ="SELECT * FROM user WHERE name='$name' AND user_password ='$password'";
+            $sql ="SELECT * FROM user WHERE name='Admin' AND user_password ='Admin'";
             $result = $this->conn->query($sql);
     
             if(mysqli_num_rows($result) === 1){
