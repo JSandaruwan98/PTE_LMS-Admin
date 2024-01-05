@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <!-- Mobile Specific Meta -->
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+     <!-- Favicon-->
+     <link rel="shortcut icon" href="img/fav.png">
+     <!-- Author Meta -->
+     <meta name="author" content="colorlib">
+     <!-- Meta Description -->
+     <meta name="description" content="">
+     <!-- Meta Keyword -->
+     <meta name="keywords" content="">
+     <!-- meta character set -->
+     <meta charset="UTF-8">
+     <!-- Site Title -->
+     <title>Education</title>
+ 
+     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet"> 
+         <!--
+         CSS
+         ============================================= -->
+         <link rel="stylesheet" href="css/linearicons.css">
+         <link rel="stylesheet" href="css/font-awesome.min.css">
+         <link rel="stylesheet" href="css/bootstrap.css">
+         <link rel="stylesheet" href="css/magnific-popup.css">
+         <link rel="stylesheet" href="css/nice-select.css">							
+         <link rel="stylesheet" href="css/animate.min.css">
+         <link rel="stylesheet" href="css/owl.carousel.css">			
+         <link rel="stylesheet" href="css/jquery-ui.css">			
+         <link rel="stylesheet" href="css/main.css">
+         <link rel="stylesheet" href="css/custome.css">
+         <style>
+            #timer {
+            font-size: 2em;
+            text-align: center;
+          } 
+         </style>  
+
+</head>
+
+<body>
+    <section class="banner-area relative about-banner" id="home">	
+        <div class="overlay overlay-bg" style="background-color: rgba(0, 65, 65, 0.5);"></div>
+        <div class="container">				
+            <div class="row d-flex align-items-center justify-content-center">
+                <div class="about-content col-lg-12">
+                    
+                </div>	
+            </div>
+        </div>
+    </section>
+    <section class="feature-area" id="block">
+        <div class="container">
+            <div class="row" >
+                <div class="col-md-12" >
+                    <div class="feature-area" id="feature-area">
+                        
+                    </div>
+                </div>
+         					
+            </div>
+        </div>	
+    </section>
+   
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            let timer;
+            let audioFile;
+            let seconds = 0;
+            let minutes = 0;
+            let hours = 0;
+            let mediaRecorder;
+            let audioChunks = [];
+            let isRecording = false;
+
+            const toggleRecordingButton = $('#recordButton');
+            const next1 = $('#next');
+            const audioPlayer = $('#audioPlayer');
+
+            toggleRecordingButton.on('click', function () {
+                if (!isRecording) {
+                    resetTimer()
+                    startTimer()
+                    startRecording();
+                    toggleRecordingButton.text('Stop Recording');
+                } else {
+                    stopTimer()
+                    stopRecording();
+                    toggleRecordingButton.text('Start Recording');
+                }
+                isRecording = !isRecording;
+            });
+
+            
+            var itemsPerPage = 1; // Number of items to display per page
+            var currentPage = 1;  // Track the current page
+
+            function updateFeatureArea(data) {
+                $('#feature-area').empty();
+                // Calculate start and end indices based on the current page
+                var startIndex = (currentPage - 1) * itemsPerPage;
+                var endIndex = startIndex + itemsPerPage;
+
+                // Loop through the data for the current page and append it to the container
+                for (var i = startIndex; i < endIndex && i < data.length; i++) {
+                    $('#feature-area').append(`
+                    <div class="single-feature" id="single-feature">
+                                                <div class="title" id="title" style="height: 70px;">
+                                                    <h2 style=" color: white;">`+ data[i].type +`</h2>
+                                                </div>
+                                                <div class="desc-wrap" style="background-color: rgb(218, 253, 253); ">
+                                                    <div class="row" style="margin-top: 50px;">
+                                                    <div class="col-1"></div>    
+                                                    <div class="col-7">
+                                                        <h4 style="color: #222;">
+                                                            You will hear a sentence. Please repeat the sentence exactly as you hear it. You will hear the sentence only once.
+                                                        </h4>
+                                                        
+                                                        <p style="text-align: justify; color: #222; margin-top: 20px; padding-left: 30px; padding-right: 30px;">An exchange network consists of local and tandem exchanges connected by trunks. An exchange network consists of local and tandem exchanges connected by trunks</p>
+                                                        
+                                                    </div>
+                                                        
+                                                    <div class="col-4" style="height: 50px; width: 150px;">
+                                                        <div data-role="controls">
+                                                            <div id="timer">00:00:00</div>
+                                                            <button id="recordButton" style="height: 50px; width: 50px;">Record</button>
+                                                        </div>
+                                                        <div data-role="recordings"></div>
+                                                    </div>
+                                                    </div>
+                                                    
+                                                    <div id="pages" style="margin-top: 100px;">
+                                                        <a  href="#" id="next" style="font-size: 20px; font-weight:600; float: right;" data-page="${currentPage - 1}">Next</a>
+                                                        <a  href="#" style="font-size: 20px; font-weight:600; float: left;" data-page="${currentPage + 1}">Previuos</a>
+                                                    </div><br>
+                                                </div>
+                                            </div>
+                    `);
+                }
+            }
+
+            function fetchDataAndPaginate() {
+                // Calculate the offset based on the current page
+                var offset = (currentPage - 1) * itemsPerPage;
+
+                $.ajax({
+                    url: 'router/get.php?data_type=question_add&offset=' + offset + '&limit=' + itemsPerPage,
+                    method: 'GET',
+                    success: function (data) {
+                        // Update the #feature-area based on the current page
+                        updateFeatureArea(data);
+                        console.log(data.type);
+
+                        // Display pagination links
+                        displayPagination(data.length);
+                    },
+                    error: function () {
+                        alert('Error fetching data.');
+                    }
+                });
+            }
+
+
+            function displayPagination(totalItems) {
+                var totalPages = Math.ceil(totalItems / itemsPerPage);
+                $('#pages').html(`
+                    <a href="#" id="previous" style="font-size: 20px; font-weight:600; float: left;" data-page="${currentPage - 1}">Previous</a>
+                    <span style="font-size: 20px; font-weight:600;">${currentPage} of ${totalPages}</span>
+                    <a href="#" style="font-size: 20px; font-weight:600; float: right;" data-page="${currentPage + 1}">Next</a>
+                `);
+
+                // Disable or hide the "Previous" link if on the first page
+                if (currentPage === 1) {
+                    $('#previous').hide();
+                } else {
+                    $('#previous').show();
+                }
+
+                // Disable or hide the "Next" link if on the last page
+                if (currentPage === totalPages) {
+                    $('#next').hide();
+                } else {
+                    $('#next').show();
+                }
+            }
+
+            // Event listener for pagination links
+            $('#pages').on('click', 'a', function (event) {
+                event.preventDefault();
+                var newPage = parseInt($(this).data('page'));
+
+                if (!isNaN(newPage) && newPage !== currentPage) {
+                    currentPage = newPage;
+                    fetchDataAndPaginate();
+                }
+            });
+
+            // Initial fetch and display
+            fetchDataAndPaginate();
+
+            
+
+            
+            $('#next').on('click', function(){
+                $.ajax({
+                    url:'router/post.php',
+                    type: 'POST',
+                    data: { task : 'normal_comparison', audioFile: audioFile },
+                    success: function(response){
+                        console.log(response.message);
+                        //console.log(response.voiceToTest)
+                    },
+                    error: function (error) {
+                        console.log(response.message);
+                        console.error('Error saving audio:', error); 
+                    }
+                })
+            });
+
+            $("#resetButton").click(function () {
+            resetTimer();
+        });
+
+        function startTimer() {
+            timer = setInterval(updateTimer, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timer);
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            seconds = 0;
+            minutes = 0;
+            hours = 0;
+            updateTimerDisplay();
+        }
+
+        function updateTimer() {
+            seconds++;
+            if (seconds === 60) {
+            seconds = 0;
+            minutes++;
+            if (minutes === 60) {
+                minutes = 0;
+                hours++;
+            }
+            }
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const formattedTime = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+            $("#timer").text(formattedTime);
+        }
+
+        function pad(value) {
+            return value < 10 ? `0${value}` : value;
+        }
+
+            
+
+            function startRecording() {
+                navigator.mediaDevices.getUserMedia({ audio: true })
+                    .then(function (stream) {
+                        mediaRecorder = new MediaRecorder(stream);
+
+                        mediaRecorder.ondataavailable = function (event) {
+                            if (event.data.size > 0) {
+                                audioChunks.push(event.data);
+                            }
+                        };
+
+                        mediaRecorder.onstop = function () {
+                            const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                            const audioUrl = URL.createObjectURL(audioBlob);
+                            audioPlayer.attr('src', audioUrl);
+
+                            const formData = new FormData();
+                            formData.append('audio', audioBlob, 'recording.wav');
+                            formData.append('task','save_audio');
+
+                            audioFile = audioUrl;
+                            // Send the recorded audio to the server using $.ajax or $.post
+                            saveAudio(formData);
+
+                            audioChunks = [];
+                        };
+
+                        mediaRecorder.start();
+                        toggleRecordingButton.prop('disabled', false);
+                    })
+                    .catch(function (error) {
+                        console.error('Error accessing microphone:', error);
+                    });
+            }
+
+            function stopRecording() {
+                if (mediaRecorder && mediaRecorder.state === 'recording') {
+                    mediaRecorder.stop();
+                }
+            }
+
+            function saveAudio(formData) {
+                // Send the recorded audio data to the server using $.ajax or $.post
+                $.ajax({
+                    url: 'router/post.php',
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {
+                        console.log('Audio saved successfully:', response.message);
+                    },
+                    error: function (error) {
+                        console.error('Error saving audio:', error);
+                    }
+                });
+            }
+        });
+
+
+        $( "#next" ).on( "click", function() {
+            $( "#block" ).animate({ "left": "+=50px" }, "slow" );
+        });
+
+        
+    </script>
+
+</body>
+
+</html>

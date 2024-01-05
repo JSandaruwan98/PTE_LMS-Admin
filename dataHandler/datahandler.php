@@ -82,9 +82,11 @@ class DataHandler {
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT q.type, a.content, a.pronunciation, a.student_id, a.oral_fluency, a.totalScore, a.mp4File, a.userAnswer, q.question, q.solution FROM answering AS a, question AS q WHERE q.question_id = a.question_id AND a.student_id = $studentId  LIMIT $offset, $itemsPerPage";
+        $sql = "SELECT q.imageFile, q.type, a.content, a.pronunciation, a.student_id, a.oral_fluency, a.totalScore, a.mp4File, a.userAnswer, q.question, q.solution, a.additional_words FROM answering AS a, question AS q WHERE q.question_id = a.question_id AND a.student_id = $studentId";
         $result = $this->conn->query($sql);
         $data = array();
+        $word_set_1 = array();
+        //$word_set_2 = array();
 
         $i=1;
         while ($row = $result->fetch_assoc()) {
@@ -97,10 +99,15 @@ class DataHandler {
         $totalItemsResult = mysqli_query($this->conn, $totalItemsQuery);
         $totalItems = mysqli_fetch_assoc($totalItemsResult)['total'];
 
+        
+        //$additional_words = array_values($word_set_1);
+        //$missed_words = array_values(unserialize($word_set_2));
 
         $response = [
             'data' => $data,
-            'totalItems' => $totalItems
+            'totalItems' => $totalItems,
+            //'additional_words1' => $additional_words,
+            //'missed_words' => $missed_words
         ];
 
         return $response;
@@ -215,9 +222,9 @@ class DataHandler {
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT DISTINCT ta.assigned_on, e.student_id, e.attempted_on,t.name AS test_name,s.name AS student_name 
-                FROM evaluation AS e, testass AS ta, test AS t, student AS s 
-                WHERE e.test_id = ta.test_id AND t.test_id = e.test_id AND s.student_id = e.student_id 
+        $sql = "SELECT DISTINCT assigned_on, e.student_id, st.name AS student_name, e.attempted_on, te.name AS test_name  
+                FROM testass AS ta, evaluation as e, assignstudent as assst, student as st, test as te 
+                WHERE ta.test_id = e.test_id AND assst.student_id = e.student_id AND assst.batch_id = ta.batch_id AND te.test_id = e.test_id AND st.student_id = e.student_id 
                 LIMIT $offset, $itemsPerPage";
         $result = $this->conn->query($sql);
         $data = array();

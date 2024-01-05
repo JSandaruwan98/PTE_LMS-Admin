@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Recorder</title>
+</head>
+<body>
+
+<button id="startRecording">Start Recording</button>
+<button id="stopRecording" disabled>Stop Recording</button>
+<audio id="audioPlayer" controls></audio>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function() {
+        let mediaRecorder;
+        let recordedChunks = [];
+
+        const startRecording = () => {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(stream => {
+                    mediaRecorder = new MediaRecorder(stream);
+
+                    mediaRecorder.ondataavailable = event => {
+                        if (event.data.size > 0) {
+                            recordedChunks.push(event.data);
+                        }
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(recordedChunks, { type: 'audio/wav' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        var data = new FormData();
+                        data.append('audioUrl', audioUrl);
+
+                        // Make an AJAX request using Fetch API
+                        fetch('mediasave.php', {
+                        method: 'POST',
+                        body: data
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                        // Handle the response from the server
+                        console.log('Response from server:', data);
+                        })
+                        .catch(error => {
+                        console.error('Error:', error);
+                        });
+                        $('#audioPlayer').attr('src', audioUrl);
+                    };
+
+                    mediaRecorder.start();
+                    $('#startRecording').prop('disabled', true);
+                    $('#stopRecording').prop('disabled', false);
+                })
+                .catch(error => {
+                    console.error('Error accessing microphone:', error);
+                });
+        };
+
+        const stopRecording = () => {
+            mediaRecorder.stop();
+            $('#startRecording').prop('disabled', false);
+            $('#stopRecording').prop('disabled', true);
+        };
+
+        $('#startRecording').on('click', startRecording);
+        $('#stopRecording').on('click', stopRecording);
+    });
+</script>
+
+</body>
+</html>

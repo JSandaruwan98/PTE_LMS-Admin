@@ -83,10 +83,11 @@ function create_transcript($api_token, $audio_url) {
     }
 }
 
-if($_SERVER['REQUEST_METHOD'] == "POST"){
+if($_SERVER['REQUEST_METHOD'] == "GET"){
 
-    $solution = $_POST["solution"];
-    $audio = $_POST["audio"];
+    
+    $upload_url = $_GET["audio"];
+    echo $upload_url;
 
     try {
         // Your API token is already set in this variable
@@ -98,45 +99,22 @@ if($_SERVER['REQUEST_METHOD'] == "POST"){
         // You may also remove the upload step and update the 'audio_url' parameter in the
         // 'create_transcript' function to point to a remote audio or video file.
         // -----------------------------------------------------------------------------
-        $sentence2 = "Update the file path  pointing to a local audio or video file.";
         
-        $path = "Media7.m4a";
-        $upload_url = upload_file($api_token, $path);
+        //$upload_url = upload_file($api_token, $audio);
     
         $transcript = create_transcript($api_token, $upload_url);
         echo $transcript['text'];
     
-        $value = $transcript['text'];
+        $value1 = $transcript['text'];
     
-        $words1 = explode(' ', strtolower($value));
-        $words2 = explode(' ', strtolower($solution));
-    
-        $commonWords = array_intersect($words1, $words2);
-    
-        // Calculate similarity percentage
-        $similarityPercentage = (count($commonWords) / count($words1)) * 100;
-    
-        // Function to highlight common words in green
-        function highlightCommonWords($paragraph, $commonWords) {
-            foreach ($commonWords as $commonWord) {
-                $paragraph = preg_replace("/\b$commonWord\b/i", '<span style="color: green;">' . $commonWord . '</span>', $paragraph);
-            }
-            return $paragraph;
-        }
-    
-        // Highlight common words in the second paragraph
-        $highlightedParagraph2 = highlightCommonWords($solution, $commonWords);
-    
-        // Output the paragraphs with common words highlighted and similarity score
-        echo "Paragraph 1: $solution\n\n";
-        echo "Paragraph 2: $highlightedParagraph2\n\n";
-        echo "Similarity Score: $similarityPercentage%\n";
+      
+        
             
     } catch (Exception $e) {
         echo 'Error: ' . $e->getMessage();
     }
-    
 
+    
 }
 
 // Upload a file and create a transcript using the AssemblyAI API

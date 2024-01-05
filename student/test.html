@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>jQuery Array Example</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+
+<script>
+  $(document).ready(function(){
+    // Initialize an empty array
+    var myArray = [];
+
+    // Given strings
+    var string1 = 'You., think,, economy.';
+    var string2 = 'kamal, nimal, samn';
+
+    // Add individual words to the array
+    $.merge(myArray, string1.split(/[ ,.:]+/).filter(Boolean));
+    $.merge(myArray, string2.split(/[ ,.:]+/).filter(Boolean));
+
+    // Display the array in the console
+    console.log(myArray);
+  });
+</script>
+
+</body>
+</html>

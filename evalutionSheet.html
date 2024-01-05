@@ -73,13 +73,19 @@ audio::-webkit-media-controls {
           dataType: "json",
           success: function (response) {
               var data = response.data;
+              //console.log(response.data)
+              
 
               // Populate the table with data
               var tableBody = $("#data-table tbody");
               tableBody.empty();
               $.each(data, function (index, item) {
+                    
+                      
+                    
+                    
                     const row = $('<tr>');
-
+                  
                     //first row  
                     const tdata1 = $('<td>').text(item.serial_number);
                     tdata1.addClass('text-center');    
@@ -95,8 +101,8 @@ audio::-webkit-media-controls {
                     const div2 = $('<div>');
                       div2.addClass('pt-3');
                       const span1 = $('<span>').text('Hide Question');
-                        span1.addClass('my-4');
-                        span1.css('color',' rgb(246, 166, 166)')
+                        span1.addClass('my-4 text-primary');
+                        //span1.css('color',' rgb(246, 166, 166)')
                         span1.attr('id', 'toggle-btn')
                     div2.append(span1);  
                     
@@ -108,37 +114,60 @@ audio::-webkit-media-controls {
                       const div32 = $('<div>').text(item.question).addClass('font-weight-bold pt-3')
                       const div33 = $('<div>').text(item.solution).addClass('py-3')
 
+                   
                     if(item.type == 'Read Aloud'){
-                      div3.append(div31, div32, div3);
+                      div3.append(div31, div32, div33);
                     }else if(item.type == 'Repeat Sentence') {
                       div3.append(div31, div32);
-                    }     
+                    }else if(item.type == 'Describe image') {
+                      div3.append(div31, div32);
+                    }else if(item.type == 'Re-tell Lecture') {
+                      div3.append(div31, div32);
+                    }    
                      
                     
                     const div4 = $('<div>')
                       div4.attr('id', 'hidden')
                       div4.css({'display': 'none'})
                       div4.addClass('pt-3')
-                      const audioQuestion = $('<audio>')
-                        audioQuestion.attr('id', 'audioQuestion')
-                        audioQuestion.attr('controls','')
-                        audioQuestion.css({
-                          'pendding': '5px',
-                          'border-radius': '30px',
-                          'width': '300px',
-                          'margin': '10px'
-                        })
-                        const source1 = $('<source>')
-                          source1.attr('src', item.mp4File)
-                          source1.attr('type','audio/mpeg')
-                        audioQuestion.append(source1)  
-                    div4.append(audioQuestion)  
+                      const audioQuestion = $('<audio>');
+                      audioQuestion.attr('id', 'audioQuestion');
+                      audioQuestion.attr('controls', '');
+                      audioQuestion.css({
+                        'padding': '5px', // Corrected 'pendding' to 'padding'
+                        'border-radius': '30px',
+                        'width': '300px',
+                        'margin': '10px'
+                      });
+
+                      const source1 = $('<source>');
+                      source1.attr('src', item.mp4File); // Corrected backslashes in the path
+                      source1.attr('type', 'audio/wav');
+
+                      audioQuestion.append(source1);  
+                    div4.append(audioQuestion) 
+                    
+                    const imagediv = $('<div>')
+                      imagediv.attr('id','hidden')
+                      imagediv.css('display','none')
+                      imagediv.addClass('pt-3')
+                      const imageQuestion = $('<img>')
+                        imageQuestion.attr({'id':'imageQuestion', 'src':'student/'+item.imageFile})
+                        imageQuestion.css({'width':'180px','height':'150px'})
+                    imagediv.append(imageQuestion)
+                    
+                    
+
 
                     if(item.type == 'Read Aloud'){
                       tdata2.append(div1, div2, div3);
                     }else if(item.type == 'Repeat Sentence') {
                       tdata2.append(div1, div2, div4, div3);
-                    }   
+                    }else if(item.type == 'Describe image') {
+                      tdata2.append(div1, div2, imagediv, div3);
+                    }else if(item.type == 'Re-tell Lecture') {
+                      tdata2.append(div1, div2, div4, div3, imagediv,);
+                    }    
                      
                     row.append(tdata2); 
                     
@@ -155,8 +184,9 @@ audio::-webkit-media-controls {
                       const div41 = $('<div>');
                         const span41 = $('<span>').text("Show User Audio") 
                         span41.attr('id', 'user-audio')
-                        span41.css('color', 'rgb(246, 166, 166)')
-                        div41.append(span41)    
+                        //span41.css('color', 'rgb(246, 166, 166)')
+                        div41.append(span41)
+                        div41.addClass('text-primary')    
                       const div42 = $('<div>')
                         div42.addClass('pt-3')
                         div42.attr('id', 'voiceRecorder') 
@@ -176,10 +206,57 @@ audio::-webkit-media-controls {
                             source.attr('type', 'audio/mpeg')
                           audio.append(source)
                         div42.append(audio)
+                      const div_topic_of_solution = $('<div>')
+                        const spanA = $('<span>').text("AI Analysis")
+                        const spanB = $('<span>').text("Voice To Test") 
+                        div_topic_of_solution.css({
+                          'font-weight': 'bold',
+                        })  
+                          
+                         
+                        if(item.type == 'Read Aloud' || item.type == 'Repeat Sentence'){
+                          div_topic_of_solution.append(spanA)
+                        }else if(item.type == 'Describe image'|| item.type == 'Re-tell Lecture') {
+                          div_topic_of_solution.append(spanB)
+                        }   
+                        div_topic_of_solution.addClass('mt-5')
                       const div43 = $('<div>').text(item.userAnswer)
-                        div43.addClass('pt-3')
+                        div43.attr('id', 'paragraph')
+                        div43.addClass('pt-3 pb-3')
+                      
+                      if(item.type == 'Read Aloud' || item.type == 'Repeat Sentence'){
+                        var paragraph = div43;
+                        
+                        word_set = item.additional_words.split(/[ ,.:]+/).filter(Boolean)                          
 
-                      tdata4.append(div41, div42, div43)
+
+                        $.each(word_set, function(index, word) {
+                          console.log(word)
+                          var regex = new RegExp('\\b' + word + '\\b', 'gi'); // Use word boundaries and case-insensitive matching
+                          paragraph.html(paragraph.html().replace(regex, '<span class="highlight" style="background-color: yellow;">' + word + '</span>'));
+                        });
+                      }  
+
+
+                      const div2_topic_of_solution = $('<div>')
+                        const spanC = $('<span>').text("AI Comment")
+                        //const spanB = $('<span>').text("Voice To Test") 
+                        div2_topic_of_solution.css({
+                          'font-weight': 'bold',
+                        })
+                      
+                      const div_ai_comment = $('<div>').text(item.additional_words)
+                        div_ai_comment.addClass('pt-3 pb-3')  
+                          
+                      div2_topic_of_solution.append(spanC)
+
+                      if(item.type == 'Describe image'|| item.type == 'Re-tell Lecture'){
+                        tdata4.append(div41, div42, div_topic_of_solution, div43, div2_topic_of_solution, div_ai_comment)
+                      }else{
+                        tdata4.append(div41, div42, div_topic_of_solution, div43)
+                      }  
+
+                      
                     row.append(tdata4)  
                     
                     const tdata5 = $('<td>')
@@ -210,29 +287,6 @@ audio::-webkit-media-controls {
                   tableBody.append(row);
               });
 
-              // Update pagination controls
-              var pagination = $("#pagingBatch");
-                    
-                    pagination.empty();
-                    var totalPages = Math.ceil(response.totalItems / itemsPerPage);
-
-                    // Add Previous button
-                    if (currentPage > 1) {
-                        var prevButton = `<li id="pagination-previous" class="page-item" id="prev-btn"><a class="page-link position-static" href="#" data-page="${currentPage - 1}">Previous</a></li>`;
-                        pagination.append(prevButton);
-                    }
-
-                    // Add numbered page buttons
-                    for (var i = 1; i <= totalPages; i++) {
-                        var pageLink = `<li id="pagination-item" class="page-item"><a class="page-link position-static" href="#" data-page="${i}">${i}</a></li>`;
-                        pagination.append(pageLink);
-                    }
-
-                    // Add Next button
-                    if (currentPage < totalPages) {
-                        var nextButton = `<li id="pagination-next" class="page-item" id="next-btn"><a class="page-link position-static" href="#" data-page="${currentPage + 1}">Next</a></li>`;
-                        pagination.append(nextButton);
-                    }
               
           }
       });
@@ -241,15 +295,7 @@ audio::-webkit-media-controls {
   // Initial data load
   loadData(currentPage);
 
-// Pagination click event
-$(document).on("click", "#pagingBatch a", function (e) {
-    e.preventDefault();
-    var page = $(this).data("page");
-    currentPage = page;  // Update the current page
-    loadData(page);
-
-    $('html, body').animate({ scrollTop: 0 }, 'fast');
-});      
+     
 
 
 });
