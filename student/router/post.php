@@ -39,8 +39,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $serialized_missed_words = serialize($result['missed_words']);
 
             $word_set_1 = implode(', ', $result['additional_words']);
+            $word_set_2 = implode(', ', $result['missed_words']);
 
-            $count =  count($result['additional_words']);
+            $count =  count($result['additional_words'] + $result['missed_words']);
 
             
             $content = 0;
@@ -59,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
 
-            $response = $sql_model->Answering_Insert($voice, $audioFile, $question_id, $student_id, $content, $word_set_1);
+            $response = $sql_model->Answering_Insert($voice, $audioFile, $question_id, $student_id, $content, $word_set_1, $word_set_2);
 
 
         }elseif($_POST['task'] == 'ai_analysis'){
@@ -72,13 +73,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $question_id = $_POST['question_id'];
             $student_id = $_POST['student_id'];
             $key_words = $_POST['key_words'];
+            //$type = $_POST['type']
 
+            if($_POST['type'] == 'Answer Short Question'){
 
-            //`a1` The sentence described by this student `a2` Briefly comment on the sentence review
-            $Question = "`".$voice."` and the key word  `".$key_words."` give only overall precentage of include the key words";
-            $result = $ExamAI->AiComparison($Question);
+                $Question ="Question : `".$key_words."`  and Answer: `".$voice."`  this answer is only give a correct or incorrect not any other";
+                $result = $ExamAI->AiComparison($Question);
 
-            $response = $sql_model->Answering_Insert($voice, $audioFile, $question_id, $student_id, $result, NAN);
+                if (stripos($result, 'incorrect') !== false) {
+                    $value = 0; // Set $value to 1
+                } elseif (stripos($result, 'correct') !== false) {
+                    $value = 1; // Set $value to 0 if 'incorrect' is found
+                }
+
+            }elseif($_POST['type'] == 'Describe image' || $_POST['type'] == 'Re-tell Lecture'){
+
+                $Question = "`".$voice."` and the key word  `".$key_words."` give only overall precentage of include the key words";
+                $value = $ExamAI->AiComparison($Question);
+
+            }
+
+         
+            
+            //$response['message'] = $value;
+
+            $response = $sql_model->Answering_Insert($voice, $audioFile, $question_id, $student_id, $value, NAN, NAN);
             
 
         }elseif($_POST['task'] == 'select-exam'){

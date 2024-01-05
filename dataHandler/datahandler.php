@@ -82,7 +82,7 @@ class DataHandler {
         $itemsPerPage = 10; // Number of items to display per page
         $offset = ($page - 1) * $itemsPerPage;
 
-        $sql = "SELECT q.imageFile, q.type, a.content, a.pronunciation, a.student_id, a.oral_fluency, a.totalScore, a.mp4File, a.userAnswer, q.question, q.solution, a.additional_words FROM answering AS a, question AS q WHERE q.question_id = a.question_id AND a.student_id = $studentId";
+        $sql = "SELECT q.imageFile, q.type, a.content, a.pronunciation, a.student_id, a.oral_fluency, a.totalScore, a.mp4File, a.userAnswer, q.question, q.solution, a.additional_words, a.missed_words FROM answering AS a, question AS q WHERE q.question_id = a.question_id AND a.student_id = $studentId";
         $result = $this->conn->query($sql);
         $data = array();
         $word_set_1 = array();

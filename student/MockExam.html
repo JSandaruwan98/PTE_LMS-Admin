@@ -213,20 +213,20 @@
                 console.log(KeyWords);
                 if(type == 'Read Aloud' || type == 'Repeat Sentence'){
                     task = 'normal_comparison'
-                }else if(type == 'Describe image' || type == 'Repeat Sentence'){
+                }else if(type == 'Describe image' || type == 'Repeat Sentence' || type == 'Answer Short Question'){
                     task = 'ai_analysis'
                 }
 
                 $.ajax({
                     url:'router/post.php',
                     type: 'POST',
-                    data: { task : task, audioFile: audioFile, Solution: Solution, question_id: question_id, student_id: value, key_words: KeyWords},
+                    data: { task : task, audioFile: audioFile, Solution: Solution, question_id: question_id, student_id: value, key_words: KeyWords, type: type},
                     success: function(response){
                         if(response.success){
                             console.log(response.message);
-                           
                         }else{
                             console.log(response.message);
+                            
                         }
                     },
                     error: function (error) {
