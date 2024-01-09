@@ -74,17 +74,28 @@
                                 <div class="row" style="height: 200px;">
                                     <div class="col-1"></div>
                                     <div class="col-7">
-                                        <div id="solution" style="text-align: justify; color: #222; margin-top: 20px; padding-left: 30px; padding-right: 30px;"></div>
+                                        <label for="selectOption">Enter type:</label>
+                                        <select id="type">
+                                            <option value="Read Aloud">Read Aloud</option>
+                                            <option value="Repeat Sentence">Repeat Sentence</option>
+                                            <option value="Describe image">Describe image</option>
+                                            <option value="Answer Short Question">Answer Short Question</option>
+                                        </select>
+                                        <label for="keyWords">Enter keywords</label>
+                                        <input type="text" id="keyWords"><br>
+                                        <label for="solution">Enter the Solution</label>
+                                        <textarea name="solution" id="solution" cols="30" rows="10"></textarea>
                                     </div>
                                     <div class="col-4 p-4" style="height: 50px; width: 150px;">
                                         <div data-role="controls">
                                             <div id="timer">00:00:00</div>
                                             <button id="recordButton" style="height: 50px; width: 50px;">Record</button>
-                                            <a  href="#" id="submit" style="font-size: 20px; font-weight:400; float: center;">Submit</a>
+                                            <a href="#" id="submit" style="font-size: 20px; font-weight: 400; float: center;">Submit</a>
                                         </div>
                                         <div data-role="recordings"></div>
                                     </div>
-                                </div>    
+                                </div>
+                                  
                                     
                                     
                                
@@ -92,8 +103,7 @@
                                 
                                 
                                 <div style="margin-top: 100px;">
-                                    <a  href="#" id="next" style="font-size: 20px; font-weight:600; float: right;">Next</a>	
-                                    <a  href="#" id="previous" style="font-size: 20px; font-weight:600; float: left;">Previuos</a>
+                                    
                                 </div><br>
                             </div>
                         </div>
@@ -162,18 +172,7 @@
                             question_id = data[i].question_id;
                             $('#title').append(`<h2 style="color: white;">${data[i].type}</h2>`);
                             $('#Question').append(`<p>${data[i].question}</p>`);
-                            if(data[i].type == "Read Aloud"){
-                                $('#solution').append(`<p>${data[i].solution}</p>`);
-                            }else if(data[i].type == "Describe image"){
-                                $('#solution').append(`<img src="${data[i].imageFile}" style="width:450px; padding-left: 25%;">`);
-                                //console.log(data[i].imageFile)
-                            }else if(data[i].type == "Repeat Sentence" || data[i].type == "Re-tell Lecture" || data[i].type == "Answer Short Question"){
-                                $('#solution').append(`<audio controls style="padding-left: 25%">
-                                                            <source src="${data[i].audio}" type="audio/mpeg">
-                                                            Your browser does not support the audio element.
-                                                        </audio>`);
-                                console.log(data[i].imageFile)
-                            }
+                            
                             
                         }
                     },
@@ -205,31 +204,43 @@
             const urlParams = new URLSearchParams(window.location.href);
             const fragment = window.location.hash;
             const value = fragment.substring(1);
-
+            var Type;
             
+
+            $("#type").change(function() {
+                Type = $(this).val();  // Remove the 'var' declaration here
+            });
+
             $('#submit').on('click', function(){
-                console.log(type);
-                console.log(KeyWords);
-                if(type == 'Read Aloud' || type == 'Repeat Sentence'){
-                    task = 'normal_comparison'
-                }else if(type == 'Describe image' || type == 'Repeat Sentence' || type == 'Answer Short Question'){
-                    task = 'ai_analysis'
+                var solution = $('#solution').val();
+                var key_words = $('#keyWords').val();
+                console.log(Type);
+                console.log(solution);
+                var Question;
+
+                if(Type == 'Read Aloud'){
+                    Question = 'Read the test aloud as clearly and naturally as possible within 40 seconds.You have 40 seconds to practice the reading of the test'
+                } else if(Type == 'Repeat Sentence'){
+                    Question = 'You will hear a sentence. Please repeat the sentence exactly as you hear it. You will hear the sentence only once.'
+                } else if(Type == 'Describe image'){
+                    Question = 'Look at the graph below in 25 seconds, please speak into the microphone and describe in details what the graph is showing. You will have 40 seconds to give your response'
+                } else if(Type == 'Answer Short Question'){
+                    Question = 'You will hear a question. Please give a simple and short answer. Often just one or a few words is enough '
                 }
 
                 $.ajax({
                     url:'router/post.php',
                     type: 'POST',
-                    data: { task : task, audioFile: audioFile, Solution: Solution, question_id: question_id, student_id: value, key_words: KeyWords, type: type},
+                    data: { task : 'QuestioAdd', audioFile: audioFile, Solution: solution, key_words: key_words, Question: Question, type: Type},
                     success: function(response){
                         if(response.success){
                             console.log(response.message);
-                        }else{
+                        } else {
                             console.log(response.message);
-                            
                         }
                     },
                     error: function (error) {
-                        console.log(response.message);
+                        console.log(response.message); // This line seems incorrect. It should be 'error.message'
                         console.log(response.comment);
                         console.error('Error saving audio:', error); 
                     }
@@ -298,7 +309,7 @@
                             console.log(audioUrl)
                             const formData = new FormData();
                             formData.append('audio', audioBlob, 'recording.wav');
-                            formData.append('task','save_audio');
+                            formData.append('task','save_audio_2');
 
                             // Send the recorded audio to the server using $.ajax or $.post
                             saveAudio(formData);

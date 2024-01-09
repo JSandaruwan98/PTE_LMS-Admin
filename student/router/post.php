@@ -23,6 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $response = $controler->save_audio($audio);
 
+        }elseif($_POST['task'] == 'save_audio_2'){
+            $audio = $_FILES['audio']['tmp_name'];
+
+            $response = $controler->save_audio_2($audio);
+
         }elseif($_POST['task'] == 'normal_comparison'){
             
             $voice = $ExamAI->VoiceToTest(); //voice to test convert
@@ -108,6 +113,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $response = $controler->selectExam($test_id, $student_id);
             //$response['message'] = $student_id;
             
+        }elseif($_POST['task'] == 'QuestioAdd'){
+            
+            //$voice = $ExamAI->VoiceToTest(); // voice to test convert
+
+            //Assigned the variables
+            $audioFile = $_POST['audioFile'];
+            $Solution = $_POST['Solution'];
+            $type =$_POST['type'];
+            $key_words = $_POST['key_words'];
+            $Question = $_POST['Question'];
+            
+
+                    
+            
+            //$response['message'] = $value;
+
+            $response = $sql_model->QuestionAdd($audioFile, $Solution, $key_words, $Question, $type);
+            
+
         }
     }    
 

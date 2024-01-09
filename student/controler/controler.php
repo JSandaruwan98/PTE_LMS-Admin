@@ -11,7 +11,7 @@ class Controlers{
         
     }
 
-    //audio saved
+    //audio saved_1 
     public function save_audio($audio){
 
         $uploadDirectory = '../../';
@@ -35,6 +35,31 @@ class Controlers{
         return $response;
     }
 
+    //audio saved_2
+    public function save_audio_2($audio){
+
+        $uploadDirectory = '../';
+        $audioFile = 'audio/audio-' . date('YmdHis') . '.wav';
+        $filename = $uploadDirectory . $audioFile;
+
+        move_uploaded_file($audio, $filename);
+
+        $uploadDirectory1 = '.';
+        $audioFile1 = $uploadDirectory1 . 'recording.wav';
+        
+        copy($filename, $audioFile1);
+        
+
+        $response['message'] = "success";
+        $response['audioFile1'] = $audioFile;
+        $response['audioFile2'] = $audioFile1;
+
+        
+        
+        return $response;
+    }
+
+
 
     //----------------------------------------------------------------------------------------------------------------------------------
 
@@ -42,25 +67,35 @@ class Controlers{
     //Question Add
     public function question_add($perPage, $offset) {
         
+        try{
 
-        // Fetch data from the database with pagination
-        $sql = "SELECT type, question, solution, imageFile, question_id, mp4File, key_words FROM question LIMIT $offset, $perPage";
-        $result = $this->conn->query($sql);
+            // Fetch data from the database with pagination
+            $sql = "SELECT type, question, solution, imageFile, question_id, mp4File, key_words FROM question LIMIT $offset, $perPage";
+            $result = $this->conn->query($sql);
 
-        $data = array();
+            $data = array();
 
-        if ($result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                $data[] = array(
-                    'type' => $row['type'],
-                    'question' => $row['question'],
-                    'solution' => $row['solution'],
-                    'imageFile' => $row['imageFile'],
-                    'question_id' => $row['question_id'],
-                    'key_words' => $row['key_words'],
-                );
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $data[] = array(
+                        'type' => $row['type'],
+                        'question' => $row['question'],
+                        'solution' => $row['solution'],
+                        'imageFile' => $row['imageFile'],
+                        'question_id' => $row['question_id'],
+                        'key_words' => $row['key_words'],
+                        'audio' => $row['mp4File']
+                    );
+                }
             }
+
+        }catch(Exception $e){
+            // Handle database connection or query errors here
+            $response['success'] = false;
+            $response['message'] = "Error: " . $e->getMessage();
         }
+
+        
     
         return $data;
     }

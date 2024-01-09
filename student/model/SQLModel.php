@@ -40,4 +40,31 @@ class SQLModel{
         return $response;
 
     }
+
+
+    public function QuestionAdd($audioFile, $Solution, $key_words, $Question, $type){
+        try{
+            
+            $sql = "INSERT INTO question (question, mp4File, solution, key_words, type, test_id) 
+                VALUES ('$Question', '$audioFile', '$Solution', '$key_words', '$type', 10)";
+
+
+            if ($this->conn->query($sql) === TRUE) {
+                $response['success'] = true;
+                $response['message'] = "data updated successfully!";
+            } else {
+                $response['success'] = false;
+                $response['message'] = "data updataion failed. Please try again.";
+            }
+            
+        }catch (Exception $e) {
+            // Handle database connection or query errors here
+            $response['success'] = false;
+            $response['message'] = "Error: " . $e->getMessage();
+        }
+
+        return $response;
+        
+    }
+
 }
