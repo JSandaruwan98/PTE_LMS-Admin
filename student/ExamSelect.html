@@ -7,15 +7,12 @@
 </head>
 <body>
     <form action="" id="test-select-form">
+        <label for="">Student Id</label>
+        <input type="text" name="student_id" id="student_id"><br>
         <label for="">Select the Test</label>
         <select id="test_id" name="test_id">
-            <option value="1">PTE_Listning II Practicle</option>
-            <option value="2">PTE_Listning III Practicle</option>
-            <option value="3">PTE_Reading III Practicle</option>
-            <option value="4">PTE_Reading I Practicle</option>
+           <option value="0">default</option>
         </select>
-        <label for="">Student Id</label>
-        <input type="text" name="student_id" id="student_id">
         <input type="submit">
 
     </form>
@@ -23,17 +20,57 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <script>
+        
         $(document).ready(function(){
-            $('#test-select-form').submit(function(event){
-                event.preventDefault(); // Prevent the form from submitting normally
-                var studentIdValue = $('#student_id').val();
-                $.ajax({
+
+            const selectElement = $('#test_id');
+            
+
+            $('#student_id').on("input", function(){
+                var studentId = $('#student_id').val();
+
+                if (studentId.trim() !== "") {
+                    $.ajax({
+                        url: `router/get.php?data_type=test_select&student_id=${studentId}`,
+                        method: 'GET',
+                        success: function (data) {
+                            data.forEach(function(option) {
+                                
+                                const optionElement = $('<option>');
+                                optionElement.attr('value', option.test_id);
+                                optionElement.text(option.name);
+
+                                // Append the <option> element to the <select> element
+                                selectElement.append(optionElement);
+                            });
+                           
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                } else {
+                    console.log("Student ID is empty");
+                }
+            })
+
+
+            $('#test_id').on('change', function () {
+                    event.preventDefault();
+                    test_id = $(this).val();
+                    var studentIdValue = $('#student_id').val();
+
+                    $.ajax({
                     url:'router/post.php',
                     type: 'POST',
                     data: $(this).serialize() + "&task=select-exam",
                     success: function(response){
                         console.log(response.message);
-                        window.location.href = 'MockExam.html#'+studentIdValue;
+                        var url = 'MockExam.html?' +
+                            'studentId=' + encodeURIComponent(studentIdValue) +
+                            '&test_id=' + encodeURIComponent(test_id);
+
+                        window.location.href = url;
                     },
                     error: function (error) {
                         //console.log(response.message);
@@ -41,6 +78,14 @@
                         
                     }
                 })
+            });
+            
+            $('#test-select-form').submit(function(event){
+                event.preventDefault(); // Prevent the form from submitting normally
+                var studentIdValue = $('#student_id').val();
+               
+                
+                
             });
         })
         

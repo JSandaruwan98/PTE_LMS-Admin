@@ -126,6 +126,12 @@
             const next1 = $('#next');
             const audioPlayer = $('#audioPlayer');
 
+            var queryString = window.location.search;
+            var params = new URLSearchParams(queryString);
+            var student_id = params.get('studentId');
+            var test_id = params.get('test_id');
+
+
             toggleRecordingButton.on('click', function () {
                 if (!isRecording) {
                     resetTimer()
@@ -146,7 +152,7 @@
 
             function fetchAndDisplayQuestions(page) {
                 $.ajax({
-                    url: `router/get.php?data_type=question_add&page=${page}&per_page=${questionsPerPage}`,
+                    url: `router/get.php?data_type=question_add&page=${page}&per_page=${questionsPerPage}&test_id=${test_id}`,
                     method: 'GET',
                     success: function (data) {
                         // Clear existing content
@@ -201,10 +207,9 @@
                 }
             });
             
+            
 
-            const urlParams = new URLSearchParams(window.location.href);
-            const fragment = window.location.hash;
-            const value = fragment.substring(1);
+           
 
             
             $('#submit').on('click', function(){
@@ -219,7 +224,7 @@
                 $.ajax({
                     url:'router/post.php',
                     type: 'POST',
-                    data: { task : task, audioFile: audioFile, Solution: Solution, question_id: question_id, student_id: value, key_words: KeyWords, type: type},
+                    data: { task : task, audioFile: audioFile, Solution: Solution, question_id: question_id, student_id: student_id, key_words: KeyWords, type: type},
                     success: function(response){
                         if(response.success){
                             console.log(response.message);

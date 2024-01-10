@@ -65,12 +65,12 @@ class Controlers{
 
 
     //Question Add
-    public function question_add($perPage, $offset) {
+    public function question_add($perPage, $offset, $test_id) {
         
         try{
 
             // Fetch data from the database with pagination
-            $sql = "SELECT type, question, solution, imageFile, question_id, mp4File, key_words FROM question LIMIT $offset, $perPage";
+            $sql = "SELECT type, question, solution, imageFile, question_id, mp4File, key_words FROM question WHERE test_id = $test_id LIMIT $offset, $perPage";
             $result = $this->conn->query($sql);
 
             $data = array();
@@ -120,6 +120,8 @@ class Controlers{
 
         return $response;
     }
+
+    
     
     
 }

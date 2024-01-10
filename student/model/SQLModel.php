@@ -67,4 +67,26 @@ class SQLModel{
         
     }
 
+
+    public function test_select($student_id){
+       
+
+            $sql = "SELECT DISTINCT ta.test_id, t.name  FROM assignstudent AS astu, testass AS ta, test AS t WHERE astu.student_id = $student_id AND t.test_id = ta.test_id";
+            $result = $this->conn->query($sql);
+            $data = array();
+            while ($row = $result->fetch_assoc()) {
+                $data[] = array(
+                    'name' => $row['name'],
+                    'test_id' => $row['test_id']
+                );
+            }
+
+            
+            
+            
+       
+
+        return $data;
+    }
+
 }
