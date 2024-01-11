@@ -6,7 +6,7 @@ $token = 'AIzaSyB-nCbTp4OrEcM3aFGDP2VtUWa6H8Nic6w';
 $url = 'https://generativelanguage.googleapis.com/v1beta3/models/text-bison-001:generateText?key=' .$token;
 $ch = curl_init($url);
 
-$json_data = '{"prompt": {text: "Question : `Who developed the theory of relativity?`  and Answer: `Albert Einstein`  this answer is only give a correct or incorrect not any other"} }';
+$json_data = '{"prompt": {text: "`` and the key word  `".$key_words."` give only overall precentage of include the key words"} }';
 
 curl_setopt(
     $ch,

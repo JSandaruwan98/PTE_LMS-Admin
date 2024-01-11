@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
 
          
-            
+            //$response['success'] = true;
             //$response['message'] = $value;
 
             $response = $sql_model->Answering_Insert($voice, $audioFile, $question_id, $student_id, $value, NAN, NAN);

@@ -162,6 +162,7 @@
 
                         // Loop through the data and append it to the containers
                         for (var i = 0; i < data.length; i++) {
+                            console.log(data.length)
                             Solution = data[i].solution;
                             type = data[i].type;
                             KeyWords = data[i].key_words
@@ -171,8 +172,11 @@
                             if(data[i].type == "Read Aloud"){
                                 $('#solution').append(`<p>${data[i].solution}</p>`);
                             }else if(data[i].type == "Describe image"){
-                                $('#solution').append(`<img src="${data[i].imageFile}" style="width:450px; padding-left: 25%;">`);
-                                //console.log(data[i].imageFile)
+                                try{
+                                    $('#solution').append(`<img src="${data[i].imageFile}" style="width:450px; padding-left: 25%; height: 250px">`);
+                                }catch(error){
+                                    console.log(error.message)
+                                }
                             }else if(data[i].type == "Repeat Sentence" || data[i].type == "Re-tell Lecture" || data[i].type == "Answer Short Question"){
                                 $('#solution').append(`<audio controls style="padding-left: 25%">
                                                             <source src="${data[i].audio}" type="audio/mpeg">

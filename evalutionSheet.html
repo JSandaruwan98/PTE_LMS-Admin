@@ -270,14 +270,22 @@ audio::-webkit-media-controls {
                         const label3 = $('<lable>').text('Oral fluency').css('font-size','14px')
                         const label4 = $('<lable>').text('Remark').css('font-size','14px')
                         const label5 = $('<lable>').text('Score').css('font-size','14px')
+                        const label6 = $('<lable>').text('Vocabulary').css('font-size','14px')  
 
                         const input1 = $('<input>').attr({'type':'text','value':item.content}).css({'width':'120px','height':'30px'})  
                         const input2 = $('<input>').attr({'type':'text','value':item.pronunciation}).css({'width':'120px','height':'30px'})  
                         const input3 = $('<input>').attr({'type':'text','value':item.oral_fluency}).css({'width':'120px','height':'30px'})  
                         const textarea = $('<textarea>').attr({'name':'','id':'','cols':'30','rows':'10'}).css({'height':'80px'})   
                         const input5 = $('<input>').attr({'type':'text','value':item.totalScore}).css({'width':'120px','height':'30px'})  
+                        const input6 = $('<input>').attr({'type':'text','value':item.content}).css({'width':'120px','height':'30px'})  
 
-                        div5.append(label1, input1, label2, input2, label3, input3, label4, textarea, label5, input5)
+                        //div5.append(label1, input1, label2, input2, label3, input3, label4, textarea, label5, input5)
+
+                        if(item.type == 'Read Aloud' || item.type == 'Repeat Sentence' || item.type == 'Describe image' || item.type == 'Re-tell Lecture'){
+                          div5.append(label1, input1, label2, input2, label3, input3, label4, textarea, label5, input5)
+                        }else if(item.type == 'Answer Short Question') {
+                          div5.append(label6, input6, label4, textarea, label5, input5)
+                        }
                     tdata5.append(div5)   
                     
                     row.append(tdata5)

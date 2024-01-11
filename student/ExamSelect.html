@@ -63,7 +63,7 @@
                     $.ajax({
                     url:'router/post.php',
                     type: 'POST',
-                    data: $(this).serialize() + "&task=select-exam",
+                    data: { test_id: test_id, student_id: studentIdValue, task: 'select-exam' },
                     success: function(response){
                         console.log(response.message);
                         var url = 'MockExam.html?' +
